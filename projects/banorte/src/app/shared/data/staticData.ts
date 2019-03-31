@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 export const window = {
   id: 167,
   height: 500,
@@ -10,11 +11,51 @@ export const window = {
       type: 'div',
       attributes: {
         style:
-          // tslint:disable-next-line:max-line-length
           'position:absolute;transform:translate3d(0,0,0);width:160px;height:70px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;color:rgb(0,0,0);background:rgb(255,255,255,0);border-width:1px;border-style:none;border-color:rgb(173,173,173);'
       },
       options: null,
       tag: 'div'
+    },
+    {
+      id: 12,
+      type: 'a',
+      name: 'a_12',
+      tag: 'a',
+      attributes: {
+        value: 'Google',
+        style:
+          'position:absolute;transform:translate3d(0,100px,0);width:160px;height:70px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;color:rgb(0,0,0);background:rgb(255,255,255,0);border-width:1px;border-style:none;border-color:rgb(173,173,173);',
+        href: 'www.google.com'
+      }
+    },
+    {
+      id: 15,
+      type: 'iframe',
+      name: 'iframe_15',
+      tag: 'iframe',
+      attributes: {
+        allow: 'autoplay;encrypted-media',
+        scrolling: null,
+        src: null,
+        triggers: 'manual',
+        style:
+          'position:absolute;transform:translate3d(0,200px,0);width:400px;height:300px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;color:rgb(0,0,0);background:rgb(255,255,255,0);border-width:1px;border-style:none;border-color:rgb(173,173,173);'
+      }
+    },
+    {
+      id: 9,
+      type: 'range',
+      name: 'range_9',
+      tag: 'input',
+      attributes: {
+        min: null,
+        max: null,
+        list: null,
+        autocomplete: null,
+        step: null,
+        style:
+          'position:absolute;transform:translate3d(0,200px,0);width:200px;height:50px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;color:rgb(0,0,0);background:rgb(255,255,255,0);border-width:1px;border-style:none;border-color:rgb(173,173,173);'
+      }
     }
   ],
   attributes: {

@@ -105,7 +105,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         val => console.log('saveCtrl$ request //////////// ', val),
-        error => console.log('Error intentando salvar ', this.lastChange)
+        error => console.log('Error intentando salvar ', this.lastChange, error)
       );
     this.emitterS.events
       .pipe(
@@ -126,9 +126,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(_ => {});
-    // -------------------- new... Inserta control
+    // -------------------- Inserta control
     this.listenToInsertCtrls();
-    // Inserta control/widget con shortcuts
+    // Inserta widget con shortcuts
     this.emitterS.shortcuts
       .pipe(takeUntil(this.destroy$))
       .subscribe(shortcut => {
@@ -136,6 +136,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           this.widgets.filter(wid => wid.id === shortcut['id'])[0]
         );
       });
+    // Ejecuta comando (copiar/pegar/borrar) con shortcuts
     this.emitterS.command$
       .pipe(takeUntil(this.destroy$))
       .subscribe(shortcut =>
@@ -145,6 +146,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.emitterS.styles
       .pipe(takeUntil(this.destroy$))
       .subscribe(style => this.newUpdateStyles(style));
+    // Attrs
+    this.emitterS.attrs
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(attrs => this.newUpdateStyles({}, attrs));
     // Window styles
     this.emitterS.windowStyles$
       .pipe(takeUntil(this.destroy$))
@@ -153,21 +158,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.emitterS.rzStartE
       .pipe(takeUntil(this.destroy$))
       .subscribe((ctrl: ControlesI) => this.clickEmitted(ctrl));
-    // rzStopE
-    this.emitterS.rzStopE
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((size: { width: number; height: number }) =>
-        this.newUpdateStyles({
-          width: `${size.width}px`,
-          height: `${size.height}px`
-        })
-      );
-    // dragEndE
-    this.emitterS.onDragEndE
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((transform: string) =>
-        this.newUpdateStyles({ transform: transform })
-      );
     // Al terminar la navegacion, carga window
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -359,6 +349,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       atributos
     );
     this.ctrlSelected = Object.assign({}, clone);
+    console.log('after newUpdate', this.ctrlSelected);
     this.makeUpdateRequest();
   }
 

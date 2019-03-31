@@ -65,12 +65,15 @@ export class DynamicCompDirective implements OnInit {
     );
     // resize stop event
     this.componentRef.instance['rzStopE'].subscribe(
-      (val: { width: number; height: number }) =>
-        this.emitterS.rzStopE.next(val)
+      (size: { width: number; height: number }) =>
+        this.emitterS.dispatchStyle({
+          width: `${size.width}px`,
+          height: `${size.height}px`
+        })
     );
     // drag end event
-    this.componentRef.instance['dragEndE'].subscribe((val: string) =>
-      this.emitterS.onDragEndE.next(val)
+    this.componentRef.instance['dragEndE'].subscribe((transform: string) =>
+      this.emitterS.dispatchStyle({ transform: transform })
     );
   }
 }

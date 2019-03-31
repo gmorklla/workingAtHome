@@ -81,15 +81,11 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       .pipe(
         distinctUntilChanged(),
         debounceTime(1000),
-        switchMap(val => of(val)),
-        filter(val => JSON.stringify(val) !== this.toCompare),
-        tap(val => {
-          this.toCompare = JSON.stringify(val);
-          const objToEmit = this.getGeneralFormValues(val);
-          this.emitChange(objToEmit);
-        })
+        switchMap(val => of(val))
       )
-      .subscribe(_ => {});
+      .subscribe(val => {
+        this.emitterS.dispatchAttr(val);
+      });
   }
 
   emitChange(data) {
@@ -149,27 +145,22 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       .pipe(
         distinctUntilChanged(),
         debounceTime(1000),
-        switchMap(val => of(val)),
-        tap(val => {
-          const gFValues = Object.assign({}, this.generalForm.value);
-          const result = this.getGeneralFormValues(gFValues);
-          const { link } = val;
-          result.attrs.push({ href: link });
-          this.emitChange(result);
-        })
+        switchMap(val => of(val))
       )
-      .subscribe(_ => {});
+      .subscribe(val => {
+        const { link } = val;
+        this.emitterS.dispatchAttr({ href: link });
+      });
   }
 
   // iframe (video)
-
   setIframeForm(): void {
     const opts = {
       src: ['', [Validators.required]]
     };
     this.iframeForm = this.fb.group(opts);
     const src = this.control.attributes['src'];
-    const srcF = src ? src : 'https://media.w3.org/2010/05/sintel/trailer.mp4';
+    const srcF = src ? src : 'https://www.youtube.com/watch?v=Yvwi6P1XBHM';
     this.iframeForm.setValue({
       src: srcF
     });
@@ -177,16 +168,12 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       .pipe(
         distinctUntilChanged(),
         debounceTime(1000),
-        switchMap(val => of(val)),
-        tap(val => {
-          const gFValues = Object.assign({}, this.generalForm.value);
-          const result = this.getGeneralFormValues(gFValues);
-          const { src: link } = val;
-          result.attrs.push({ src: link });
-          this.emitChange(result);
-        })
+        switchMap(val => of(val))
       )
-      .subscribe(_ => {});
+      .subscribe(val => {
+        const { src: source } = val;
+        this.emitterS.dispatchAttr({ src: source });
+      });
   }
 
   // range
@@ -337,30 +324,6 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         })
       )
       .subscribe(_ => {});
-  }
-
-  // otros
-
-  colorSelected(e, inputName) {
-    let obj;
-    switch (inputName) {
-      case 'color':
-        obj = { color: e };
-        break;
-      case 'fondo':
-        obj = { fondo: e };
-        break;
-      case 'boderColor':
-        obj = {
-          border: {
-            borderColor: e
-          }
-        };
-        break;
-      default:
-        break;
-    }
-    this.generalForm.patchValue(obj);
   }
 
   getNumValueNoPX(value): number {
