@@ -1,0 +1,46 @@
+<form
+  [formGroup]="dialogForm"
+  novalidate
+>
+  <h1 mat-dialog-title>Options</h1>
+  <div
+    mat-dialog-content
+    class="content"
+  >
+    <mat-form-field>
+      <mat-select
+        placeholder="Node type"
+        formControlName="nodeType"
+      >
+        <mat-option
+          *ngFor="let ntype of nodeTypes"
+          [value]="ntype"
+        >
+          {{ntype}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select
+        placeholder="Element"
+        formControlName="element"
+      >
+        <mat-option
+          *ngFor="let element of elements"
+          [value]="element"
+        >
+          {{element}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button
+      mat-button
+      (click)="close()"
+      cdkFocusInitial
+      [disabled]="dialogForm.status === 'INVALID'"
+    >Select</button>
+  </div>
+</form>

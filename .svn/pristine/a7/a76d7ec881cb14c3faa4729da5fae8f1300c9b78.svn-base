@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Alerta</h1>
+<div mat-dialog-content>
+  <p>{{data.mensaje}}</p>
+</div>
+<div
+  class="actions"
+  mat-dialog-actions
+>
+  <button
+    mat-raised-button
+    (click)="onNoClick()"
+  >
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Cancelar"
+    >close</mat-icon>
+    Cancelar
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    [mat-dialog-close]="true"
+    cdkFocusInitial
+  >
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Borrar"
+    >delete</mat-icon>
+    Borrar
+  </button>
+</div>

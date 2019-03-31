@@ -1,0 +1,14 @@
+<lib-nickname-setter (nick)="setNick($event)"></lib-nickname-setter>
+<lib-typing-msg [typingMsg]="typingMsg"></lib-typing-msg>
+<lib-message-input
+  (emitTypingEvent)="emitTypingEvent($event)"
+  (emitMessage)="sendMessage($event)"
+></lib-message-input>
+<div class="container">
+  <lib-users-list [users]="users"></lib-users-list>
+  <lib-messages-list
+    [messages]="messages"
+    [nickname]="nickname"
+    [height]="height"
+  ></lib-messages-list>
+</div>

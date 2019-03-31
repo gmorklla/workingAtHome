@@ -1,0 +1,4 @@
+<ng-container
+  appDynamicComp
+  [ctrl]="control"
+></ng-container>

@@ -1,0 +1,25 @@
+import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+
+@Component({
+  selector: 'app-rule-configuration',
+  templateUrl: './rule-configuration.component.html',
+  styleUrls: ['./rule-configuration.component.css']
+})
+export class RuleConfigurationComponent implements OnInit {
+
+  public designId: string;
+  public windowId: string;
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.route.url.subscribe(url => {
+      this.designId = this.route.snapshot.paramMap.get('designId');
+      console.log('Design ID: ', this.designId);
+
+      this.windowId = this.route.snapshot.paramMap.get('windowId');
+      console.log('Window ID: ', this.windowId);
+    });
+  }
+}

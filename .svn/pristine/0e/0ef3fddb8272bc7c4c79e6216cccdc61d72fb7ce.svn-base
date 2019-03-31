@@ -1,0 +1,82 @@
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource, Sort} from '@angular/material';
+import {VariableDesignService} from '../../../services/variable/variable-design.service';
+import {VariableDesign} from '../../../models/variable/variable-design.model';
+
+@Component({
+  selector: 'app-rule-variable-table',
+  templateUrl: './rule-variable-table.component.html',
+  styleUrls: ['./rule-variable-table.component.css']
+})
+export class RuleVariableTableComponent implements OnInit {
+
+  @Input() private designId: string;
+  @Input() private windowId: string;
+
+  displayedColumns: string[] = ['id', 'name', 'description', 'dataType', 'value', 'control'];
+  dataSource: MatTableDataSource<VariableDesign>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private variableDesignService: VariableDesignService) {
+  }
+
+  ngOnInit() {
+    this.fn_getAllVariableDesign();
+  }
+
+  private fn_getAllVariableDesign(): void {
+    this.variableDesignService.fn_getAll(this.designId).subscribe({
+      next: (result: VariableDesign[]) => {
+        console.log('[RESPONSE]', result);
+
+        this.dataSource = new MatTableDataSource<VariableDesign>(result);
+        this.dataSource.filterPredicate = (variableDesign: VariableDesign, filterValue: string) =>
+          variableDesign.variable.name.trim().toLowerCase().indexOf(filterValue) !== -1
+          || variableDesign.variable.description.trim().toLowerCase().indexOf(filterValue) !== -1;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  fn_applySort(sort: Sort): void {
+    const data = this.dataSource.data;
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data.sort((a, b) => {
+        return compare(a.id, b.id, true);
+      });
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'id': return compare(a.id, b.id, isAsc);
+        case 'name': return compare(a.variable.name, b.variable.name, isAsc);
+        case 'description': return compare(a.variable.description, b.variable.description, isAsc);
+        default: return 0;
+      }
+    });
+  }
+}
+
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}

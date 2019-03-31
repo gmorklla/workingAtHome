@@ -1,0 +1,33 @@
+<form novalidate
+      autocomplete="off"
+      [formGroup]="mainForm">
+  <div class="row">
+    <div class="col-6 col-sm-6 col-md-3">
+      <mat-form-field>
+        <mat-select placeholder="Canal"
+                    (selectionChange)="fn_filterChange();"
+                    formControlName="idChannel">
+          <mat-option>-- Todos --</mat-option>
+          <mat-optgroup *ngFor="let channelGroup of listChannelGroups" [label]="channelGroup.name"
+                        [disabled]="channelGroup.disabled">
+            <mat-option *ngFor="let channel of channelGroup.channels" [value]="channel.idSubChannel">
+              {{channel.descriptionSubChannel}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6 col-sm-6 col-md-3">
+      <mat-form-field class="form-field">
+        <mat-select placeholder="Estatus"
+                    (selectionChange)="fn_filterChange();"
+                    formControlName="status">
+          <mat-option>-- Todos --</mat-option>
+          <mat-option *ngFor="let status of listLinkedChannelStatus" [value]="status.id">
+            {{status.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

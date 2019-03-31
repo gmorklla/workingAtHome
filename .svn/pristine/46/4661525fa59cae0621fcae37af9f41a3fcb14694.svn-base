@@ -1,0 +1,34 @@
+<div class="text-center">{{data.linkedChannel.channel.descriptionSubChannel}}</div>
+<div class="text-center">{{data.campaign.code}} - {{data.campaign.offerCode}}</div>
+<mat-nav-list>
+  <a href="#" mat-list-item *ngIf="data.linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+     (click)="openLink($event, ACTION_DESIGN)">
+    <i class="material-icons color-red">wallpaper</i>
+    <span mat-line class="font-weight-bold">Diseño</span>
+    <span mat-line>Crea o modifica el diseño de la campaña</span>
+  </a>
+  <a href="#" mat-list-item *ngIf="data.linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+     (click)="openLink($event, ACTION_SETTINGS)">
+    <i class="material-icons color-red">settings</i>
+    <span mat-line class="font-weight-bold">Configuración</span>
+    <span mat-line>Determina los parámetros de publicación</span>
+  </a>
+  <a href="#" mat-list-item *ngIf="data.linkedChannel.status.id === LinkedChannelStatusConstant.DESIGN || data.linkedChannel.status.id === LinkedChannelStatusConstant.INACTIVE"
+     (click)="openLink($event, ACTION_ACTIVE)">
+    <i class="material-icons color-red">check_circle_outline</i>
+    <span mat-line class="font-weight-bold">Activación</span>
+    <span mat-line>Habilita la campaña para <span class="color-red">{{data.linkedChannel.channel.descriptionSubChannel}}</span></span>
+  </a>
+  <a href="#" mat-list-item *ngIf="data.linkedChannel.status.id === LinkedChannelStatusConstant.ACTIVE"
+     (click)="openLink($event, ACTION_INACTIVE)">
+    <i class="material-icons color-red">not_interested</i>
+    <span mat-line class="font-weight-bold">Desactivación</span>
+    <span mat-line>Deshabilita la campaña para <span class="color-red">{{data.linkedChannel.channel.descriptionSubChannel}}</span></span>
+  </a>
+  <a href="#" mat-list-item *ngIf="data.linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+     (click)="openLink($event, ACTION_REMOVE)">
+    <i class="material-icons color-red">delete_outline</i>
+    <span mat-line class="font-weight-bold">Desvincular</span>
+    <span mat-line>Desvincula canal <span class="color-red">{{data.linkedChannel.channel.descriptionSubChannel}}</span> de la campaña</span>
+  </a>
+</mat-nav-list>

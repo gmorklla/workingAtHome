@@ -1,0 +1,25 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+button {
+  outline: none;
+}
+
+.addChildBtn {
+  display: flex;
+  align-items: center;
+}
+
+.addChildBtn mat-form-field {
+  width: 60%;
+  margin-right: 5px;
+}
+
+.node-name {
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: small;
+}

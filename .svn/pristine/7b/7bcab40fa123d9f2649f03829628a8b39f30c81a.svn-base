@@ -1,0 +1,46 @@
+<form
+  [formGroup]="dialogForm"
+  novalidate
+>
+  <h1 mat-dialog-title>Options</h1>
+  <div
+    mat-dialog-content
+    class="content"
+  >
+    <mat-form-field>
+      <mat-select
+        placeholder="Nedn"
+        formControlName="nedn"
+      >
+        <mat-option
+          *ngFor="let nedn of nedns"
+          [value]="nedn"
+        >
+          {{nedn}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select
+        placeholder="Kpi"
+        formControlName="kpi"
+      >
+        <mat-option
+          *ngFor="let kpi of kpis"
+          [value]="kpi"
+        >
+          {{kpi}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button
+      mat-button
+      (click)="close()"
+      cdkFocusInitial
+      [disabled]="dialogForm.status === 'INVALID'"
+    >Select</button>
+  </div>
+</form>

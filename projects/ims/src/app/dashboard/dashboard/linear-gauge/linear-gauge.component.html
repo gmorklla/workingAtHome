@@ -1,0 +1,28 @@
+<mat-card
+  class="dashCard"
+  fxFlex
+  fxLayoutAlign="space-between"
+  fxLayout="column"
+  (mouseenter)="mouseenterFn()"
+  (mouseleave)="mouseleaveFn()"
+>
+  <mat-card-header>
+    <mat-card-title>{{name}}</mat-card-title>
+    <button
+      *ngIf="showRBtn"
+      mat-icon-button
+      class="closeBtn"
+      color="warn"
+      (click)="close()"
+    >
+      <mat-icon aria-label="Remove">close</mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content
+    fxLayout="column"
+    fxLayoutAlign="space-between"
+    fxFlex
+  >
+    <lib-linear-gauge></lib-linear-gauge>
+  </mat-card-content>
+</mat-card>

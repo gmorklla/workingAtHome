@@ -1,0 +1,9 @@
+import { NgModule } from '@angular/core';
+import { CampaignComponent } from './campaign/campaign.component';
+import {CampaignsModule} from "../../../../campaigns/src/lib/campaigns.module";
+
+@NgModule({
+  imports: [CampaignsModule],
+  declarations: [CampaignComponent]
+})
+export class CampaignModule { }

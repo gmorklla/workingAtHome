@@ -1,0 +1,13 @@
+<mat-list [attr.data-id]="'controles'">
+  <ng-container *ngFor="let control of controlesHTML">
+    <mat-list-item
+      [attr.data-control]="getControlString(control)"
+      matTooltip="{{control.description}}"
+      [matTooltipPosition]="'right'"
+      (click)="setControl($event, control)"
+    >
+      <fa-icon [icon]="getIcon(control.image)"></fa-icon>
+      <h4 mat-line>{{ control.description }}</h4>
+    </mat-list-item>
+  </ng-container>
+</mat-list>

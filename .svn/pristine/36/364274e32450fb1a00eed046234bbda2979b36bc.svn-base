@@ -1,0 +1,35 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutes } from './app.routing.module';
+import { CustomMaterialModule } from './custom-material/custom-material.module';
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { target } from './shared/data/port';
+
+@NgModule({
+  declarations: [AppComponent, NavbarComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpModule,
+    HttpClientModule,
+    AppRoutes,
+    CustomMaterialModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+      exclude: [
+        `${target}campaign/`,
+        `${target}flow/`
+      ]
+    })
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}

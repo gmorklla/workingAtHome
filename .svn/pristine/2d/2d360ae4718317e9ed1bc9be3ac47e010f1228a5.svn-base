@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  font-family: 'Roboto',
+    sans-serif;
+  color: rgb(44, 44, 44);
+}
+
+.test text tspan:nth-child(2) {
+  font-size: xx-small;
+}

@@ -1,0 +1,15 @@
+<!-- Navbar -->
+<mat-toolbar color="primary" style="background:transparent;" class="mainContainer">
+  <mat-toolbar-row class="toolbar-header">
+    <div class="logoContainer">
+      <img src="./assets/images/banorte.png" alt="Banorte" matTooltip="Banorte" [matTooltipPosition]="'right'">
+    </div>
+    <span class="spacer"></span>
+    <button mat-button color="color-white" class="btn-action mr-1"
+            [routerLink]="['/flows']"><i class="material-icons">view_carousel</i> Flujos
+    </button>
+    <button mat-icon-button [routerLink]="'/flujo'">
+      <mat-icon aria-label="Home">home</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>

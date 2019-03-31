@@ -1,0 +1,98 @@
+import { NgModule } from '@angular/core';
+import { FlowsComponent } from './flows.component';
+import {FlowRoutingModule} from '../../../banorte/src/app/flow/flow-routing.module';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
+import {
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule, MatListModule, MatMenuModule,
+  MatPaginatorModule, MatSelectModule, MatSnackBarModule,
+  MatTableModule,
+  MatTooltipModule
+} from '@angular/material';
+import {LinkedChannelDialogComponent} from '../../../campaigns/src/lib/components/dialog/linked-channel-dialog/linked-channel-dialog.component';
+import {LoaderComponent} from '../../../campaigns/src/lib/components/loader/loader.component';
+import {ConfirmationDialogComponent} from '../../../campaigns/src/lib/components/dialog/confirmation-dialog/confirmation-dialog.component';
+import {ConfigurationDialogComponent} from '../../../campaigns/src/lib/components/dialog/configuration-dialog/configuration-dialog.component';
+import {OptionsSheetComponent} from '../../../campaigns/src/lib/components/sheet/options-sheet/options-sheet.component';
+import {AlertService} from '../../../campaigns/src/lib/services/alert/alert.service';
+import {ChannelService} from '../../../campaigns/src/lib/services/channel.service';
+import {LinkedChannelService} from '../../../campaigns/src/lib/services/linked-channel.service';
+import {ConfigurationService} from '../../../campaigns/src/lib/services/configuration.service';
+import {FilterComponent} from './components/filter/filter.component';
+import {FlowService} from './services/flow.service';
+import {UtilsService} from '../../../campaigns/src/lib/services/utils/utils.service';
+import { CreateFlowComponent } from './views/create-flow/create-flow.component';
+import { FlowFormComponent } from './components/form/flow-form/flow-form.component';
+import { FlowFormEditComponent } from './components/form/flow-form-edit/flow-form-edit.component';
+import { EditFlowComponent } from './views/edit-flow/edit-flow.component';
+
+@NgModule({
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NgxUiLoaderModule,
+    FlowRoutingModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatBottomSheetModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatSelectModule,
+    MatListModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatBadgeModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    MatDatepickerModule,
+    MatChipsModule,
+    MatAutocompleteModule
+  ],
+  declarations: [
+    FlowsComponent,
+    CreateFlowComponent,
+    EditFlowComponent,
+    FilterComponent,
+    LinkedChannelDialogComponent,
+    LoaderComponent,
+    ConfirmationDialogComponent,
+    ConfigurationDialogComponent,
+    OptionsSheetComponent,
+    FlowFormComponent,
+    FlowFormEditComponent],
+  exports: [
+    FlowsComponent,
+    CreateFlowComponent,
+    EditFlowComponent
+  ],
+  providers: [
+    AlertService,
+    UtilsService,
+    ChannelService,
+    LinkedChannelService,
+    FlowService,
+    ConfigurationService
+  ],
+  entryComponents: [
+    FlowsComponent,
+    LinkedChannelDialogComponent,
+    ConfirmationDialogComponent,
+    ConfigurationDialogComponent,
+    OptionsSheetComponent
+  ]
+})
+export class FlowsModule { }

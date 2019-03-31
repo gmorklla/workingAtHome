@@ -1,0 +1,26 @@
+.ffContainer {
+  max-width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  align-items: center;
+}
+
+.sTerm {
+  flex: 0 1 0;
+}
+
+button {
+  flex: 1 1 0;
+}
+
+.list {
+  margin: 0 5px;
+  flex: 3 0 0;
+}
+
+.queriesContainer {
+  max-width: 100%;
+  padding: 10px;
+}

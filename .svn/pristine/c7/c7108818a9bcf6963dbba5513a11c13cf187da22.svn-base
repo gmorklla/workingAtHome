@@ -1,0 +1,35 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { InputButtonService } from './input-button.service';
+
+@Component({
+  selector: 'lib-inputButton',
+  template: `
+    <button mat-raised-button [ngStyle]="estilos">
+      {{ valor }}
+    </button>
+  `,
+  styleUrls: ['./input-button.css']
+})
+export class InputButtonComponent implements OnInit {
+  @Input() ctrl;
+  valor: string;
+  backgroundColor: string;
+  color: string;
+  fontSize: string;
+  estilos;
+
+  constructor(private service: InputButtonService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+      this.valor = value ? value : 'Mensaje';
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      this.valor = value && value.trim() !== '' ? value : this.ctrl.type;
+    }
+  }
+}

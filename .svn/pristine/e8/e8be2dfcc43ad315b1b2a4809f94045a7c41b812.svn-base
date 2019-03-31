@@ -1,0 +1,6 @@
+export const target = 'http://localhost:8090/wconfig-services/';
+export const targetRules = 'http://localhost:8090/rules-services/';
+export const targetModels = 'http://lnxsapl1d.dev.unix.banorte.com:9080/mm-services/';
+
+export const ip = 'localhost';
+export const port = '8080';

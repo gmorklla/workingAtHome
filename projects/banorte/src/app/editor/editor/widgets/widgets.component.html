@@ -1,0 +1,12 @@
+<mat-list [attr.data-id]="'widgets'">
+  <mat-list-item
+    *ngFor="let widget of widgets"
+    [attr.data-control]="getControlString(widget)"
+    matTooltip="{{widget.description}}"
+    [matTooltipPosition]="'right'"
+    (click)="setWidget($event, widget)"
+  >
+    <fa-icon [icon]="getIcon(widget.image)"></fa-icon>
+    <h4 mat-line>{{ widget.description }}</h4>
+  </mat-list-item>
+</mat-list>

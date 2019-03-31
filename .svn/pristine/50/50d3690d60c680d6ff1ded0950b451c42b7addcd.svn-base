@@ -1,0 +1,25 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputButtonComponent } from './input-button.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { FormInputButtonComponent } from './form/form-input-button.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ColorPickerModule
+  ],
+  declarations: [InputButtonComponent, FormInputButtonComponent],
+  exports: [InputButtonComponent],
+  entryComponents: [InputButtonComponent, FormInputButtonComponent]
+})
+export class InputButtonModule {}

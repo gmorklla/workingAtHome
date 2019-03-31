@@ -1,0 +1,44 @@
+import { Injectable } from '@angular/core';
+import { HttpCallService } from 'projects/http-call/src/public_api';
+import { target } from 'projects/banorte/src/app/shared/data/port';
+import { Observable } from 'rxjs';
+
+export interface WindowChildRI {
+  attributes: {};
+  controls: any;
+  designId: number;
+  fatherId: number;
+  height: number;
+  id: 0;
+  name: string;
+  responseCode: string;
+  type: string;
+  width: number;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TreeService {
+  constructor(private http: HttpCallService) {}
+
+  addWindow(node, designId: number, name: string): Observable<any> {
+    const url = `${target}window/${node.id}/child`;
+    const obj = {
+      id: '',
+      name: name,
+      height: 500,
+      width: 500,
+      attributes: { style: 'background-color:rgb(255,255,255);' },
+      controls: [],
+      designId: designId
+    };
+    console.log('addWindow req obj', obj);
+    return this.http.postRequest(url, obj, {});
+  }
+
+  deleteWindow(node) {
+    const url = `${target}window/${node.id}`;
+    return this.http.deleteRequest(url, {});
+  }
+}

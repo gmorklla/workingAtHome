@@ -1,0 +1,4 @@
+export const target =
+  'http://lnxsapl1d.dev.unix.banorte.com:9080/wconfig-services/';
+export const ip = 'lnxsapl1d.dev.unix.banorte.com';
+export const port = '9080';

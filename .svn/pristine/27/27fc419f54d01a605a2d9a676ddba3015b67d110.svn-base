@@ -1,0 +1,114 @@
+<div class="wrapper">
+  <!---------------------------- Window ---------------------------->
+  <article class="main">
+    <div class="window">
+      <ng-container *ngIf="window; else noWindow">
+        <div
+          matTooltip="Window: {{ window.name }}"
+          [matTooltipPosition]="'above'"
+          class="contenedor selected"
+          [id]="window.id"
+          [attr.data-id]="'window'"
+          (click)="clickOnWindow(window); $event.stopPropagation()"
+          [ngStyle]="windowStyles"
+          [style.width.px]="window.width"
+          [style.height.px]="window.height"
+        >
+          <ng-container *ngFor="
+              let control of window.controls;
+              let i = index;
+              trackBy: i
+            ">
+            <app-dinamico
+              class="dinamico"
+              [control]="control"
+            ></app-dinamico>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-template #noWindow>
+        <p style="font-size: smaller; color: gray;">Obteniendo ventana</p>
+      </ng-template>
+    </div>
+  </article>
+  <!---------------------------- Lista de controles ---------------------------->
+  <aside
+    class="aside-1"
+    ngResizable
+    rzHandles="e"
+    rzMinWidth="40"
+    (click)="otherClick()"
+  >
+    <mat-accordion class="panelIzquierdo">
+      <!-- /////////////////////// Tab ventanas /////////////////////// -->
+      <mat-expansion-panel
+        matTooltip="Ventanas"
+        [matTooltipPosition]="'above'"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon
+              aria-label="Ventanas"
+              style="margin-right: 5px;"
+            >filter</mat-icon>
+            Ventanas
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-ventanas></app-ventanas>
+      </mat-expansion-panel>
+      <!-- /////////////////////// Tab controles /////////////////////// -->
+      <mat-expansion-panel
+        matTooltip="Controles"
+        [matTooltipPosition]="'above'"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon
+              aria-label="Controles"
+              style="margin-right: 5px;"
+            >settings_applications</mat-icon>
+            Controles
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-controles
+          [controlesHTML]="controlesHTML"
+          (emitControl)="emitterS.createControl$.next({id: $event.id})"
+        ></app-controles>
+      </mat-expansion-panel>
+      <!-- /////////////////////// Tab widgets /////////////////////// -->
+      <mat-expansion-panel
+        matTooltip="Widgets"
+        [matTooltipPosition]="'above'"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon
+              aria-label="Widgets"
+              style="margin-right: 5px;"
+            >dashboard</mat-icon>
+            Widgets
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-widgets
+          *ngIf="widgets"
+          [widgets]="widgets"
+          (emitWidget)="insertaWidget($event)"
+        ></app-widgets>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </aside>
+  <!---------------------------- Atributos ---------------------------->
+  <aside class="aside aside-2">
+    <app-window-attributes
+      [windowSelected]="windowSelected"
+      (click)="otherClick()"
+    ></app-window-attributes>
+    <hr />
+    <app-atributos
+      [ctrlSelected]="ctrlSelected"
+      [winIdCtrlSelect]="winIdCtrlSelect"
+    ></app-atributos>
+  </aside>
+</div>
+<!---------------------------- Shortcuts menu ---------------------------->
+<app-shortcuts *ngIf="showShortcutsMenu"></app-shortcuts>

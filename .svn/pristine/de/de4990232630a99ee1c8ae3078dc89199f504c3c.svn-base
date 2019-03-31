@@ -1,0 +1,47 @@
+<ng-container>
+  <div
+    class="vidContainer"
+    cdkDrag
+    ngResizable
+    rzHandles="se"
+    (rzResizing)="onResizeStop($event)"
+    (click)="setYTUrl()"
+    [style.width.px]="width"
+    [style.height.px]="height"
+  >
+    <span [innerHtml]="iframe_html"></span>
+    <div
+      class="handle"
+      cdkDragHandle
+      [style.width.px]="width"
+      [style.height.px]="height"
+    ></div>
+  </div>
+</ng-container>
+
+<h4>Basic mat-select</h4>
+<mat-form-field
+  appearance="fill"
+  [floatLabel]="'never'"
+  [ngClass]="sValue"
+>
+  <mat-label>Favorite food</mat-label>
+  <mat-select
+    panelClass="panelExe"
+    [(ngModel)]="sValue"
+  >
+    <mat-option
+      *ngFor="let food of foods"
+      [value]="food.value"
+    >
+      {{food.viewValue}}
+    </mat-option>
+  </mat-select>
+  <img
+    width="60px"
+    height="60px"
+    matSuffix
+    src="assets/gmork.png"
+    alt=""
+  >
+</mat-form-field>

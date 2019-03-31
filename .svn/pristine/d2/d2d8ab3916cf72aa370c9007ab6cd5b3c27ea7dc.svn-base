@@ -1,0 +1,83 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { InputFileService } from './input-file.service';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+
+@Component({
+  selector: 'lib-inputFile',
+  template: `
+    <button
+      mat-raised-button
+      color="primary"
+      [ngStyle]="estilos"
+      cdkDrag
+      (cdkDragStarted)="clickOnCtrl($event)"
+      (cdkDragEnded)="onDragEnd($event)"
+      [cdkDragBoundary]="'.contenedor'"
+      ngResizable
+      rzHandles="se"
+      (rzStart)="clickOnCtrl($event)"
+      (rzStop)="onResizeStop($event)"
+      matTooltip="Control: {{ ctrl.type }} - {{ ctrl.id }}"
+      [matTooltipPosition]="'above'"
+      (click)="fileInput.click(); clickOnCtrl($event); $event.stopPropagation()"
+    >
+      <span class="inButton">
+        {{ valor }}
+        <mat-icon>attach_file</mat-icon>
+      </span>
+    </button>
+    <input
+      disabled
+      hidden
+      (change)="onFileSelected()"
+      #fileInput
+      type="file"
+      id="file"
+    />
+  `,
+  styleUrls: ['./input-file.css']
+})
+export class InputFileComponent implements OnInit {
+  @Input() ctrl;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  valor: string;
+  estilos;
+
+  constructor(private service: InputFileService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      this.valor = value && value.trim() !== '' ? value.trim() : 'Mensaje';
+    }
+  }
+
+  onFileSelected() {
+    const inputNode: any = document.querySelector('#file');
+    if (typeof FileReader !== 'undefined') {
+      const reader = new FileReader();
+      reader.onloadstart = (e: any) => {
+        this.valor = inputNode.files[0].name;
+      };
+      reader.readAsArrayBuffer(inputNode.files[0]);
+    }
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    const transform = event.source.element.nativeElement.style.transform;
+    this.dragEndE.emit(transform);
+  }
+}

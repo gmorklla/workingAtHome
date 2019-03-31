@@ -1,0 +1,110 @@
+<!-- Navbar -->
+<mat-toolbar
+  color="primary"
+  class="mainContainer"
+>
+  <mat-toolbar-row class="mainToolbar">
+    <span
+      matTooltip="IMS"
+      [matTooltipPosition]="'right'"
+      class="name"
+      [routerLink]="['/login']"
+    >IMS</span>
+    <span class="spacer"></span>
+    <!-- ///////////// User info ///////////// -->
+    <ng-container *ngIf="(user | async); else noUser">
+      <div class="loginContainer">
+        <span
+          class="uCircle"
+          matTooltip="{{(user | async)?.email}}"
+          [matTooltipPosition]="'left'"
+          [matTooltipClass]="'primary-tooltip'"
+        >{{(user | async)?.email[0]}}</span>
+      </div>
+    </ng-container>
+    <ng-template #noUser>
+      <div class="loginContainer">
+        <span class="uCircle">N</span>
+        <span class="user">Not logged in</span>
+      </div>
+    </ng-template>
+    <!-- ///////////// Menu button icon ///////////// -->
+    <button
+      mat-button
+      [matMenuTriggerFor]="sectionsM"
+      matTooltip="Menu"
+      [matTooltipPosition]="'below'"
+      [matTooltipClass]="'primary-tooltip'"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-toolbar-row>
+  <!-- ///////////// Submenu toolbar ///////////// -->
+  <mat-toolbar-row class="submenu">
+    <span>{{title | uppercase}}</span>
+    <span class="spacer"></span>
+    <button
+      *ngIf="submenu.length > 0"
+      mat-button
+      [matMenuTriggerFor]="submenuM"
+      [matMenuTriggerData]="{data: submenu}"
+      matTooltip="Options"
+      [matTooltipPosition]="'left'"
+      [matTooltipClass]="'primary-tooltip'"
+    >
+      <mat-icon class="menuIcon">add</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<!-- ///////////// Submenu selection ///////////// -->
+<mat-menu #submenuM="matMenu">
+  <ng-template
+    matMenuContent
+    let-data="data"
+  >
+    <button
+      mat-menu-item
+      *ngFor="let sub of data"
+      (click)="$event.stopPropagation(); submenuCFn(sub)"
+    >
+      <mat-icon color="primary">{{sub.icon}}</mat-icon>
+      {{sub.name}}
+    </button>
+  </ng-template>
+</mat-menu>
+<!-- ///////////// Menu section selection ///////////// [routerLink]="section.url" -->
+<mat-menu #sectionsM="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let section of sections"
+    (click)="$event.stopPropagation(); navigate(section.url)"
+  >
+    <mat-icon>{{section.icon}}</mat-icon>
+    {{section.name}}
+  </button>
+  <button
+    mat-menu-item
+    [matMenuTriggerFor]="menu"
+  >
+    <mat-icon>format_color_fill</mat-icon>
+    Themes
+  </button>
+</mat-menu>
+<!-- ///////////// Menu theme selection ///////////// -->
+<mat-menu
+  #menu="matMenu"
+  panelClass="'themesMenu'"
+  class="themesMenu"
+>
+  <button
+    mat-menu-item
+    *ngFor="let theme of themes"
+    (click)="setTheme(theme.value)"
+    style="text-align: center;"
+  >
+    <mat-icon
+      [ngStyle]="{'color': theme.color}"
+      class="menuIcon"
+    >fiber_manual_record</mat-icon>
+  </button>
+</mat-menu>

@@ -1,0 +1,48 @@
+const styleGeneral = {
+  position: 'absolute',
+  transform: 'translate3d(0,0,0)',
+  width: '160px',
+  height: '70px',
+  'font-size': '12px',
+  'text-align': 'left',
+  'font-family': 'Arial, Helvetica, sans-serif',
+  'font-style': 'normal',
+  'line-height': '12px',
+  color: 'rgb(0,0,0)',
+  background: 'rgb(255,255,255)',
+  'border-width': '1px',
+  'border-style': 'solid',
+  'border-color': 'rgb(173,173,173)'
+};
+
+const styleBasico = {
+  position: 'absolute',
+  transform: 'translate3d(0,0,0)',
+  width: '160px',
+  height: '70px'
+};
+const styleRadioCheck = {
+  position: 'absolute',
+  transform: 'translate3d(0,0,0)',
+  width: '30px',
+  height: '30px'
+};
+
+export const ctrlStyleMap = {
+  text: styleGeneral,
+  number: styleGeneral,
+  email: styleGeneral,
+  password: styleGeneral,
+  button: styleGeneral,
+  select: styleGeneral,
+  div: styleGeneral,
+  image: styleBasico,
+  textarea: styleGeneral,
+  file: styleGeneral,
+  a: styleBasico,
+  checkbox: styleRadioCheck,
+  radio: styleRadioCheck,
+  range: styleBasico,
+  iframe: styleBasico,
+  template: styleBasico
+};

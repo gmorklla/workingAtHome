@@ -1,0 +1,85 @@
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { InputCheckboxService } from './input-checkbox.service';
+import { CheckboxStyleModel } from './models/checbox-style/checkbox-style.model';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+
+@Component({
+  selector: 'lib-input-checkbox',
+  templateUrl: './input-checkbox.component.html',
+  styleUrls: ['./input-checkbox.component.css']
+})
+export class InputCheckboxComponent implements OnInit {
+  @Input() public ctrl;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  public width: number;
+  public height: number;
+  public containerStyles: any;
+  public valor: string;
+  public estilos;
+
+  constructor(private service: InputCheckboxService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      this.containerStyles = this.setStylesOfContainer();
+
+      const checkboxStyleModel: CheckboxStyleModel = this.service.generateStyleCheckbox(
+        this.getNumValueNoPX(this.estilos.width),
+        this.getNumValueNoPX(this.estilos.height),
+        this.estilos['background-image']
+          ? this.estilos['background-image']
+          : '/assets/images/checkboxx.png'
+      );
+      delete this.estilos['background-size'];
+      const union: any = { ...checkboxStyleModel, ...this.estilos };
+      this.estilos = union;
+      delete this.estilos.background;
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      delete this.estilos.width;
+      delete this.estilos.height;
+      this.valor = value ? value : 'Mensaje';
+    }
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.width = e.size.width;
+    this.height = e.size.height;
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    const transform = event.source.element.nativeElement.style.transform;
+    this.dragEndE.emit(transform);
+  }
+
+  // Obtiene estilos que deben aplicarse al contenedor
+  setStylesOfContainer() {
+    const {
+      width = '100px',
+      height = '100px',
+      transform = 'translate3d(0,0,0)'
+    } = this.estilos;
+    this.width = this.getNumValueNoPX(width);
+    this.height = this.getNumValueNoPX(height);
+    const fObj = {
+      transform: transform,
+      position: 'absolute'
+    };
+    return { ...fObj };
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

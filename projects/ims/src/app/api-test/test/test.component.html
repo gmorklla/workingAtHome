@@ -1,0 +1,52 @@
+<form
+  [formGroup]="queryForm"
+  novalidate
+>
+  <div class="ffContainer">
+    <mat-form-field class="sTerm">
+      <mat-select
+        placeholder="Get distinct"
+        formControlName="termCtrl"
+      >
+        <mat-option
+          *ngFor="let term of terms"
+          value="{{term}}"
+        >
+          {{term}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="list">
+      <input
+        matInput
+        placeholder="List"
+        aria-label="List"
+        [matAutocomplete]="auto"
+        formControlName="listCtrl"
+      >
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let item of filteredList | async"
+          [value]="item"
+        >
+          <span>{{item}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="queryForm.status === 'INVALID'"
+      (click)="addFilter()"
+    >Add filter</button>
+  </div>
+</form>
+<div class="queriesContainer">
+  <mat-chip-list>
+    <mat-chip
+      color="primary"
+      selected
+      *ngFor="let query of queries"
+    >{{query.type}}: {{query.value}}</mat-chip>
+  </mat-chip-list>
+</div>

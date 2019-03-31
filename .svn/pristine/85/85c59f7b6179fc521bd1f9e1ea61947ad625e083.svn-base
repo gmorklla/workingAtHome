@@ -1,0 +1,4 @@
+<ng-container *ngIf="ctrlSelected.type !== 'image'; else container">
+  <app-general-form [control]="ctrlSelected"></app-general-form>
+</ng-container>
+<ng-template #container></ng-template>

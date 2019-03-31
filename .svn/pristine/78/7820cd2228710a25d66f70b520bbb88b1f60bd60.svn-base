@@ -1,0 +1,167 @@
+import { Injectable, HostListener } from '@angular/core';
+import { EventEmitterService } from './event-emitter.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ShortcutsService {
+  constructor(private emitterS: EventEmitterService) {
+    window.addEventListener('keydown', event => {
+      if (event.ctrlKey) {
+        this.emitterS.dispatchShortcutsMenu(true);
+      }
+    });
+    window.addEventListener('keyup', event => {
+      if (event.key === 'Control') {
+        this.emitterS.dispatchShortcutsMenu(false);
+      }
+      // Mensaje
+      if (event.altKey && event.ctrlKey && event.key === 'm') {
+        this.emitterS.dispatchShortcut({
+          id: 1,
+          type: 'control'
+        });
+      }
+      // Texto
+      if (event.altKey && event.ctrlKey && event.key === 't') {
+        this.emitterS.dispatchShortcut({
+          id: 2,
+          type: 'control'
+        });
+      }
+      // Email
+      if (event.altKey && event.ctrlKey && event.key === 'e') {
+        this.emitterS.dispatchShortcut({
+          id: 3,
+          type: 'control'
+        });
+      }
+      // Contraseña
+      if (event.altKey && event.ctrlKey && event.key === 'c') {
+        this.emitterS.dispatchShortcut({
+          id: 4,
+          type: 'control'
+        });
+      }
+      // Numero
+      if (event.altKey && event.ctrlKey && event.key === 'n') {
+        this.emitterS.dispatchShortcut({
+          id: 5,
+          type: 'control'
+        });
+      }
+      // Combo
+      if (event.altKey && event.ctrlKey && event.key === 'o') {
+        this.emitterS.dispatchShortcut({
+          id: 6,
+          type: 'control'
+        });
+      }
+      // Radio
+      if (event.altKey && event.ctrlKey && event.key === 'r') {
+        this.emitterS.dispatchShortcut({
+          id: 7,
+          type: 'control'
+        });
+      }
+      // Checkbox
+      if (event.altKey && event.ctrlKey && event.key === 'h') {
+        this.emitterS.dispatchShortcut({
+          id: 8,
+          type: 'control'
+        });
+      }
+      // Rango
+      if (event.altKey && event.ctrlKey && event.key === 'a') {
+        this.emitterS.dispatchShortcut({
+          id: 9,
+          type: 'control'
+        });
+      }
+      // Boton
+      if (event.altKey && event.ctrlKey && event.key === 'b') {
+        this.emitterS.dispatchShortcut({
+          id: 10,
+          type: 'control'
+        });
+      }
+      // Area texto
+      if (event.altKey && event.ctrlKey && event.key === 'x') {
+        this.emitterS.dispatchShortcut({
+          id: 11,
+          type: 'control'
+        });
+      }
+      // Link
+      if (event.altKey && event.ctrlKey && event.key === 'l') {
+        this.emitterS.dispatchShortcut({
+          id: 12,
+          type: 'control'
+        });
+      }
+      // Archivo
+      if (event.altKey && event.ctrlKey && event.key === 'f') {
+        this.emitterS.dispatchShortcut({
+          id: 13,
+          type: 'control'
+        });
+      }
+      // Imagen
+      if (event.altKey && event.ctrlKey && event.key === 'i') {
+        this.emitterS.dispatchShortcut({
+          id: 14,
+          type: 'control'
+        });
+      }
+      // Video
+      if (event.altKey && event.ctrlKey && event.key === 'v') {
+        this.emitterS.dispatchShortcut({
+          id: 15,
+          type: 'control'
+        });
+      }
+      // Token
+      if (event.altKey && event.ctrlKey && event.key === 'k') {
+        this.emitterS.dispatchShortcut({
+          id: 2,
+          type: 'widget'
+        });
+      }
+      // Copy
+      if (event.altKey && event.ctrlKey && event.key === 'p') {
+        this.emitterS.dispatchShortcut({
+          id: 1,
+          type: 'command'
+        });
+      }
+      // Paste
+      if (event.altKey && event.ctrlKey && event.key === 's') {
+        this.emitterS.dispatchShortcut({
+          id: 2,
+          type: 'command'
+        });
+      }
+      // LockAxis x
+      if (
+        (event.altKey && event.ctrlKey && event.key === 'ArrowLeft') ||
+        (event.altKey && event.ctrlKey && event.key === 'ArrowRight')
+      ) {
+        this.emitterS.dispatchLockAxis('x');
+      }
+      // LockAxis y
+      if (
+        (event.altKey && event.ctrlKey && event.key === 'ArrowUp') ||
+        (event.altKey && event.ctrlKey && event.key === 'ArrowDown')
+      ) {
+        this.emitterS.dispatchLockAxis('y');
+      }
+      // Delete
+      if (event.code === 'Delete' && event.ctrlKey) {
+        this.emitterS.dispatchShortcut({
+          id: 3,
+          type: 'command'
+        });
+      }
+    });
+  }
+}

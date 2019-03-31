@@ -1,0 +1,154 @@
+<!-- <div class="deleteBtn">
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="deleteItem($event)"
+  >Borrar item</button>
+</div>
+<form
+  [formGroup]="stylesContainerForm"
+  novalidate
+>
+  <mat-form-field>
+    <input
+      id="in-image-source"
+      matInput
+      placeholder="Source"
+      type="string"
+      formControlName="value"
+      (change)="updateSrc($event)"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Ancho"
+      type="number"
+      formControlName="width"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Alto"
+      type="number"
+      formControlName="height"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Posición x"
+      type="number"
+      formControlName="x"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Posición y"
+      type="number"
+      formControlName="y"
+    >
+  </mat-form-field>
+</form> -->
+
+<mat-card>
+  <mat-card-content>
+    <section class="range-section">
+      <!-- <mat-form-field class="range-margin">
+        <input
+          matInput
+          type="number"
+          placeholder="Value"
+          [(ngModel)]="value"
+          (ngModelChange)="onChange($event, 'value')"
+        >
+      </mat-form-field> -->
+      <mat-form-field class="range-margin">
+        <input
+          matInput
+          type="number"
+          placeholder="Min value"
+          [(ngModel)]="min"
+          (ngModelChange)="onChange($event, 'min')"
+        >
+      </mat-form-field>
+      <mat-form-field class="range-margin">
+        <input
+          matInput
+          type="number"
+          placeholder="Max value"
+          [(ngModel)]="max"
+          (ngModelChange)="onChange($event, 'max')"
+        >
+      </mat-form-field>
+      <mat-form-field class="range-margin">
+        <input
+          matInput
+          type="number"
+          placeholder="Step size"
+          [(ngModel)]="step"
+          (ngModelChange)="onChange($event, 'step')"
+        >
+      </mat-form-field>
+    </section>
+
+    <section class="range-section">
+      <mat-checkbox
+        class="range-margin"
+        [(ngModel)]="showTicks"
+        (ngModelChange)="onChange($event, 'showTicks')"
+      >Show ticks</mat-checkbox>
+      <mat-checkbox
+        class="range-margin"
+        [(ngModel)]="autoTicks"
+        (ngModelChange)="onChange($event, 'autoTicks')"
+        *ngIf="showTicks"
+      >
+        Auto ticks
+      </mat-checkbox>
+      <mat-form-field
+        class="range-margin"
+        *ngIf="showTicks && !autoTicks"
+      >
+        <input
+          matInput
+          type="number"
+          placeholder="Tick interval"
+          [(ngModel)]="tickInterval"
+          (ngModelChange)="onChange($event, 'tickInterval')"
+        >
+      </mat-form-field>
+    </section>
+
+    <section class="range-section">
+      <mat-checkbox
+        class="range-margin"
+        [(ngModel)]="thumbLabel"
+        (ngModelChange)="onChange($event, 'thumbLabel')"
+      >Show thumb label</mat-checkbox>
+    </section>
+
+    <section class="range-section">
+      <mat-checkbox
+        class="range-margin"
+        [(ngModel)]="vertical"
+        (ngModelChange)="onChange($event, 'vertical')"
+      >Vertical</mat-checkbox>
+    </section>
+
+    <section class="range-section">
+      <mat-checkbox
+        class="range-margin"
+        [(ngModel)]="disabled"
+        (ngModelChange)="onChange($event, 'disabled')"
+      >Disabled</mat-checkbox>
+    </section>
+
+  </mat-card-content>
+</mat-card>

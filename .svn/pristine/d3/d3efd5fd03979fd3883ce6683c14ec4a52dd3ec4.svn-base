@@ -1,0 +1,44 @@
+import { Component, OnInit } from '@angular/core';
+import { HttpCallService } from 'projects/http-call/src/public_api';
+import { port, ip } from '../../shared/data/port';
+import { WindowModel } from '../../shared/models/window/window.model';
+import { FormatStylesService } from '../../shared/services/format-styles/format-styles.service';
+
+@Component({
+  selector: 'app-render',
+  templateUrl: './render.component.html',
+  styleUrls: ['./render.component.css']
+})
+export class RenderComponent implements OnInit {
+  public window: WindowModel;
+
+  constructor(
+    private http: HttpCallService,
+    private formatStylesService: FormatStylesService
+  ) {}
+
+  public ngOnInit() {
+    this.getWindow();
+  }
+
+  public getWindow() {
+    const url = `http://${ip}:${port}/wconfig-services/window/478`;
+    this.http.getRequest(url, {}).subscribe((val: WindowModel) => {
+      this.window = val;
+      console.log('[this.window]: ', this.window);
+    });
+  }
+
+  // De un 'string de estilos css' generará un objeto del tipo ngStyle
+  public setStylesOfWindow(window: WindowModel): { [key: string]: any } {
+    const tamanio = `width:${window.width}px;height:${
+      window.height
+    }px;position:relative;`;
+    const style: string = window.attributes['style'] + tamanio;
+    const styleObj: {
+      [key: string]: any;
+    } = this.formatStylesService.stringToObj(style);
+
+    return styleObj;
+  }
+}

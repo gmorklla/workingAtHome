@@ -1,0 +1,4 @@
+<textarea
+  [ngStyle]="stylesObj"
+  [placeholder]="value"
+></textarea>

@@ -1,0 +1,6 @@
+<input
+  [type]="ctrl.type"
+  [value]="value"
+  [ngStyle]="stylesObj"
+  style="box-sizing: border-box;"
+>

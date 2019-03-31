@@ -1,0 +1,28 @@
+<ng-container>
+  <div
+    class="item"
+    [ngStyle]="containerStyles"
+    cdkDrag
+    (cdkDragStarted)="clickOnCtrl($event)"
+    (cdkDragEnded)="onDragEnd($event)"
+    [cdkDragBoundary]="'.contenedor'"
+    [cdkDragLockAxis]="lockAxis"
+    ngResizable
+    rzHandles="se"
+    (rzStart)="clickOnCtrl($event)"
+    (rzStop)="onResizeStop($event)"
+    matTooltip="Control: {{ ctrl.type }} - {{ ctrl.id }}"
+    [matTooltipPosition]="'above'"
+    [style.width.px]="width"
+    [style.height.px]="height"
+    (click)="clickOnCtrl($event); $event.stopPropagation()"
+  >
+    <span [innerHtml]="iframe_html"></span>
+    <div
+      class="handle"
+      cdkDragHandle
+      [style.width.px]="width"
+      [style.height.px]="height"
+    ></div>
+  </div>
+</ng-container>

@@ -1,0 +1,70 @@
+import { NgModule } from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {CampaignRoutingModule} from "../../../banorte/src/app/campaign/campaign.routing.module";
+import {
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatCardModule, MatCheckboxModule, MatDialogModule, MatDividerModule, MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule, MatMenuModule,
+  MatPaginatorModule,
+  MatSelectModule, MatSnackBarModule,
+  MatTableModule, MatTooltipModule
+} from "@angular/material";
+import {CampaignsComponent} from './campaigns.component';
+import { FilterComponent } from './components/filter/filter.component';
+import {ChannelService} from "./services/channel.service";
+import {LinkedChannelService} from './services/linked-channel.service';
+import {CampaignService} from './services/campaign.service';
+import {ConfigurationService} from './services/configuration.service';
+import {AlertService} from './services/alert/alert.service';
+import {UtilsService} from './services/utils/utils.service';
+import {DialogModule} from './components/dialog/dialog.module';
+import {SectionModule} from './components/section/section.module';
+
+@NgModule({
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    CampaignRoutingModule,
+    DialogModule,
+    SectionModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatBottomSheetModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatSelectModule,
+    MatListModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatBadgeModule,
+    MatMenuModule,
+    MatSnackBarModule
+  ],
+  declarations: [
+    CampaignsComponent,
+    FilterComponent
+  ],
+  exports: [
+    CampaignsComponent
+  ],
+  providers: [
+    AlertService,
+    UtilsService,
+    ChannelService,
+    LinkedChannelService,
+    CampaignService,
+    ConfigurationService
+  ]
+})
+export class CampaignsModule { }

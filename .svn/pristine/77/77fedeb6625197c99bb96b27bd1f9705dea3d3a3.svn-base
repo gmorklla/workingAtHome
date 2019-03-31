@@ -1,0 +1,12 @@
+<div class="mw-100">
+  <div class="row">
+    <div class="form-group col-sm-12">
+      <iib-buscar-preguntas
+        [windowId]="winIdCtrlSelect"
+        [controlHTML]="controlHTML"
+        [pregunta]="pregunta"
+        (regresarPregunta)="regresarPregunta($event)">
+      </iib-buscar-preguntas>
+    </div>
+  </div>
+</div>

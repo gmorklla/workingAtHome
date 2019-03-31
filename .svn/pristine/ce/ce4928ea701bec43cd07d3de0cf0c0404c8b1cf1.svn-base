@@ -1,0 +1,136 @@
+import { element } from 'protractor';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { InputRangeService } from './input-range.service';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { coerceNumberProperty } from '@angular/cdk/coercion';
+
+interface InputRangeCtrlModel {
+  id: number;
+  name: string;
+  type: string;
+  attributes: {
+    min: string;
+    max: string;
+    style: string;
+    step: string;
+    value: string;
+    showMinMax: string;
+  };
+  options: any;
+  tag: string;
+}
+
+@Component({
+  selector: 'lib-input-range',
+  templateUrl: './input-range.component.html',
+  styleUrls: ['./input-range.component.css']
+})
+export class InputRangeComponent implements OnInit {
+  @Input() public ctrl;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  autoTicks = false;
+  disabled = false;
+  invert = false;
+  max = 100;
+  min = 0;
+  showTicks = false;
+  step = 1;
+  thumbLabel = false;
+  value = 0;
+  vertical = false;
+  public stylesObj: any;
+  public estilos;
+  public width: number;
+  public height: number;
+  // public value: string;
+  // public min: number;
+  // public max: number;
+  // public step: number;
+  public showMinMax: string;
+  public containerStyles;
+  get tickInterval(): number | 'auto' {
+    return this.showTicks ? (this.autoTicks ? 'auto' : this._tickInterval) : 0;
+  }
+  set tickInterval(value) {
+    this._tickInterval = coerceNumberProperty(value);
+  }
+  private _tickInterval = 1;
+
+  constructor(private service: InputRangeService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: {
+          style,
+          autoTicks = false,
+          disabled = false,
+          max = 100,
+          min = 0,
+          showTicks = false,
+          step = 1,
+          thumbLabel = false,
+          value = 0,
+          vertical = false
+        }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      this.containerStyles = this.setStylesOfContainer();
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      delete this.estilos.width;
+      delete this.estilos.height;
+      this.autoTicks = JSON.parse(autoTicks);
+      this.disabled = JSON.parse(disabled);
+      this.max = Number(max);
+      this.min = Number(min);
+      this.showTicks = JSON.parse(showTicks);
+      this.step = Number(step);
+      this.thumbLabel = JSON.parse(thumbLabel);
+      // this.value = Number(value);
+      this.vertical = JSON.parse(vertical);
+    }
+    this.service.emitChange.subscribe(e =>
+      Object.keys(e).forEach(attr => (this[attr] = e[attr]))
+    );
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.width = e.size.width;
+    this.height = e.size.height;
+    this.service.rzStopE.next(e.size);
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    const transform = event.source.element.nativeElement.style.transform;
+    this.service.dragEndE.next(transform);
+    this.dragEndE.emit(transform);
+  }
+
+  // Obtiene estilos que deben aplicarse al contenedor
+  setStylesOfContainer() {
+    const {
+      width = '150px',
+      height = '60px',
+      transform = 'translate3d(0,0,0)'
+    } = this.estilos;
+    this.width = this.getNumValueNoPX(width);
+    this.height = this.getNumValueNoPX(height);
+    const fObj = {
+      transform: transform,
+      position: 'absolute'
+    };
+    return { ...fObj };
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

@@ -1,0 +1,16 @@
+import {Component, OnInit} from '@angular/core';
+
+/**
+ * @title Data table with sorting, pagination, and filtering.
+ */
+@Component({
+  selector: 'app-campaign',
+  templateUrl: './campaign.component.html',
+  styleUrls: ['./campaign.component.css']
+})
+export class CampaignComponent implements OnInit {
+
+  ngOnInit() {
+
+  }
+}

@@ -1,0 +1,48 @@
+<lib-loader></lib-loader>
+<form novalidate
+      autocomplete="off"
+      [formGroup]="mainForm">
+  <div class="container-fluid py-5 mb-4">
+    <div class="row mt-4">
+      <div class="col-md-8">
+        <label class="pt-3"> Crear flujo </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field class="d-block">
+          <input matInput placeholder="Nombre" formControlName="name">
+          <mat-error *ngIf="name.hasError('required')">
+            Campo <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="d-block">
+          <input matInput [matDatepicker]="pickerStartDate" [min]="minDate" placeholder="Vigencia (Inicio)" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+          <mat-datepicker #pickerStartDate disabled="false"></mat-datepicker>
+          <mat-error *ngIf="startDate.hasError('required')">
+            Campo <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="d-block">
+          <input matInput [matDatepicker]="pickerEndDate" [min]="minDate" placeholder="Vigencia (Fin)" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEndDate disabled="false"></mat-datepicker>
+          <mat-error *ngIf="endDate.hasError('required')">
+            Campo <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <mat-card class="page-footer py-2 d-flex justify-content-between">
+    <button mat-button color="primary" class="btn-action mr-1"
+            [routerLink]="['/flows']"><i class="material-icons">navigate_before</i> Regresar
+    </button>
+    <button mat-raised-button color="primary" class="btn-action"><i class="material-icons">save_alt</i> Guardar</button>
+  </mat-card>
+</form>

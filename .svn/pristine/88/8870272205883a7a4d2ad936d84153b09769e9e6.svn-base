@@ -1,0 +1,29 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { DivMessageService } from './div-message.service';
+
+@Component({
+  selector: 'lib-div-message',
+  template: `
+    <div [ngStyle]="estilos" style="white-space:pre-wrap;">{{ valor }}</div>
+  `,
+  styleUrls: ['./div-message.css']
+})
+export class DivMessageComponent implements OnInit {
+  @Input() ctrl;
+  valor: string;
+  estilos;
+
+  constructor(private service: DivMessageService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      this.valor = value && value.trim() !== '' ? value : this.ctrl.type;
+    }
+  }
+}

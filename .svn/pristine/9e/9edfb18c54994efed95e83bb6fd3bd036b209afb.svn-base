@@ -1,0 +1,21 @@
+const PROXY_CONFIG = { // TODO => Se agrega /mm-services/ al target.
+  "**": {
+    //"target": "http://lnxsapl1d.dev.unix.banorte.com:9080", // Banorte
+    // "target": "http://15.157.30.223:8080", // Jose Luis
+    "target": "http://localhost:8080", // Mi local
+    // "target": "http://15.157.48.78:8080", // YocundosMundial
+    // "target": "http://15.157.38.71:8080", // JuanAlejandro
+    "secure": false,
+    "bypass": function (req) {
+      if (req && req.headers && req.headers.accept &&
+        req.headers.accept && req.headers.accept.indexOf("html") !== -1) {
+        console.log("Skipping proxy for browser request.");
+        return "/index.html";
+      }
+    },
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+};
+
+module.exports = PROXY_CONFIG;

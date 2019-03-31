@@ -1,0 +1,212 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: whitesmoke; */
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+/* in-flight clone */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
+.dynamicInputs .mat-form-field-flex {
+  align-items: flex-end;
+}
+
+.mat-button-toggle-label-content {
+  line-height: 35px !important;
+  padding: 0 10px !important;
+}
+
+.panelIzquierdo .mat-expansion-panel-body {
+  padding: 0 0 16px;
+}
+
+.modalAttrs mat-checkbox label.mat-checkbox-layout {
+  margin-bottom: 0 !important;
+}
+
+.value-container {
+  display: flex !important;
+  align-items: center;
+  width: 95%;
+  border-radius: 5px;
+  background: #eaeaea !important;
+  border: 1px solid #637079;
+  color: #7392a7 !important;
+  padding: 5px 0;
+  transition: all 0.3s ease;
+}
+
+.value-container.selected,
+.value-container:hover {
+  margin: 5px 0;
+  box-shadow: 1px 1px 10px #00000030;
+  background: #c3c3c3 !important;
+}
+
+.value-container.selected .node-value,
+.value-container:hover .node-value {
+  color: #5a5a5a !important;
+}
+
+tree-internal .tree .folding.nodeExpanded,
+tree-internal .tree .folding.nodeCollapsed {
+  width: 20px;
+  height: 20px;
+  padding: 0 3px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  border: 1px solid #cacaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  position: relative;
+  left: -10px;
+  cursor: pointer;
+}
+
+tree-internal .tree .folding.nodeExpanded:before {
+  content: '-';
+  color: #757575;
+}
+
+tree-internal .tree .folding.nodeCollapsed:before {
+  content: '+';
+  color: #757575;
+}
+
+.node-menu .node-menu-content li.node-menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.node-menu .node-menu-content .node-menu-item .node-menu-item-icon {
+  width: 24px !important;
+}
+
+.nFolder:before {
+  content: url(/assets/iconos/folder.svg);
+}
+
+.nHijo:before {
+  content: url(/assets/iconos/web_asset.svg);
+}
+
+.nBorrar:before {
+  content: url(/assets/iconos/delete.svg);
+}
+
+.node-menu {
+  top: -132px;
+}
+
+.node-value {
+  width: 100%;
+}
+
+tree-internal ul {
+  padding: 3px 0 0px 25px !important;
+}
+
+/* Controls */
+.form-field {
+  width: 100%;
+}
+  .form-field-one-buttom {
+    display: inline-block !important;
+    width: calc(100% - 40px);
+  }
+
+.btn-action {
+  min-width: 120px !important;
+}
+
+.width-100 {
+  min-width: 100px;
+}
+.width-120 {
+  min-width: 120px;
+}
+.width-140 {
+  min-width: 140px;
+}
+
+/* Colors */
+.color-red {
+  color: #EC0029 !important;
+}
+.color-white {
+  color: #FFFFFF !important;
+}
+
+/* Footer */
+.page-footer {
+  position: fixed !important;
+  bottom: 0px;
+  width: 100%;
+  border-radius: 0px !important;
+  background: rgba(171, 170, 170, 0.46) !important;
+}
+
+tree-internal .tree .node-value {
+  cursor: pointer;
+}
+
+tree-internal .tree .node-value:after {
+  display: block;
+  padding-top: -3px;
+  width: 0;
+  height: 3px !important;
+  border-radius: 10px;
+  background-color: #5a5a5a !important;
+  content: '';
+  transition: width 0.3s;
+}
+
+tree-internal .tree .node-value:hover:after,
+tree-internal .tree .node-selected:after {
+  width: 26px !important;
+}
+
+.ng-resizable-handle.ng-resizable-se {
+  right: 3px;
+  bottom: 3px;
+}
+
+/* Alerts */
+.fu-alert-danger .mat-button-wrapper {
+  color: red !important;
+}

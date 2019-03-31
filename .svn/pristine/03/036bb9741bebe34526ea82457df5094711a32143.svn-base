@@ -1,0 +1,6 @@
+<div class="wrapper">
+  <button
+    mat-raised-button
+    (click)="crearVentana()"
+  >Crear ventana</button>
+</div>

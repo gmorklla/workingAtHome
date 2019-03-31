@@ -1,0 +1,30 @@
+<h3><code>ng2-dragula</code></h3>
+
+<!-- these are some basics to get you started -- modify as you see fit. -->
+
+<!-- <div class="flex">
+  <div
+    class="container"
+    dragula="VAMPIRES"
+    [(dragulaModel)]="vamps"
+    id="left"
+  >
+    <div
+      class="vamp"
+      *ngFor="let vamp of vamps"
+    >{{ vamp.name }}</div>
+  </div>
+</div>
+<div
+  id="right"
+  class="container canvas"
+  dragula="VAMPIRES"
+  [(dragulaModel)]="vamps2"
+>
+  <span
+    class="item"
+    *ngFor="let vamp of vamps2"
+    cdkDragBoundary="#right"
+    cdkDrag
+  >{{ vamp.name }}</span>
+</div> -->

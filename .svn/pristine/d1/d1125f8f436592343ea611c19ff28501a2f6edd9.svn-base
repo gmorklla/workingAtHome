@@ -1,0 +1,104 @@
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { InputRangeService } from './input-range.service';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+
+interface InputRangeCtrlModel {
+  id: number;
+  name: string;
+  type: string;
+  attributes: {
+    min: string;
+    max: string;
+    style: string;
+    step: string;
+    value: string;
+    showMinMax: string;
+  };
+  options: any;
+  tag: string;
+}
+
+@Component({
+  selector: 'lib-input-range',
+  templateUrl: './input-range.component.html',
+  styleUrls: ['./input-range.component.css']
+})
+export class InputRangeComponent implements OnInit {
+  @Input() public ctrl: InputRangeCtrlModel;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  public stylesObj: any;
+  public estilos;
+  public width: number;
+  public height: number;
+  public value: string;
+  public min: number;
+  public max: number;
+  public step: number;
+  public showMinMax: string;
+  public containerStyles;
+
+  constructor(private service: InputRangeService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      this.containerStyles = this.setStylesOfContainer();
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      delete this.estilos.width;
+      delete this.estilos.height;
+      this.min = this.ctrl.attributes.min
+        ? Number(this.ctrl.attributes.min)
+        : 0;
+      this.max = this.ctrl.attributes.max
+        ? Number(this.ctrl.attributes.max)
+        : 10;
+      this.step = this.ctrl.attributes.step
+        ? Number(this.ctrl.attributes.step)
+        : 1;
+      this.showMinMax = this.ctrl.attributes.showMinMax
+        ? this.ctrl.attributes.showMinMax
+        : 'true';
+    }
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.width = e.size.width;
+    this.height = e.size.height;
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    const transform = event.source.element.nativeElement.style.transform;
+    this.dragEndE.emit(transform);
+  }
+
+  // Obtiene estilos que deben aplicarse al contenedor
+  setStylesOfContainer() {
+    const {
+      width = '150px',
+      height = '60px',
+      transform = 'translate3d(0,0,0)'
+    } = this.estilos;
+    this.width = this.getNumValueNoPX(width);
+    this.height = this.getNumValueNoPX(height);
+    const fObj = {
+      transform: transform,
+      position: 'absolute'
+    };
+    return { ...fObj };
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

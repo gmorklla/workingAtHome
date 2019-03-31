@@ -1,0 +1,9 @@
+import { NgModule } from '@angular/core';
+import { FlowComponent } from './flow/flow.component';
+import { FlowsModule } from '../../../../flows/src/lib/flows.module';
+
+@NgModule({
+  imports: [FlowsModule],
+  declarations: [FlowComponent]
+})
+export class FlowModule { }

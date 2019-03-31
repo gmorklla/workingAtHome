@@ -1,0 +1,80 @@
+<mat-list class="p-0" role="list" *ngIf="element.listLinkedChannels && element.listLinkedChannels.length > 0">
+  <mat-list-item class="linked-channel" role="listitem" *ngFor="let linkedChannel of element.listLinkedChannels">
+    <div class="row my-1" *ngIf="linkedChannel.linkDate && fn_showLinkedChannel(linkedChannel)">
+      <div class="col-4 pt-2">
+        <span class="text-info" [ngClass]="{'color-red': fn_isUpdateLinkedChannel(linkedChannel)}"> {{linkedChannel.channel.idSubChannel}} - {{linkedChannel.channel.descriptionSubChannel}} </span>
+        <span class="badge badge-danger px-2" *ngIf="fn_isNewLinkedChannel(linkedChannel);"> Nuevo </span>
+      </div>
+      <div class="col-8 d-flex justify-content-end">
+        <button mat-button class="mr-2" matTooltip="Vista previa" [matTooltipPosition]="'above'"
+                *ngIf="linkedChannel.status.id !== LinkedChannelStatusConstant.NEW">
+          <i class="material-icons md-18">play_circle_outline</i>
+        </button>
+        <button mat-button color="primary" class="btn-action" [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+          Opciones
+        </button>
+        <mat-menu #menu="matMenu">
+          <div class="text-center mb-2">
+            <small class="font-weight-bold border-bottom">{{linkedChannel.channel.descriptionSubChannel}}</small>
+          </div>
+          <button mat-menu-item
+                  *ngIf="linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+                  [matMenuTriggerFor]="designs">
+            <mat-icon class="color-red">wallpaper</mat-icon>
+            <span>Diseño</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+                  (click)="fn_openDialogForSettings(linkedChannel);">
+            <mat-icon class="color-red">settings</mat-icon>
+            <span class="pr-3">Configuración</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+                  [disabled]="linkedChannel.status.id !== LinkedChannelStatusConstant.DESIGN && linkedChannel.status.id !== LinkedChannelStatusConstant.INACTIVE"
+                  (click)="fn_openDialogForActivation(linkedChannel);">
+            <mat-icon
+              [ngClass]="{'color-red': linkedChannel.status.id === LinkedChannelStatusConstant.DESIGN || linkedChannel.status.id === LinkedChannelStatusConstant.INACTIVE}">
+              check_circle_outline
+            </mat-icon>
+            <span>Activación</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="linkedChannel.status.id === LinkedChannelStatusConstant.ACTIVE"
+                  (click)="fn_openDialogForDesactivation(linkedChannel);">
+            <mat-icon class="color-red">not_interested</mat-icon>
+            <span class="pr-3">Desactivación</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="linkedChannel.status.id !== LinkedChannelStatusConstant.ACTIVE"
+                  (click)="fn_openDialogForDLink(linkedChannel);">
+            <mat-icon class="color-red">delete_outline</mat-icon>
+            <span>Desvincular</span>
+          </button>
+        </mat-menu>
+        <mat-menu #designs="matMenu">
+          <div *ngFor="let linkedChannelDesign of linkedChannel.listDesigns; let i = index">
+            <button mat-menu-item
+               [routerLink]="['/layout/design/' + linkedChannelDesign.design.id + '/window/' + linkedChannelDesign.design.initWindowId]">
+              <mat-icon class="color-red">open_in_new</mat-icon>
+              <span>{{linkedChannelDesign.design.name}}</span>
+            </button>
+          </div>
+          <button mat-menu-item (click)="fn_createDesign(linkedChannel);">
+            <mat-icon class="color-red">add</mat-icon>
+            <span class="pr-3">Crear nuevo</span>
+          </button>
+        </mat-menu>
+        <p class="text-dark width-140 m-0 p-2">
+          <span matTooltip="Estatus" [matTooltipPosition]="'above'">{{linkedChannel.status.name}}</span>
+        </p>
+      </div>
+    </div>
+  </mat-list-item>
+</mat-list>
+<div class="d-flex align-items-center color-red p-3 m-0"
+     *ngIf="!element.listLinkedChannels || element.listLinkedChannels.length === 0">
+  <i class="material-icons">error_outline</i> <span
+  class="ml-2"> No existe ningún canal vinculado a esta campaña </span>
+</div>

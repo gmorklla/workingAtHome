@@ -1,0 +1,10 @@
+<select
+  [ngStyle]="stylesObj"
+>
+  <option>{{value}}</option>
+  <option
+    *ngFor="let option of options"
+    [value]="option.key"
+  >{{option.value}}
+  </option>
+</select>

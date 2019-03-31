@@ -1,0 +1,19 @@
+<div class="users">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <span
+          matBadge="{{users.length}}"
+          matBadgeOverlap="false"
+        >Users</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let user of users">
+          {{user.socket_username}}
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>

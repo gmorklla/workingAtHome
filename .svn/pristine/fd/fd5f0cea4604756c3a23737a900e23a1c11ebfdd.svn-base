@@ -1,0 +1,30 @@
+import { Injectable } from '@angular/core';
+import { HttpCallService } from 'projects/http-call/src/public_api';
+import { target } from 'projects/banorte/src/app/shared/data/port';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TreeService {
+  constructor(private http: HttpCallService) {}
+
+  addWindow(node, flowId: string, name: string): Observable<any> {
+    const url = `${target}window/${node.id}/child`;
+    const obj = {
+      id: '',
+      name: name,
+      height: 500,
+      width: 500,
+      responseCode: 'A01',
+      attributes: { style: 'background-color:rgb(255,255,255);' },
+      flowId: flowId
+    };
+    return this.http.postRequest(url, obj, {});
+  }
+
+  deleteWindow(node) {
+    const url = `http://localhost:8080/wconfig-services/window/${node.id}`;
+    return this.http.deleteRequest(url, {});
+  }
+}

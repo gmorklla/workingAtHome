@@ -1,0 +1,95 @@
+import {
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import { ControlModel } from '../../../../shared/models/control/control.model';
+import { RenderInputsComponent } from 'projects/render-inputs/src/public_api';
+import { RenderButtonComponent } from 'projects/render-button/src/public_api';
+import { RenderDivMessageComponent } from 'projects/render-div-message/src/public_api';
+import { RenderSelectComponent } from 'projects/render-select/src/public_api';
+import { RenderTextareaComponent } from 'projects/render-textarea/src/public_api';
+import { RenderCheckboxComponent } from 'projects/render-checkbox/src/public_api';
+import { RenderRadioComponent } from 'projects/render-radio/src/public_api';
+import { RenderRangeComponent } from 'projects/render-range/src/public_api';
+import { RenderImageComponent } from 'projects/render-image/src/public_api';
+import { RenderAComponent } from 'projects/render-a/src/public_api';
+import { RenderIframeComponent } from 'projects/render-iframe/src/public_api';
+import { RenderFileComponent } from 'projects/render-file/src/public_api';
+
+@Component({
+  selector: 'app-dinamico',
+  templateUrl: './dinamico.component.html',
+  styleUrls: ['./dinamico.component.css']
+})
+export class DinamicoComponent implements OnInit {
+  @Input() public control: ControlModel;
+  @ViewChild('container', {read: ViewContainerRef}) public container: ViewContainerRef;
+
+  constructor(
+    private resolver: ComponentFactoryResolver
+  ) {
+  }
+
+  ngOnInit() {
+    this.createComponent();
+  }
+
+  createComponent() {
+    let componentToRender;
+    switch (this.control.type) {
+      case 'text':
+      case 'number':
+      case 'email':
+      case 'password':
+        componentToRender = RenderInputsComponent;
+        break;
+      case 'button':
+        componentToRender = RenderButtonComponent;
+        break;
+      case 'div':
+        componentToRender = RenderDivMessageComponent;
+        break;
+      case 'textarea':
+        componentToRender = RenderTextareaComponent;
+        break;
+      case 'select':
+        componentToRender = RenderSelectComponent;
+        break;
+      case 'checkbox':
+        componentToRender = RenderCheckboxComponent;
+        break;
+      case 'radio':
+        componentToRender = RenderRadioComponent;
+        break;
+      case 'range':
+        componentToRender = RenderRangeComponent;
+        break;
+      case 'image':
+        componentToRender = RenderImageComponent;
+        break;
+      case 'a':
+        componentToRender = RenderAComponent;
+        break;
+      case 'iframe':
+        componentToRender = RenderIframeComponent;
+        break;
+      case 'file':
+        componentToRender = RenderFileComponent;
+        break;
+      default:
+        componentToRender = RenderInputsComponent;
+        break;
+    }
+
+    this.container.clear();
+    const factory = this.resolver.resolveComponentFactory(componentToRender);
+    const componentRef = this.container.createComponent(factory);
+    componentRef.instance['ctrl'] = this.control;
+
+  }
+
+}

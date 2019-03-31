@@ -1,0 +1,126 @@
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import {
+  distinctUntilChanged,
+  debounceTime,
+  switchMap,
+  filter,
+  tap
+} from 'rxjs/operators';
+import { of } from 'rxjs';
+import { EventEmitterService } from 'projects/banorte/src/app/shared/services/event-emitter.service';
+import { FormatStylesService } from 'projects/banorte/src/app/shared/services/format-styles.service';
+
+@Component({
+  selector: 'app-texto',
+  templateUrl: './texto.component.html',
+  styleUrls: ['./texto.component.css']
+})
+export class TextoComponent implements OnInit, OnChanges {
+  formGroup: FormGroup;
+  @Input() ctrlSelected;
+  toCompare: string;
+  styleObj: any;
+
+  constructor(
+    private fb: FormBuilder,
+    private emitterS: EventEmitterService,
+    private formatStyles: FormatStylesService
+  ) {}
+
+  ngOnInit() {
+    this.initForm();
+    this.listenForm();
+    this.setFormValues();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.ctrlSelected) {
+      if (this.formGroup) {
+        this.setFormValues();
+      }
+    }
+  }
+
+  initForm(): any {
+    this.formGroup = this.fb.group({
+      fontSize: ['', Validators.required],
+      textAlign: ['', Validators.required],
+      fontFamily: ['', Validators.required],
+      fontStyle: ['', [Validators.required]],
+      lineHeight: ['', [Validators.required]]
+    });
+  }
+
+  listenForm(): any {
+    this.formGroup.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        filter(val => JSON.stringify(val) !== this.toCompare),
+        tap(val => (this.toCompare = JSON.stringify(val)))
+      )
+      .subscribe(val => {
+        const objToEmit = this.getGeneralFormValues(val);
+        this.emitterS.dispatchStyle(objToEmit);
+      });
+  }
+
+  getGeneralFormValues(val: any): any {
+    const {
+      fontSize = null,
+      textAlign = null,
+      fontFamily = null,
+      fontStyle = null,
+      lineHeight = null
+    } = val;
+    const style = {
+      'font-size': fontSize ? fontSize + 'px' : null,
+      'text-align': textAlign,
+      'font-family': fontFamily,
+      'font-style': fontStyle,
+      'line-height': lineHeight ? lineHeight + 'px' : null
+    };
+    return style;
+  }
+
+  setFormValues(): any {
+    this.styleObj = this.ctrlSelected.attributes['style']
+      ? this.formatStyles.stringToObj(this.ctrlSelected.attributes['style'])
+      : {};
+    let {
+      'font-size': fontSize = '12',
+      'line-height': lineHeight = '12'
+    } = this.styleObj;
+    const {
+      'text-align': textAlign = 'left',
+      'font-family': fontFamily = 'Arial, Helvetica, sans-serif',
+      'font-style': fontStyle = 'normal'
+    } = this.styleObj;
+    fontSize = this.getNumValueNoPX(fontSize);
+    lineHeight = this.getNumValueNoPX(lineHeight);
+    this.formGroup.setValue(
+      {
+        fontSize: fontSize,
+        textAlign: textAlign,
+        fontFamily: fontFamily,
+        fontStyle: fontStyle,
+        lineHeight: lineHeight
+      },
+      { emitEvent: false }
+    );
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

@@ -1,0 +1,500 @@
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {CampaignService} from './services/campaign.service';
+import {Campaign} from './models/campaign.model';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatBottomSheet, MatDialog, MatPaginator, MatSnackBar, MatTableDataSource, PageEvent} from '@angular/material';
+import {FilterComponent} from './components/filter/filter.component';
+import {LinkedChannelDialogComponent} from './components/dialog/linked-channel-dialog/linked-channel-dialog.component';
+import {Channel} from './models/channel.model';
+import {LinkedChannel} from './models/linked.channel.model';
+import {LinkedChannelService} from './services/linked-channel.service';
+import {ConfirmationDialogComponent} from './components/dialog/confirmation-dialog/confirmation-dialog.component';
+import {Configuration} from './models/configuration.model';
+import {ConfigurationDialogComponent} from './components/dialog/configuration-dialog/configuration-dialog.component';
+import {OptionsSheetComponent} from './components/sheet/options-sheet/options-sheet.component';
+import {Day} from './models/configuration/day.model';
+import {ConfigurationService} from './services/configuration.service';
+import {LinkedChannelStatusConstant} from './models/constants/linked.channel.status.constant';
+
+@Component({
+  selector: 'lib-campaigns',
+  templateUrl: './campaigns.component.html',
+  styleUrls: ['./campaigns.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
+})
+export class CampaignsComponent implements OnInit {
+
+  private listDays: Day[];
+
+  dataSource: MatTableDataSource<Campaign>;
+  columnsToDisplay = ['select', 'code', 'name', 'offer', 'channels', 'startDate', 'endDate', 'status'];
+  expandedElement: Campaign | null;
+
+  /**
+   * Selector
+   */
+  selection = new SelectionModel<Campaign>(true, []);
+
+  /**
+   * Pagination
+   */
+  private INIT_PAGE_INDEX = 1;
+
+  length: number;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  pageEvent: PageEvent;
+
+  /**
+   * Filter
+   */
+  search: string;
+  idChannel: string;
+  @ViewChild(FilterComponent) filter: FilterComponent;
+
+  /**
+   * Expanded or collapsed
+   */
+  idChannelCopy: string;
+  listCampaignsForExpanded: Campaign[];
+  listLinkedChannelForNewLink: LinkedChannel[];
+
+  LinkedChannelStatusConstant = LinkedChannelStatusConstant;
+
+  constructor(private campaignService: CampaignService,
+              private linkedChannelService: LinkedChannelService,
+              private configurationService: ConfigurationService,
+              private bottomSheet: MatBottomSheet,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
+    this.listCampaignsForExpanded = [];
+    this.listLinkedChannelForNewLink = [];
+  }
+
+  ngOnInit() {
+    this.search = '';
+    this.fn_pageAll();
+    this.fn_getAllDays();
+  }
+
+  private fn_pageAll(): void {
+    console.log(this.filter.mainForm)
+
+    // Filter
+    let campaignCode = this.filter.mainForm.value.campaignCode;
+    if (campaignCode === null || campaignCode == undefined) {
+      campaignCode = '';
+    }
+
+    let offerCode = this.filter.mainForm.value.offerCode;
+    if (offerCode === null || offerCode == undefined) {
+      offerCode = '';
+    }
+
+    this.idChannel = this.filter.mainForm.value.idChannel;
+    if (this.idChannel === null || this.idChannel == undefined) {
+      this.idChannel = '';
+    }
+    this.idChannelCopy = this.idChannel;
+
+    let status = this.filter.mainForm.value.status;
+    if (status === null || status == undefined) {
+      status = '';
+    }
+
+    // Selection
+    this.selection.clear();
+
+    // Pagination
+    let page = this.INIT_PAGE_INDEX;
+    let pageSize = this.pageSize;
+    if (this.pageEvent) {
+      page = this.pageEvent.pageIndex + 1;
+      pageSize = this.pageEvent.pageSize;
+    }
+
+    this.campaignService.fn_pageAll(this.search, campaignCode, offerCode, this.idChannel, status, page, pageSize).subscribe({
+      next: (result: Campaign[]) => {
+        console.log('[RESPONSE]', result);
+        this.dataSource = new MatTableDataSource<Campaign>(result);
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+
+    this.campaignService.fn_pageCount(this.search, campaignCode, offerCode, this.idChannel, status).subscribe({
+      next: (result: number) => {
+        console.log('[RESPONSE]', result);
+        this.length = result;
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  private fn_getAllDays(): void {
+    this.configurationService.fn_getAllDays().subscribe({
+      next: (result: Day[]) => {
+        console.log('[RESPONSE]', result);
+        this.listDays = result;
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Personalize columns
+   */
+  fn_getCountLinkedChannels(listLinkedChannels: LinkedChannel[]): number {
+    return listLinkedChannels ? listLinkedChannels.length : 0;
+  }
+
+  fn_showLinkedChannel(linkedChannel: LinkedChannel): boolean {
+    let show = true;
+    if (this.idChannel !== '' && this.idChannel !== linkedChannel.channel.idSubChannel) {
+      show = false;
+    }
+    return show;
+  }
+
+  fn_isNewLinkedChannel(linkedChannel: LinkedChannel): boolean {
+    let isNew = false;
+    this.listLinkedChannelForNewLink.forEach((_linkedChannel: LinkedChannel) => {
+      if (linkedChannel.idReferential === _linkedChannel.idReferential
+            && linkedChannel.channel.idSubChannel === _linkedChannel.channel.idSubChannel) {
+        isNew = true;
+        return false;
+      }
+    });
+    return isNew;
+  }
+
+  fn_copy(_string: string) {
+    let aux = document.createElement("input");
+    aux.setAttribute("value", _string);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+    console.log("Copy: ", _string)
+  }
+
+  /**
+   * Selection
+   * @returns {boolean}
+   */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  /**
+   * Filter
+   * @param {string} filterValue
+   */
+  fn_applyFilter(filterValue: string) {
+    this.search = filterValue;
+  }
+
+  fn_filterChange(): void {
+    this.paginator.firstPage();
+
+    this.fn_pageAll();
+  }
+
+  /**
+   * Expanded or collapsed
+   */
+  fn_isExpanded(campaign: Campaign): boolean {
+    let expanded = false;
+    // By channel
+    if (this.idChannelCopy !== '') {
+      expanded = true;
+    }
+
+    // By link
+    if (!expanded) {
+      this.listCampaignsForExpanded.forEach((campaignExpanded) => {
+        if (campaign.id === campaignExpanded.id) {
+          expanded = true;
+          return false;
+        }
+      });
+    }
+    return expanded;
+  }
+
+  fn_resetExpendedList(): void {
+    this.idChannelCopy = '';
+    this.listCampaignsForExpanded = [];
+  }
+
+  /**
+   * Actions
+   */
+  fn_refresh(): void {
+    this.filter.fn_reset();
+    this.fn_resetExpendedList();
+
+    this.fn_pageAll();
+  }
+
+  fn_openDialogForLink(): void {
+    const dialogRef = this.dialog.open(LinkedChannelDialogComponent, {
+      width: '1000px',
+      data: {listChannelGroups: this.filter.listChannelGroups, listCampaigns: this.selection.selected}
+    });
+
+    dialogRef.afterClosed().subscribe((result: Channel[]) => {
+      if (result !== undefined) {
+        this.fn_linkedChannels(result);
+      }
+    });
+  }
+
+  private fn_linkedChannels(listChannels: Channel[]): void {
+    this.listCampaignsForExpanded = [];
+    this.listLinkedChannelForNewLink = [];
+    let existsNewLinks = false;
+
+    const listSelectedCampaigns = this.selection.selected;
+    listSelectedCampaigns.forEach((campaign: Campaign) => {
+      if (!campaign.listLinkedChannels) {
+        campaign.listLinkedChannels = [];
+      }
+      let existsNewLinksForCampaign = false;
+      listChannels.forEach((channel: Channel) => {
+        let existsChannel = this.existsChannel(campaign.listLinkedChannels, channel);
+        if (!existsChannel) {
+          const linkedChannel = new LinkedChannel();
+          linkedChannel.idReferential = campaign.id;
+          linkedChannel.channel = channel;
+
+          campaign.listLinkedChannels.push(linkedChannel);
+          this.listLinkedChannelForNewLink.push(linkedChannel);
+          existsNewLinksForCampaign = true;
+        }
+      });
+
+      if (existsNewLinksForCampaign) {
+        existsNewLinks = true;
+      }
+      this.listCampaignsForExpanded.push(campaign);
+    });
+    console.log(listSelectedCampaigns);
+
+    if (existsNewLinks) {
+      this.linkedChannelService.fn_link(listSelectedCampaigns).subscribe({
+        next: (result: boolean) => {
+          console.log('[RESPONSE]', result);
+          this.fn_pageAll();
+        },
+        error: (error: any) => {
+          console.log(error);
+          // this.alertasService.operacionFallida(error.message);
+        },
+        complete: () => {
+          console.log('OK');
+        }
+      });
+    }
+  }
+
+  private existsChannel(listLinkedChannels: LinkedChannel[], channel: Channel): boolean {
+    let found = false;
+    listLinkedChannels.forEach((linkedChannel) => {
+      if (linkedChannel.channel.idSubChannel === channel.idSubChannel) {
+        found = true;
+        return false;
+      }
+    });
+    return found;
+  }
+
+  /**
+   * Options
+   */
+  openBottomSheet(linkedChannel: LinkedChannel): void {
+    const campaign = this.fn_getCampaign(linkedChannel.idReferential);
+
+    const bsOptions = this.bottomSheet.open(OptionsSheetComponent, {
+      panelClass: ['color-red'],
+      data: {
+        campaign: campaign,
+        linkedChannel: linkedChannel
+      }
+    });
+
+    bsOptions.afterDismissed().subscribe(() => {
+      const data = bsOptions.instance.data;
+
+      console.log('Action selected: ', data.actionSelected);
+      switch (bsOptions.instance.data.actionSelected) {
+        case bsOptions.instance.ACTION_DESIGN:
+          console.log('OK - ACTION_DESIGN');
+          break;
+        case bsOptions.instance.ACTION_SETTINGS:
+          this.fn_openDialogForSettings(data.linkedChannel);
+          break;
+        case bsOptions.instance.ACTION_ACTIVE:
+          console.log('OK - ACTION_ACTIVE');
+          break;
+        case bsOptions.instance.ACTION_INACTIVE:
+          console.log('OK - ACTION_INACTIVE');
+          break;
+        case bsOptions.instance.ACTION_REMOVE:
+          this.fn_openDialogForDLink(data.linkedChannel);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  /**
+   * dLinked channels
+   */
+  fn_openDialogForDLink(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const campaign = this.fn_getCampaign(linkedChannel.idReferential);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        'title': 'Desvincular',
+        'info': '<strong>' + linkedChannel.channel.descriptionSubChannel + '</strong> será desvinculado de la campaña <strong>' + campaign.name + '</strong>'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        this.listCampaignsForExpanded = [ campaign ];
+        this.listLinkedChannelForNewLink = [];
+
+        this.fn_dLinkedChannel(linkedChannel);
+      }
+    });
+  }
+
+  private fn_getCampaign(idReferential: string): Campaign {
+    let campaign = null;
+    this.dataSource.data.forEach((_campaign: Campaign) => {
+      if (_campaign.id === idReferential) {
+        campaign = _campaign;
+        return false;
+      }
+    });
+    return campaign;
+  }
+
+  private fn_dLinkedChannel(linkedChannel: LinkedChannel): void {
+    this.linkedChannelService.fn_dLink(linkedChannel).subscribe({
+      next: (result: boolean) => {
+        console.log('[RESPONSE]', result);
+        this.fn_pageAll();
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Settings channels
+   */
+  fn_openDialogForSettings(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const campaign = this.fn_getCampaign(linkedChannel.idReferential);
+    this.fn_openSnackBar(campaign.code + ' ~ ' + campaign.offerCode, linkedChannel.channel.idSubChannel)
+
+    this.configurationService.fn_get(linkedChannel.idReferential, linkedChannel.channel.idSubChannel).subscribe({
+      next: (result: Configuration) => {
+        console.log('[RESPONSE]', result);
+
+        const dialogRef = this.dialog.open(ConfigurationDialogComponent, {
+          width: '500px',
+          data: {
+            campaign: campaign,
+            linkedChannel: linkedChannel,
+            configuration: result,
+            listDays: this.listDays
+          }
+        });
+
+        dialogRef.afterClosed().subscribe((result: Configuration) => {
+          if (result !== undefined) {
+            linkedChannel.configuration = result;
+            this.fn_saveOrUpdateSettings(linkedChannel);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  private fn_saveOrUpdateSettings(linkedChannel: LinkedChannel): void {
+    this.configurationService.fn_saveOrUpdate(linkedChannel.idReferential, linkedChannel.channel.idSubChannel, linkedChannel.configuration).subscribe({
+      next: (result: boolean) => {
+        console.log('[RESPONSE]', result);
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Info
+   */
+  private fn_openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 50000
+    });
+  }
+}

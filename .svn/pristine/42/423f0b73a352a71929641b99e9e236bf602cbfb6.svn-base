@@ -1,0 +1,42 @@
+<mat-card
+  class="dashCard"
+  fxFlex
+  fxLayoutAlign="space-between"
+  fxLayout="column"
+  (mouseenter)="mouseenterFn()"
+  (mouseleave)="mouseleaveFn()"
+>
+  <mat-card-header>
+    <mat-card-title>{{kpi !== '' ? kpi : 'Gauge'}}</mat-card-title>
+    <button
+      *ngIf="showRBtn"
+      mat-icon-button
+      class="closeBtn"
+      color="warn"
+      (click)="close()"
+    >
+      <mat-icon aria-label="Remove">close</mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content
+    fxLayout="column"
+    fxLayoutAlign="space-between"
+    fxFlex
+  >
+    <ng-container *ngIf="data; else options">
+      <lib-chart-pie
+        [data]="data"
+        class="gauge"
+      ></lib-chart-pie>
+      <p style="text-align: center;">{{data[0].nedn | nednF}}</p>
+    </ng-container>
+    <ng-template #options>
+      <button
+        mat-raised-button
+        color="warn"
+        class="button"
+        (click)="openDialog()"
+      >Set options</button>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,51 @@
+import { Injectable } from '@angular/core';
+import { StyleModel } from '../../../render-checkbox/src/lib/models/style/style.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RenderInputsService {
+
+  constructor() {
+  }
+
+  stringToObj(styles: string): { [key: string]: any } {
+    if (styles) {
+      const styleObj = styles
+        .split(';')
+        .filter(val => val !== '')
+        .map(val => {
+          const arr = val.split(':');
+          const obj = {};
+          obj[arr[0]] = arr[1];
+          return obj;
+        })
+        .reduce((prev, curr) => {
+          return {...prev, ...curr};
+        });
+
+      // Se añaden estas líneas debido a que esos atributos no están viajando con el px
+      styleObj['width'] = styleObj['width'] + 'px';
+      styleObj['height'] = styleObj['height'] + 'px';
+
+      return styleObj;
+    }
+  }
+
+  styleReOrder(stylesObj: any): StyleModel {
+
+    const resultado: StyleModel = {
+      '-webkit-appearance': 'none',
+      'width': stylesObj['width'],
+      'position': stylesObj['position'],
+      'height': stylesObj['height'],
+      'background-image': stylesObj['background-image'],
+      'background-repeat': 'no-repeat',
+      'background-size': '100px',
+      'background-position-x': 'left',
+      'transform': stylesObj['transform']
+    };
+
+    return resultado;
+  }
+}

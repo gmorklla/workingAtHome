@@ -1,0 +1,12 @@
+<div *ngIf="showMinMax === 'true'">
+  <span style="color: black">{{ctrl.attributes.min}}</span>
+  <span style="color: black">{{ctrl.attributes.max}}</span>
+</div>
+<input
+  type="range"
+  [value]="value"
+  [min]="min"
+  [max]="max"
+  [step]="step"
+  [ngStyle]="stylesObj"
+>

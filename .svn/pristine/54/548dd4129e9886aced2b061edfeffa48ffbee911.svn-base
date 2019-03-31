@@ -1,0 +1,40 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutes } from './app.routing.module';
+import { CustomMaterialModule } from './custom-material/custom-material.module';
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import {target, targetRules} from './shared/data/port';
+import { DialogComponent } from './shared/dialog/dialog/dialog.component';
+import {LoaderModule} from '../../../campaigns/src/lib/components/loader/loader.module';
+
+export function getBaseUrl() {
+  return document.getElementsByTagName('base')[0].href;
+}
+
+@NgModule({
+  declarations: [AppComponent, NavbarComponent, DialogComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpModule,
+    HttpClientModule,
+    AppRoutes,
+    CustomMaterialModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true,
+      exclude: [`${target}campaign/`, `${target}flow/`, `${targetRules}`]
+    }),
+    LoaderModule
+  ],
+  providers: [{ provide: 'BASE_URL', useFactory: getBaseUrl }],
+  entryComponents: [DialogComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}

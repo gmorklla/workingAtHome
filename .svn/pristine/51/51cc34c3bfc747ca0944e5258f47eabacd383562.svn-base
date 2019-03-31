@@ -1,0 +1,41 @@
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef} from '@angular/material';
+import {LinkedChannel} from '../../../models/linked.channel.model';
+import {Campaign} from '../../../models/campaign.model';
+import {LinkedChannelStatusConstant} from '../../../models/constants/linked.channel.status.constant';
+
+export interface OptionsSheetData {
+  campaign: Campaign;
+  linkedChannel: LinkedChannel;
+  actionSelected: string;
+}
+
+@Component({
+  selector: 'lib-options-sheet',
+  templateUrl: './options-sheet.component.html',
+  styleUrls: ['./options-sheet.component.css']
+})
+export class OptionsSheetComponent implements OnInit {
+
+  public ACTION_DESIGN = 'design';
+  public ACTION_SETTINGS = 'settings';
+  public ACTION_ACTIVE = 'active';
+  public ACTION_INACTIVE = 'inactive';
+  public ACTION_REMOVE = 'remove';
+
+  LinkedChannelStatusConstant = LinkedChannelStatusConstant;
+
+  constructor(private bottomSheetRef: MatBottomSheetRef<OptionsSheetComponent>,
+              @Inject(MAT_BOTTOM_SHEET_DATA)
+              public data: OptionsSheetData) {}
+
+  ngOnInit() {
+  }
+
+  openLink(event: MouseEvent, actionSelected: string): void {
+    this.data.actionSelected = actionSelected;
+
+    this.bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
+}

@@ -1,0 +1,20 @@
+<div
+  class="mainContainer"
+  #container
+  [ngClass]="theme"
+>
+  <!-- Navbar component -->
+  <lib-navbar
+    [sections]="sections"
+    [themes]="themes"
+    [user]="user"
+    (selectTheme)="selectTheme($event)"
+    (submenuEvent)="submenuEvent($event)"
+    (menuEvent)="menuEvent($event)"
+  ></lib-navbar>
+  <div class="routerContainer">
+    <!-- Router component -->
+    <router-outlet></router-outlet>
+    <div class="gradient"></div>
+  </div>
+</div>

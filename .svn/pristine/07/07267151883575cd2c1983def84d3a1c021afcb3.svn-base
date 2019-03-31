@@ -1,0 +1,17 @@
+<div class="container">
+  <ngx-charts-gauge
+    [scheme]="colorScheme"
+    [results]="data"
+    [min]="0"
+    [max]="100"
+    [angleSpan]="360"
+    [startAngle]="0"
+    [bigSegments]="0"
+    [smallSegments]="0"
+    [valueFormatting]="formatV"
+    [showAxis]="false"
+    [units]="data[0].time"
+    (select)="onSelect($event)"
+  >
+  </ngx-charts-gauge>
+</div>

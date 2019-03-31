@@ -1,0 +1,308 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "paths": {
+      "libOne": [
+        "dist/lib-one"
+      ],
+      "libOne/*": [
+        "dist/lib-one/*"
+      ],
+      "libTwo": [
+        "dist/lib-two"
+      ],
+      "libTwo/*": [
+        "dist/lib-two/*"
+      ],
+      "chartPie": [
+        "dist/chart-pie"
+      ],
+      "chartPie/*": [
+        "dist/chart-pie/*"
+      ],
+      "thresholdColor": [
+        "dist/threshold-color"
+      ],
+      "thresholdColor/*": [
+        "dist/threshold-color/*"
+      ],
+      "chartBar": [
+        "dist/chart-bar"
+      ],
+      "chartBar/*": [
+        "dist/chart-bar/*"
+      ],
+      "navbar": [
+        "dist/navbar"
+      ],
+      "navbar/*": [
+        "dist/navbar/*"
+      ],
+      "login": [
+        "dist/login"
+      ],
+      "login/*": [
+        "dist/login/*"
+      ],
+      "numberCard": [
+        "dist/number-card"
+      ],
+      "numberCard/*": [
+        "dist/number-card/*"
+      ],
+      "linearGauge": [
+        "dist/linear-gauge"
+      ],
+      "linearGauge/*": [
+        "dist/linear-gauge/*"
+      ],
+      "socketComm": [
+        "dist/socket-comm"
+      ],
+      "socketComm/*": [
+        "dist/socket-comm/*"
+      ],
+      "httpCall": [
+        "dist/http-call"
+      ],
+      "httpCall/*": [
+        "dist/http-call/*"
+      ],
+      "customPipes": [
+        "dist/custom-pipes"
+      ],
+      "customPipes/*": [
+        "dist/custom-pipes/*"
+      ],
+      "chat": [
+        "dist/chat"
+      ],
+      "chat/*": [
+        "dist/chat/*"
+      ],
+      "pdfGenerator": [
+        "dist/pdf-generator"
+      ],
+      "pdfGenerator/*": [
+        "dist/pdf-generator/*"
+      ],
+      "dragula": [
+        "node_modules/dragula/dist/dragula.min.js"
+      ],
+      "inputButton": [
+        "dist/input-button"
+      ],
+      "inputButton/*": [
+        "dist/input-button/*"
+      ],
+      "divMessage": [
+        "dist/div-message"
+      ],
+      "divMessage/*": [
+        "dist/div-message/*"
+      ],
+      "imageComponent": [
+        "dist/image-component"
+      ],
+      "imageComponent/*": [
+        "dist/image-component/*"
+      ],
+      "windowEdit": [
+        "dist/window-edit"
+      ],
+      "windowEdit/*": [
+        "dist/window-edit/*"
+      ],
+      "selectLib": [
+        "dist/select-lib"
+      ],
+      "selectLib/*": [
+        "dist/select-lib/*"
+      ],
+      "inputFile": [
+        "dist/input-file"
+      ],
+      "inputFile/*": [
+        "dist/input-file/*"
+      ],
+      "questions": [
+        "dist/questions"
+      ],
+      "questions/*": [
+        "dist/questions/*"
+      ],
+      "textarea": [
+        "dist/textarea"
+      ],
+      "textarea/*": [
+        "dist/textarea/*"
+      ],
+      "link": [
+        "dist/link"
+      ],
+      "link/*": [
+        "dist/link/*"
+      ],
+      "inputGeneral": [
+        "dist/input-general"
+      ],
+      "inputGeneral/*": [
+        "dist/input-general/*"
+      ],
+      "checkbox": [
+        "dist/checkbox"
+      ],
+      "checkbox/*": [
+        "dist/checkbox/*"
+      ],
+      "inputCheckbox": [
+        "dist/input-checkbox"
+      ],
+      "inputCheckbox/*": [
+        "dist/input-checkbox/*"
+      ],
+      "inputRadio": [
+        "dist/input-radio"
+      ],
+      "inputRadio/*": [
+        "dist/input-radio/*"
+      ],
+      "inputRange": [
+        "dist/input-range"
+      ],
+      "inputRange/*": [
+        "dist/input-range/*"
+      ],
+      "video": [
+        "dist/video"
+      ],
+      "video/*": [
+        "dist/video/*"
+      ],
+      "iframe": [
+        "dist/iframe"
+      ],
+      "iframe/*": [
+        "dist/iframe/*"
+      ],
+      "tree": [
+        "dist/tree"
+      ],
+      "tree/*": [
+        "dist/tree/*"
+      ],
+      "campaigns": [
+        "dist/campaigns"
+      ],
+      "campaigns/*": [
+        "dist/campaigns/*"
+      ],
+      "image-catalog": [
+        "dist/image-catalog"
+      ],
+      "image-catalog/*": [
+        "dist/image-catalog/*"
+      ],
+      "renderInputs": [
+        "dist/render-inputs"
+      ],
+      "renderInputs/*": [
+        "dist/render-inputs/*"
+      ],
+      "renderDiv": [
+        "dist/render-div"
+      ],
+      "renderDiv/*": [
+        "dist/render-div/*"
+      ],
+      "renderDivMessage": [
+        "dist/render-div-message"
+      ],
+      "renderDivMessage/*": [
+        "dist/render-div-message/*"
+      ],
+      "renderButton": [
+        "dist/render-button"
+      ],
+      "renderButton/*": [
+        "dist/render-button/*"
+      ],
+      "renderSelect": [
+        "dist/render-select"
+      ],
+      "renderSelect/*": [
+        "dist/render-select/*"
+      ],
+      "renderTextarea": [
+        "dist/render-textarea"
+      ],
+      "renderTextarea/*": [
+        "dist/render-textarea/*"
+      ],
+      "renderCheckbox": [
+        "dist/render-checkbox"
+      ],
+      "renderCheckbox/*": [
+        "dist/render-checkbox/*"
+      ],
+      "renderRadio": [
+        "dist/render-radio"
+      ],
+      "renderRadio/*": [
+        "dist/render-radio/*"
+      ],
+      "renderImage": [
+        "dist/render-image"
+      ],
+      "renderImage/*": [
+        "dist/render-image/*"
+      ],
+      "renderRange": [
+        "dist/render-range"
+      ],
+      "renderRange/*": [
+        "dist/render-range/*"
+      ],
+      "renderA": [
+        "dist/render-a"
+      ],
+      "renderA/*": [
+        "dist/render-a/*"
+      ],
+      "renderIframe": [
+        "dist/render-iframe"
+      ],
+      "renderIframe/*": [
+        "dist/render-iframe/*"
+      ],
+      "renderFile": [
+        "dist/render-file"
+      ],
+      "renderFile/*": [
+        "dist/render-file/*"
+      ],
+      "flows": [
+        "dist/flows"
+      ],
+      "flows/*": [
+        "dist/flows/*"
+      ]
+    }
+  }
+}

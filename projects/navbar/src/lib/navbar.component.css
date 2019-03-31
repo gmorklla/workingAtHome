@@ -1,0 +1,93 @@
+.mainContainer {
+  z-index: 1;
+  top: 0;
+  position: sticky;
+}
+
+.mainToolbar {
+  padding: 0 40px;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+}
+
+.mainToolbar button,
+.submenu button {
+  min-width: auto !important;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.icon {
+  padding: 0 14px;
+}
+
+.menu {
+  display: none;
+}
+
+.submenu {
+  padding: 0 40px;
+  letter-spacing: 5px;
+  background-color: darkslateblue;
+  color: white;
+  z-index: -1;
+}
+
+.submenu mat-icon {
+  margin: 0 14px 0 0;
+}
+
+mat-icon {
+  outline: none;
+  cursor: pointer;
+}
+
+.name {
+  letter-spacing: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+.title {
+  text-transform: capitalize;
+}
+
+.loginContainer {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.user {
+  font-size: small;
+}
+
+.uCircle {
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  color: #e81e63;
+}
+
+.menuIcon {
+  margin-right: 0 !important;
+}
+
+@media all and (max-width: 800px) {
+  .name {
+    letter-spacing: 0;
+  }
+
+  .mainToolbar,
+  .submenu {
+    padding: 0 16px;
+  }
+}

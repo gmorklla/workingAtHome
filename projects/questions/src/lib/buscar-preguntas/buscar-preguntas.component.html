@@ -1,0 +1,220 @@
+<form novalidate autocomplete="off" [formGroup]="buscarPreguntasForm">
+  <!--Sección de busqueda de pregunta-->
+  <div class="form row">
+    <div class="form-group form-record col-sm-12 auto-complete">
+      <label for="preguntaId">Pregunta</label>
+      <div class="input-group mb-3">
+        <input id="preguntaId"
+               type="text"
+               class="form-control form-control-sm"
+               placeholder="{{nombre}}"
+               [(ngModel)]="model"
+               [ngbTypeahead]="search"
+               [resultTemplate]="rt"
+               [inputFormatter]="inFormatter"
+               (ngModelChange)="preguntaSeleccionada($event)"
+               formControlName="pregunta"><span>
+        <div class="input-group-append">
+          
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                type="button"
+                (click)="open(content)"
+              >
+                <fa-icon [icon]="getIcon('fas fa-plus')"></fa-icon>
+              </button>
+            </div>
+        </div>
+      </span>
+      </div>
+      <div class="small searching" *ngIf="searching">Buscando...</div>
+      <div class="text-danger small" *ngIf="searchFailed">No encontrado.</div>
+    </div>
+  </div>
+  <div class="row" *ngIf="pregunta" [style.bottom.px]="20">
+    <div class="col-sm-12">
+      Pregunta seleccionada
+    </div>
+    <div class="col-sm-12" >
+      <strong>{{pregunta.description}}</strong>
+    </div>
+
+  </div>
+  <div class="row" *ngIf="tipoPreguntaAux == 2" [style.top.px]="20">
+    <div class="col-sm-12">
+      <table class="table table-sm">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">Valor</th>
+          <th scope="col">Clave</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of answersPregunta;let i =index;">
+          <td>{{item.description}}</td>
+          <td>{{item.code}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-check" [style.top.px]="20">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Insertar texto de la pregunta</label>
+  </div>
+  <div class="row" >
+    <div class="col-sm-12">
+      <button  class="btn btn-primary bg-danger btn-block" (click)="vincular()">Vincular</button>
+    </div>
+  </div>
+</form>
+<!--Modal de pregunta nueva-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Agregar pregunta</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <form [formGroup]="preguntaForm">
+      <div class="form-group">
+        <!--Descripción de pregunta-->
+        <label>Pregunta</label>
+        <div class="input-group">
+          <input id="text" class="form-control" placeholder="pregunta" name="description" required
+                 formControlName="description">
+        </div>
+        <!--Tipo de pregunta-->
+      </div>
+      <div class="form-group">
+        <label>Tipo pregunta</label>
+        <div class="row">
+          <div class="col-sm-1" *ngIf="tipoPregunta == 1">
+            <button
+              id="bt1"
+              [ngClass]="tipoPregunta == 1 ?'btn btn-secondary': 'btn btn-light'"
+              class="btn btn-sm"
+              (click)="setTipoPregunta(1)">
+              <fa-icon [icon]="getIcon('fas fa-lock-open')"></fa-icon>
+            </button>
+          </div>
+          <div class="col-sm-1" *ngIf="tipoPregunta === 2">
+            <button
+              id="bt2"
+              class="btn btn-sm"
+              [ngClass]="tipoPregunta === 2 ?'btn btn-secondary': 'btn btn-light'"
+              (click)="setTipoPregunta(2)"
+            >
+              <fa-icon [icon]="getIcon('fas fa-lock')"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="tipoPregunta == 2">
+        <div class="row" >
+          <div class="col-sm-12">
+            <label >Respuestas</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">
+            <label >Valor</label>
+          </div>
+          <div class="col-sm-4">
+            <label >Clave</label>
+          </div>
+          <div class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="addItem()"
+            >
+              <fa-icon [icon]="getIcon('fas fa-plus')"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <!--Respuestas-->
+        <form [formGroup]="preguntaForm">
+          <div formArrayName="answers"
+               *ngFor="let item of preguntaForm.get('answers').controls; let i =index;">
+            <div [formGroupName]="i" class="row">
+              <!--Clave-->
+              <div class="col-sm-4">
+                <input class="form-control" formControlName="description" placeholder="Clave" required>
+              </div>
+              <!--Valor-->
+              <div class="col-sm-4">
+
+                <input
+                  placeholder="Valor"
+                  type="text"
+                  required
+                  class="form-control"
+                  [ngbTypeahead]="searchCodigo"
+                  [resultTemplate]="rtCodes"
+                  [inputFormatter]="inFormatterCodes"
+                  (ngModelChange)="codigoSeleccionado($event)"
+                  formControlName="type" >
+              </div>
+              <!--Eliminar elemento del array de respuestas-->
+              <div class="col-sm-4">
+                <button
+                  id="bt3"
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  (click)="remove(i)"
+                >
+                  <fa-icon [icon]="getIcon('fas fa-minus')"></fa-icon>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+      <!--alert-->
+      <div
+        [style.top.px]="20"
+        class="alert alert-warning alert-dismissible fade show"
+        *ngIf="bandera"
+        role="alert"
+      >
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="bandera=!bandera"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <Strong>Preguntas</Strong> Todos los campos son obligatorios
+      </div>
+    </form>
+
+  </div>
+  <!--Botenes de guardar y cerrar-->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close()">Cancelar</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="crear($event)">Guardar</button>
+  </div>
+</ng-template>
+<!--Footer para preguntas-->
+<ng-template #rt let-r="result" let-t="term">
+  <div>{{r.description}}</div>
+</ng-template>
+<!--Footer para claves-->
+<ng-template #rtCodes let-r="result" let-t="term">
+  <div>{{r.description}}</div>
+
+  <footer class="blockquote-footer">
+    <ngb-highlight [result]="r.type" [term]="t"></ngb-highlight>
+  </footer>
+
+</ng-template>

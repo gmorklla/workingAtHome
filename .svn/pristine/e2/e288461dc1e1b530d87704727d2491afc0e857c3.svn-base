@@ -1,0 +1,46 @@
+<ng-container *ngIf="ctrlSelected; else sinItem">
+  <h3>{{ctrlSelected.type}} - {{ctrlSelected.id}}</h3>
+</ng-container>
+<ng-template #sinItem>
+  <p style="font-size: smaller; color: gray;">Selecciona un item para modificarlo</p>
+</ng-template>
+<mat-accordion>
+  <mat-expansion-panel [disabled]="!ctrlSelected">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Estilos
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- ///////////////////// CONTROL FORM ///////////////////// -->
+    <app-container-styles
+      *ngIf="ctrlSelected"
+      [ctrlSelected]="ctrlSelected"
+      (emitChangeFromForm)="propChangeEmit($event)"
+      (destroyControl)="destroyControl($event)"
+    ></app-container-styles>
+  </mat-expansion-panel>
+  <!-- ///////////////////// EVENTOS ///////////////////// -->
+  <!--[expanded]="ctrlSelected && (ctrlSelected.type === 'button' || ctrlSelected.type === 'a')" -->
+  <mat-expansion-panel [disabled]="!ctrlSelected || (ctrlSelected.type !== 'button' && ctrlSelected.type !== 'a')">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Eventos
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-eventos
+      *ngIf="ctrlSelected"
+      [ctrl]="ctrlSelected"
+    ></app-eventos>
+  </mat-expansion-panel>
+  <mat-expansion-panel [disabled]="!ctrlSelected" *ngIf="ctrlSelected">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Catálogo Imagenes
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <lib-image-catalog
+      *ngIf="ctrlSelected !== null && ctrlSelected.type === 'image'"
+      [controlHTML]="ctrlSelected"
+    ></lib-image-catalog>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,29 @@
+<h1 mat-dialog-title> Canales disponibles </h1>
+<div mat-dialog-content>
+  <div class="row">
+    <div class="col-6 col-sm-4 col-md-3 mt-2" *ngFor="let channelGroup of data.listChannelGroups; let i = index;">
+      <mat-card class="p-1 mb-2">{{channelGroup.name}}</mat-card>
+      <div class="col-md-12" *ngFor="let channel of channelGroup.channels">
+        <mat-checkbox color="primary"
+                      (change)="fn_onChange($event, channel);"
+                      [checked]="fn_isChecked(channel)"
+                      [disabled]="fn_isChecked(channel)">
+          {{channel.descriptionSubChannel}} <span class="badge badge-danger" *ngIf="fn_countChannelSelected(channel) > 0 && data.listProcesses.length > 1">{{channel.count}}</span>
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-between btn-actions" mat-dialog-actions>
+  <div>
+    <span *ngIf="data.listProcesses.length > 1">
+      <span class="font-weight-bold">{{data.listProcesses.length}}</span> elementos seleccionados
+    </span>
+  </div>
+  <div>
+    <button mat-button class="btn-action" (click)="fn_onClose();"><i class="material-icons">reply</i> Salir </button>
+    <button mat-button class="btn-action" color="primary"
+            [mat-dialog-close]="listChannelSelecteds"
+            [disabled]="listChannelSelecteds.length === 0"><i class="material-icons">device_hub</i> Vincular </button>
+  </div>
+</div>

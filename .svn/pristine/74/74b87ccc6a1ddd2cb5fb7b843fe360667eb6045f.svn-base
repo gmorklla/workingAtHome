@@ -1,0 +1,51 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { InputRadioService } from './input-radio.service';
+import { CheckboxStyleModel } from '../../../input-checkbox/src/lib/models/checbox-style/checkbox-style.model';
+
+@Component({
+  selector: 'lib-input-padio',
+  template: `
+    <input
+      type="radio"
+      [ngStyle]="stylesObj"
+      [value]="valor
+    ">
+  `,
+  styleUrls: ['./input-radio.component.css']
+})
+export class InputRadioComponent implements OnInit {
+  @Input() public ctrl;
+  public stylesObj: any;
+  public valor: string;
+  public estilos;
+
+  constructor(private service: InputRadioService) { }
+
+  ngOnInit() {
+    if (this.ctrl) {
+
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+
+      const stylesObj: any = style ? this.service.stringToObj(style) : {};
+      const checkboxStyleModel: CheckboxStyleModel = this.service.generateStyleRadio(
+        stylesObj.width,
+        stylesObj.height,
+        stylesObj['background-image']
+          ? stylesObj['background-image']
+          : '/assets/images/checkbox.png'
+      );
+
+      const union: any = { ...checkboxStyleModel, ...stylesObj };
+
+      this.stylesObj = union;
+
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      delete this.stylesObj.background; // Para que se muestren las imgs es necesaria esta linea, el orden importa.
+      this.valor = value ? value : 'this.ctrl.type';
+    }
+  }
+
+}

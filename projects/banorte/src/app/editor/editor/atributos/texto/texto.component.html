@@ -1,0 +1,83 @@
+<div [formGroup]="formGroup">
+  <label for="color">Color de texto</label>
+  <input
+    id="color"
+    placeholder="Color"
+    (colorPickerChange)="colorSelected($event)"
+    [(colorPicker)]="color"
+    [style.background]="color"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    [cpCancelButton]="true"
+    [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+    [cpPresetColors]="['rgb(255,255,255)', 'rgb(0,0,0)', 'rgb(40,137,233)', 'rgb(233,32,233)', 'rgb(236,64,64)', 'rgb(67,236,64)']"
+    formControlName="color"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+  <mat-form-field class="formItem">
+    <mat-select
+      placeholder="Fuente"
+      formControlName="fontFamily"
+    >
+      <mat-option
+        *ngFor="let font of fonts"
+        value="{{font.value}}"
+      >
+        {{font.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Tamaño"
+      type="number"
+      formControlName="fontSize"
+    >
+  </mat-form-field>
+
+  <mat-button-toggle-group
+    #group="matButtonToggleGroup"
+    formControlName="textAlign"
+    style="margin-bottom: 10px;"
+  >
+    <mat-button-toggle value="left">
+      <mat-icon>format_align_left</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="center">
+      <mat-icon>format_align_center</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="right">
+      <mat-icon>format_align_right</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="justify">
+      <mat-icon>format_align_justify</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-button-toggle-group
+    #group="matButtonToggleGroup"
+    formControlName="fontStyle"
+    style="margin-bottom: 10px;"
+  >
+    <mat-button-toggle value="normal">
+      <mat-icon>title</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="italic">
+      <mat-icon>format_italic</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <br>
+
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Interlineado"
+      type="number"
+      formControlName="lineHeight"
+    >
+  </mat-form-field>
+</div>

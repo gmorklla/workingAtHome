@@ -1,0 +1,58 @@
+<div class="deleteBtn">
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="deleteItem($event)"
+  >Borrar item</button>
+</div>
+<form
+  [formGroup]="stylesContainerForm"
+  novalidate
+>
+  <mat-form-field>
+    <input
+      id="in-image-source"
+      matInput
+      placeholder="Source"
+      type="string"
+      formControlName="value"
+      (change)="updateSrc($event)"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Ancho"
+      type="number"
+      formControlName="width"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Alto"
+      type="number"
+      formControlName="height"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Posición x"
+      type="number"
+      formControlName="x"
+    >
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Posición y"
+      type="number"
+      formControlName="y"
+    >
+  </mat-form-field>
+</form>

@@ -1,0 +1,61 @@
+.deleteBtn,
+.agregaOpcion {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+form {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.formItem {
+  width: 48%;
+}
+
+.deleteBtn button,
+.agregaOpcion button {
+  width: 100%;
+  color: white;
+}
+
+label {
+  color: #838383;
+  font-size: x-small;
+}
+
+input#fondo,
+input#color {
+  border: 1px dotted lightgray;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+hr {
+  border: 0;
+  border-bottom: 4px solid #ccc;
+  background: #999;
+}
+
+mat-form-field {
+  max-width: 100%;
+}
+
+h3 {
+  width: 100%;
+  margin: 15px 0;
+  padding: 5px 0;
+  border-bottom: 1px dotted lightgray;
+  font-size: larger;
+  text-transform: uppercase;
+  color: gray;
+  border-top: 1px dotted lightgray;
+  text-align: center;
+}

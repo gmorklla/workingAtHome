@@ -1,0 +1,198 @@
+<div class="deleteBtn">
+  <button
+    mat-raised-button
+    color="warn"
+    matTooltip="Borrar item"
+    [matTooltipPosition]="'right'"
+    (click)="deleteItem($event)"
+  >
+    <mat-icon aria-label="Borrar item">delete</mat-icon>
+  </button>
+</div>
+
+<!-- /////////////////////// Forma para radio /////////////////////// -->
+<ng-container *ngIf="control.type === 'radio'">
+  <mat-divider></mat-divider>
+  <h3>Imagen</h3>
+  <mat-divider></mat-divider>
+  <form
+    [formGroup]="radioForm"
+    novalidate
+  >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Link de imagen"
+        type="text"
+        formControlName="link"
+      >
+    </mat-form-field>
+  </form>
+</ng-container>
+
+<!-- /////////////////////// Forma para checkbox /////////////////////// -->
+<ng-container *ngIf="control.type === 'checkbox'">
+  <mat-divider></mat-divider>
+  <h3>Imagen</h3>
+  <mat-divider></mat-divider>
+  <form
+    [formGroup]="checkboxForm"
+    novalidate
+  >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Link de imagen"
+        type="text"
+        formControlName="link"
+      >
+    </mat-form-field>
+  </form>
+</ng-container>
+
+<!-- /////////////////////// Forma para select /////////////////////// -->
+<ng-container *ngIf="control.type === 'select'">
+  <mat-divider></mat-divider>
+  <h3>Flechita select</h3>
+  <mat-divider></mat-divider>
+  <form
+    [formGroup]="selectForm"
+    novalidate
+  >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Link de imagen"
+        type="text"
+        formControlName="link"
+      >
+    </mat-form-field>
+    <div
+      formArrayName="opciones"
+      *ngFor="let item of selectForm.get('opciones').controls; let i = index;"
+    >
+      <div [formGroupName]="i">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Nombre de opción"
+            type="text"
+            formControlName="viewValue"
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Valor de opción"
+            type="text"
+            formControlName="value"
+          >
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div class="agregaOpcion">
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="agregaOpcion($event)"
+      style="color:white;"
+    >Agrega opción</button>
+  </div>
+</ng-container>
+
+<!-- /////////////////////// Forma para link en a tag /////////////////////// -->
+<ng-container *ngIf="control.type === 'a'">
+  <form
+    [formGroup]="linkForm"
+    novalidate
+  >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Link"
+        type="text"
+        formControlName="link"
+      >
+    </mat-form-field>
+  </form>
+</ng-container>
+
+<!-- /////////////////////// Forma para link en iframe /////////////////////// -->
+<ng-container *ngIf="control.type === 'iframe'">
+  <form
+    [formGroup]="iframeForm"
+    novalidate
+  >
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Link"
+        type="text"
+        formControlName="src"
+      >
+    </mat-form-field>
+  </form>
+</ng-container>
+
+<!-- /////////////////////// Forma para General /////////////////////// -->
+<form
+  [formGroup]="generalForm"
+  novalidate
+>
+
+  <mat-form-field
+    class="formItem"
+    style="width: 100%;"
+  >
+    <ng-container *ngIf="control.type === 'div'; else noDiv">
+      <textarea
+        matInput
+        placeholder="Texto"
+        formControlName="value"
+      ></textarea>
+    </ng-container>
+    <ng-template #noDiv>
+      <input
+        matInput
+        placeholder="Texto"
+        type="text"
+        formControlName="value"
+      >
+    </ng-template>
+  </mat-form-field>
+  <!-- ///////////////////// Colores /////////////////////-->
+  <label for="fondo">Fondo</label>
+  <input
+    id="fondo"
+    placeholder="Color de fondo"
+    (colorPickerChange)="colorSelected($event, 'fondo')"
+    [(colorPicker)]="fondo"
+    [style.background]="fondo"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    [cpCancelButton]="true"
+    [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+    [cpPresetColors]="['rgb(255,255,255)', 'rgb(0,0,0)', 'rgb(40,137,233)', 'rgb(233,32,233)', 'rgb(236,64,64)', 'rgb(67,236,64)']"
+    formControlName="fondo"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+  <label for="color">Color de texto</label>
+  <input
+    id="color"
+    placeholder="Color"
+    (colorPickerChange)="colorSelected($event, 'color')"
+    [(colorPicker)]="color"
+    [style.background]="color"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    [cpCancelButton]="true"
+    [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+    [cpPresetColors]="['rgb(255,255,255)', 'rgb(0,0,0)', 'rgb(40,137,233)', 'rgb(233,32,233)', 'rgb(236,64,64)', 'rgb(67,236,64)']"
+    formControlName="color"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+
+</form>

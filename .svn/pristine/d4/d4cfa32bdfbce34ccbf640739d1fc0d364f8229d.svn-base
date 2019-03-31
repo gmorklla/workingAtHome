@@ -1,0 +1,60 @@
+import { Component, OnInit } from '@angular/core';
+import { HttpCallService } from 'projects/http-call/src/public_api';
+import { FlujoI } from '../../shared/data/data';
+import { switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { port, ip } from '../../shared/data/port';
+
+@Component({
+  selector: 'app-flujo',
+  templateUrl: './flujo.component.html',
+  styleUrls: ['./flujo.component.css']
+})
+export class FlujoComponent implements OnInit {
+  constructor(private http: HttpCallService, private router: Router) {}
+
+  ngOnInit() {}
+
+  crearVentana() {
+    const uuid = this.create();
+    const url = 'http://' + ip + ':' + port + '/wconfig-services/flow';
+    this.http
+      .postRequest(url, { name: uuid }, {})
+      .pipe(
+        switchMap(flujo => {
+          const urlWindow =
+            'http://' + ip + ':' + port + '/wconfig-services/window';
+          const reqObj = {
+            id: '',
+            name: 'window',
+            height: 500,
+            width: 500,
+            controls: null,
+            flowId: flujo['id'],
+            attributes: {
+              style: 'background-color:rgb(255,255,255);'
+            }
+          };
+          return this.http.postRequest(urlWindow, reqObj, {});
+        })
+      )
+      .subscribe(val => {
+        this.router.navigate([
+          `/layout/flow/${val['flowId']}/window/${val['id']}`
+        ]);
+      });
+  }
+
+  create() {
+    let dt = new Date().getTime();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function(c) {
+        const r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+    return uuid;
+  }
+}

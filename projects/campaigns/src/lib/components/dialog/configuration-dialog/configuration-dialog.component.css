@@ -1,0 +1,10 @@
+.form-field {
+  width: 100%;
+}
+.additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+.btn-actions {
+  border-top: 1px rgba(0, 0, 0, 0.24) solid;
+}

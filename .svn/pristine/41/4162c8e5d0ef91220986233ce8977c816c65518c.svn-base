@@ -1,0 +1,42 @@
+<div class="container-fluid pb-4 mb-4">
+  <div class="row mt-4">
+    <div class="col-md-12 p-0">
+      <mat-tab-group mat-align-tabs="end">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">wb_auto</mat-icon>
+            Variables
+          </ng-template>
+          <app-rule-variable
+            [designId]="designId"
+            [windowId]="windowId">
+          </app-rule-variable>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">cloud_queue</mat-icon>
+            Servicios
+          </ng-template>
+          <app-rule-service
+            [designId]="designId"
+            [windowId]="windowId">
+          </app-rule-service>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">wrap_text</mat-icon>
+            Reglas
+          </ng-template>
+          Content 1
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="mr-2">exposure</mat-icon>
+            Expresiones
+          </ng-template>
+          Content 2
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

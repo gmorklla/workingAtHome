@@ -1,0 +1,10 @@
+<form novalidate
+      autocomplete="off"
+      [formGroup]="parentForm">
+  <mat-form-field class="d-block">
+    <input matInput maxlength="64" placeholder="Nombre" formControlName="variableName">
+    <mat-error *ngIf="variableName.hasError('required')">
+      Campo <strong>requerido</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

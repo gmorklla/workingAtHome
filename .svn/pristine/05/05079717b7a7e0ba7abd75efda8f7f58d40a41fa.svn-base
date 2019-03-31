@@ -1,0 +1,30 @@
+import {Component, Input, OnInit} from '@angular/core';
+import {ControlModel} from "../../../banorteRender/src/app/shared/models/control/control.model";
+import {LinkService} from "../../../link/src/lib/link.service";
+import {RenderAService} from "./render-a.service";
+
+@Component({
+  selector: 'lib-renderA',
+  templateUrl: './render-a.component.html',
+  styleUrls: ['./render-a.component.css']
+})
+export class RenderAComponent implements OnInit {
+
+  @Input() public ctrl: ControlModel;
+
+  public stylesObj: any;
+  public href: string;
+
+  constructor(private service: RenderAService) { }
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { style, href  }
+      } = this.ctrl;
+      this.href = href;
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+    }
+  }
+
+}

@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def warContext = 'uf-ui-managment'
+
+task npmInstall(type:Exec) {
+	workingDir "${projectDir}/"
+	commandLine "cmd", "/c", "npm install"
+	standardOutput = new ByteArrayOutputStream()
+	ext.output = {
+	  return standardOutput.toString()
+	}
+}
+
+task ngBuild(type: Exec, dependsOn: 'npmInstall') {
+	workingDir "${projectDir}/"
+	commandLine "cmd", "/c", "ng build banorte --prod --base-href \"/${warContext}/\" --deploy-url \"/${warContext}/\""
+	standardOutput = new ByteArrayOutputStream()
+	ext.output = {
+	  return standardOutput.toString()
+	}
+}
+
+war.dependsOn 'ngBuild'
+
+war {
+	from "${projectDir}/dist/banorte"
+	into '/'
+	eachFile {
+		if (it.name == "ibm-web-ext.xml") {
+		  it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ["warContext": "${warContext}".toString()])
+		}
+	 }
+}
+
+
+
+
+

@@ -1,0 +1,7 @@
+<div class="relativeDiv">
+  <div class="rectangle" ngDraggable ngResizable>
+    <button class="children">Button</button>
+  </div>
+</div>
+<div #container ngDraggable ngResizable class="contenedor"></div>
+<button (click)="modifyEle()">Modify</button>

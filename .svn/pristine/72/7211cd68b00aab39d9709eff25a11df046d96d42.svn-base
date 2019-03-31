@@ -1,0 +1,9 @@
+<input
+  type="range"
+  list="{{ctrl.id}}"
+  [value]="value"
+  [min]="min"
+  [max]="max"
+  [step]="step"
+  [ngStyle]="stylesObj"
+>

@@ -1,0 +1,17 @@
+<!--
+<div *ngIf="showMinMax === true">
+  <span style="color: black">{{ctrl.attributes.min}}</span>
+  <span style="color: black">{{ctrl.attributes.max}}</span>
+</div>
+-->
+<mat-slider
+  class="example-margin"
+  [value]="value"
+  [max]="max"
+  [min]="min"
+  [step]="step"
+  [thumbLabel]="thumbLabel"
+  [tickInterval]="tickInterval"
+  [ngStyle]="stylesObj"
+>
+</mat-slider>

@@ -1,0 +1,42 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Pregunta } from '../models/preguntas.model';
+import { Relacion } from '../models/relacion.pregunta.model';
+import { Codes } from '../models/code.model';
+import { target } from 'projects/banorte/src/app/shared/data/port';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PreguntasService {
+  private url: string;
+
+  constructor(public http: HttpClient) {
+    this.url = target;
+  }
+
+  buscarCodigoRespuesta(search: string): Observable<Codes[]> {
+    return this.http
+      .get<Codes[]>(`${this.url}catalog/responseCode/find?search=${search}`)
+      .pipe();
+  }
+
+  buscarPreguntas(search: string, tipo: number): Observable<Pregunta[]> {
+    console.log('Esta es la url que vamos a enviar para obtener la pregunta: ');
+    console.log(`${this.url}question/find?search=${search}&type=${tipo}`);
+    return this.http
+      .get<Pregunta[]>(`${this.url}question/find?search=${search}&type=${tipo}`)
+      .pipe();
+  }
+
+  insertarPregunta(pregunta: Pregunta): Observable<Pregunta> {
+    return this.http.post<Pregunta>(`${this.url}question/`, pregunta).pipe();
+  }
+
+  insertarRelacionPregunta(relacion: Relacion): Observable<Relacion> {
+    return this.http
+      .post<Relacion>(`${this.url}question/relation`, relacion)
+      .pipe();
+  }
+}

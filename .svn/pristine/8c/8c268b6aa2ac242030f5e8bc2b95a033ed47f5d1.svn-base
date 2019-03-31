@@ -1,0 +1,12 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { InputGeneralComponent } from './input-general.component';
+
+@NgModule({
+  imports: [CommonModule, FormsModule],
+  declarations: [InputGeneralComponent],
+  exports: [InputGeneralComponent],
+  entryComponents: [InputGeneralComponent]
+})
+export class InputGeneralModule {}

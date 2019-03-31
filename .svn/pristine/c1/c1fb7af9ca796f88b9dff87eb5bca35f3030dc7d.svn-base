@@ -1,0 +1,41 @@
+<div class="grid">
+  <!-- Pie -->
+  <div class="item wPie">
+    <lib-chart-pie
+      class="test"
+      [data]="data"
+    ></lib-chart-pie>
+  </div>
+  <!-- Pie -->
+  <div class="item wPie">
+    <lib-chart-pie
+      class="test"
+      [data]="data"
+    ></lib-chart-pie>
+  </div>
+  <!-- Pie -->
+  <div class="item wPie">
+    <lib-chart-pie
+      class="test"
+      [data]="data"
+    ></lib-chart-pie>
+  </div>
+  <!-- Pie -->
+  <div class="item wPie">
+    <lib-chart-pie
+      class="test"
+      [data]="data"
+    ></lib-chart-pie>
+  </div>
+  <!-- Pie -->
+  <div class="item wPie">
+    <lib-chart-pie
+      class="test"
+      [data]="data"
+    ></lib-chart-pie>
+  </div>
+  <!-- Bar -->
+  <div class="item wBars">
+    <lib-chart-bar [data]="data2"></lib-chart-bar>
+  </div>
+</div>

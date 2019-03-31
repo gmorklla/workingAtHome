@@ -1,0 +1,11 @@
+.typingContainer {
+  max-width: 100%;
+  height: 35px;
+  background-color: whitesmoke;
+  margin: 0 30px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: small;
+}

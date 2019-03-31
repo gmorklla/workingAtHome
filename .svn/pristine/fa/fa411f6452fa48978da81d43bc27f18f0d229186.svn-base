@@ -1,0 +1,80 @@
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import { TextareaService } from './textarea.service';
+import { EventEmitterService } from 'projects/banorte/src/app/shared/services/event-emitter.service';
+
+@Component({
+  selector: 'lib-textarea',
+  templateUrl: './textarea.component.html',
+  styleUrls: ['./textarea.component.css']
+})
+export class TextareaComponent implements OnInit {
+  @Input() ctrl;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  public width: number;
+  public height: number;
+  public valor: string;
+  public estilos;
+  public containerStyles;
+  public lockAxis: string;
+
+  constructor(
+    private service: TextareaService,
+    private emitterS: EventEmitterService
+  ) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.estilos = style ? this.service.stringToObj(style) : {};
+      this.containerStyles = this.setStylesOfContainer();
+      delete this.estilos.position;
+      delete this.estilos.transform;
+      delete this.estilos.width;
+      delete this.estilos.height;
+      this.valor = value ? value : 'Mensaje';
+    }
+    // LockAxis
+    this.emitterS.lockAxisS.subscribe(lock => (this.lockAxis = lock));
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.width = e.size.width;
+    this.height = e.size.height;
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    this.lockAxis = null;
+    const transform = event.source.element.nativeElement.style.transform;
+    this.dragEndE.emit(transform);
+  }
+
+  // Obtiene estilos que deben aplicarse al contenedor
+  setStylesOfContainer() {
+    const {
+      width = '100px',
+      height = '100px',
+      transform = 'translate3d(0,0,0)'
+    } = this.estilos;
+    this.width = this.getNumValueNoPX(width);
+    this.height = this.getNumValueNoPX(height);
+    const fObj = {
+      transform: transform,
+      position: 'absolute'
+    };
+    return { ...fObj };
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

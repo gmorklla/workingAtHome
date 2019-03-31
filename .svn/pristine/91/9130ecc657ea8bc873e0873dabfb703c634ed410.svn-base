@@ -1,0 +1,305 @@
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Process} from '../../../models/process.interface';
+import {LinkedChannel} from '../../../models/linked.channel.model';
+import {AlertService} from '../../../services/alert/alert.service';
+import {ConfigurationService} from '../../../services/configuration.service';
+import {Configuration} from '../../../models/configuration.model';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+import {ConfigurationDialogComponent} from '../../dialog/configuration-dialog/configuration-dialog.component';
+import {Day} from '../../../models/configuration/day.model';
+import {Flow} from '../../../../../../flows/src/lib/models/flow.model';
+import {ConfirmationDialogComponent} from '../../dialog/confirmation-dialog/confirmation-dialog.component';
+import {LinkedChannelService} from '../../../services/linked-channel.service';
+import {LinkedChannelStatusConstant} from '../../../models/constants/linked.channel.status.constant';
+import {LinkedChannelStatus} from '../../../models/linked.channel.status.model';
+import {DesignService} from '../../../services/design.service';
+import {Design} from '../../../models/design.model';
+import {Router} from '@angular/router';
+
+@Component({
+  selector: 'lib-linked-channel-details',
+  templateUrl: './linked-channel-details.component.html',
+  styleUrls: ['./linked-channel-details.component.css']
+})
+export class LinkedChannelDetailsComponent implements OnInit {
+
+  @Input() public element: Process;
+  @Input() public idChannel: string;
+  @Input() public listFlowsForExpanded: Process[];
+  @Input() public listLinkedChannelForNewLink: LinkedChannel[];
+  @Input() public dataSource: MatTableDataSource<Flow>;
+  @Input() public listDays: Day[];
+
+  @Output() public refreshTable = new EventEmitter();
+
+  LinkedChannelStatusConstant = LinkedChannelStatusConstant;
+
+  constructor(private designService: DesignService,
+              private configurationService: ConfigurationService,
+              private linkedChannelService: LinkedChannelService,
+              private dialog: MatDialog,
+              private alertService: AlertService,
+              private router: Router) { }
+
+  ngOnInit() { }
+
+  /**
+   * Validations
+   */
+  fn_showLinkedChannel(linkedChannel: LinkedChannel): boolean {
+    let show = true;
+    if (this.idChannel !== '' && this.idChannel !== linkedChannel.channel.idSubChannel) {
+      show = false;
+    }
+    return show;
+  }
+
+  fn_isNewLinkedChannel(linkedChannel: LinkedChannel): boolean {
+    let isNew = false;
+    this.listLinkedChannelForNewLink.forEach((_linkedChannel: LinkedChannel) => {
+      if (linkedChannel.idReferential === _linkedChannel.idReferential
+        && linkedChannel.channel.idSubChannel === _linkedChannel.channel.idSubChannel) {
+        isNew = true;
+        return false;
+      }
+    });
+    return isNew;
+  }
+
+  /**
+   * Methods functional
+   */
+  private fn_getProcess(idReferential: string): Process {
+    let process = null;
+    this.dataSource.data.forEach((_process: Process) => {
+      if (_process.id === idReferential) {
+        process = _process;
+        return false;
+      }
+    });
+    return process;
+  }
+
+  /**
+   *
+   */
+  fn_openDialogForDesign(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+
+    this.designService.fn_create().subscribe({
+      next: (result: Design) => {
+        console.log('[RESPONSE]', result);
+        if (result) {
+          this.alertService.fn_success('El diseño para ' + linkedChannel.channel.descriptionSubChannel + ' ha sido creado correctamente');
+          this.router.navigate([`/layout/design/${result.id}/window/${result.initWindowId}`]);
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error('Lo siento, no es posible crear el diseño');
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Settings channels
+   */
+  fn_openDialogForSettings(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const process = this.fn_getProcess(linkedChannel.idReferential);
+    this.alertService.fn_info(process.name, linkedChannel.channel.descriptionSubChannel)
+
+    this.configurationService.fn_get(linkedChannel.idReferential, linkedChannel.channel.idSubChannel).subscribe({
+      next: (result: Configuration) => {
+        console.log('[RESPONSE]', result);
+
+        const dialogRef = this.dialog.open(ConfigurationDialogComponent, {
+          width: '500px',
+          data: {
+            process: process,
+            linkedChannel: linkedChannel,
+            configuration: result,
+            listDays: this.listDays
+          }
+        });
+
+        dialogRef.afterClosed().subscribe((result: Configuration) => {
+          if (result !== undefined) {
+            linkedChannel.configuration = result;
+            this.fn_saveOrUpdateSettings(linkedChannel);
+          }
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
+        // this.alertasService.operacionFallida(error.message);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  private fn_saveOrUpdateSettings(linkedChannel: LinkedChannel): void {
+    this.configurationService.fn_saveOrUpdate(linkedChannel.idReferential, linkedChannel.channel.idSubChannel, linkedChannel.configuration).subscribe({
+      next: (result: boolean) => {
+        console.log('[RESPONSE]', result);
+        if (result) {
+          this.alertService.fn_success('Configuración correcta para canal ' + linkedChannel.channel.descriptionSubChannel);
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error('Lo siento, no es posible guardar la configuración');
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Active linkedChannel
+   */
+  fn_openDialogForActivation(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const process = this.fn_getProcess(linkedChannel.idReferential);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        'title': 'Activación',
+        'info': '<strong>' + linkedChannel.channel.descriptionSubChannel + '</strong> será activado para la campaña <strong>' + process.name + '</strong>'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        linkedChannel.status = new LinkedChannelStatus(LinkedChannelStatusConstant.ACTIVE);
+        this.fn_activateLinkedChannel(process, linkedChannel);
+      }
+    });
+  }
+
+  private fn_activateLinkedChannel(process: Process, linkedChannel: LinkedChannel): void {
+    this.linkedChannelService.fn_update(linkedChannel).subscribe({
+      next: (result: LinkedChannel) => {
+        console.log('[RESPONSE]', result);
+        if (result) {
+          this.listFlowsForExpanded.length = 0;
+          this.listFlowsForExpanded.push(process);
+          this.listLinkedChannelForNewLink.length = 0;
+          this.listLinkedChannelForNewLink.push(linkedChannel);
+
+          this.alertService.fn_success(linkedChannel.channel.descriptionSubChannel + ' ha sido activado para ' + process.name);
+
+          this.refreshTable.emit();
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error('Lo siento, no es posible activar el canal');
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * Desactive linkedChannel
+   */
+  fn_openDialogForDesactivation(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const process = this.fn_getProcess(linkedChannel.idReferential);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        'title': 'Desactivación',
+        'info': '<strong>' + linkedChannel.channel.descriptionSubChannel + '</strong> será desactivado para la campaña <strong>' + process.name + '</strong>'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        linkedChannel.status = new LinkedChannelStatus(LinkedChannelStatusConstant.INACTIVE);
+        this.fn_desactivateLinkedChannel(process, linkedChannel);
+      }
+    });
+  }
+
+  private fn_desactivateLinkedChannel(process: Process, linkedChannel: LinkedChannel): void {
+    this.linkedChannelService.fn_update(linkedChannel).subscribe({
+      next: (result: LinkedChannel) => {
+        console.log('[RESPONSE]', result);
+        if (result) {
+          this.listFlowsForExpanded.length = 0;
+          this.listFlowsForExpanded.push(process);
+          this.listLinkedChannelForNewLink.length = 0;
+          this.listLinkedChannelForNewLink.push(linkedChannel);
+
+          this.alertService.fn_success(linkedChannel.channel.descriptionSubChannel + ' ha sido desactivado para ' + process.name);
+
+          this.refreshTable.emit();
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error('Lo siento, no es posible desactivar el canal');
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
+   * dLinked channels
+   */
+  fn_openDialogForDLink(linkedChannel: LinkedChannel): void {
+    console.log('LinkedChannel: ', linkedChannel);
+    const process = this.fn_getProcess(linkedChannel.idReferential);
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      data: {
+        'title': 'Desvincular',
+        'info': '<strong>' + linkedChannel.channel.descriptionSubChannel + '</strong> será desvinculado de la campaña <strong>' + process.name + '</strong>'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result === true) {
+        this.fn_dLinkedChannel(process, linkedChannel);
+      }
+    });
+  }
+
+  private fn_dLinkedChannel(process: Process, linkedChannel: LinkedChannel): void {
+    this.linkedChannelService.fn_dLink(linkedChannel).subscribe({
+      next: (result: boolean) => {
+        console.log('[RESPONSE]', result);
+        if (result) {
+          this.listFlowsForExpanded.length = 0;
+          this.listFlowsForExpanded.push(process);
+          this.listLinkedChannelForNewLink.length = 0;
+
+          this.alertService.fn_success(linkedChannel.channel.descriptionSubChannel + ' ha sido desvinculado');
+
+          this.refreshTable.emit();
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error('Lo siento, no es posible desvincular el canal');
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+}

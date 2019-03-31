@@ -1,0 +1,17 @@
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class UtilsService {
+
+  constructor() { }
+
+  fn_copy(_string: string) {
+    let aux = document.createElement("input");
+    aux.setAttribute("value", _string);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+    console.log("Copy: ", _string)
+  }
+}

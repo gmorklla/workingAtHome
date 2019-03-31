@@ -1,0 +1,78 @@
+.vidContainer {}
+
+.handle {
+  border: 1px solid gray;
+  background: rgba(20, 73, 220, 0.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ::ng-deep .mat-form-field-flex {
+  border-radius: 10px;
+  background: cyan !important;
+}
+
+::ng-deep .mat-form-field-outline {
+  color: red !important;
+}
+
+::ng-deep .mat-form-field-outline * {
+  background: cyan !important;
+}
+
+::ng-deep .mat-input-element {
+  caret-color: red !important;
+}
+
+::ng-deep .mat-form-field-type-mat-select .mat-form-field-label {
+  color: red !important;
+}
+
+::ng-deep .mat-select-arrow {
+  color: red !important;
+} */
+
+/* ::ng-deep .mat-form-field-outline {
+  color: #EB0029 !important;
+} */
+
+::ng-deep .mat-select-arrow {
+  border: none !important;
+}
+
+/* ::ng-deep .mat-form-field-outline * {
+  background: #EB0029 !important;
+} */
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background: rgb(228, 228, 228) !important;
+}
+
+::ng-deep .red.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: #EB0029 !important;
+}
+
+::ng-deep .green.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: rgb(0, 235, 59) !important;
+}
+
+::ng-deep .blue.mat-form-field-appearance-fill .mat-form-field-flex {
+  background: rgb(0, 208, 235) !important;
+}
+
+::ng-deep .panelExe {
+  background: rgba(105, 105, 105, 0.87) !important;
+}
+
+::ng-deep .panelExe .mat-option {
+  color: white !important;
+}
+
+::ng-deep.mat-select-value {
+  color: white !important;
+}
+
+::ng-deep .mat-form-field-type-mat-select .mat-form-field-label {
+  color: white !important;
+}

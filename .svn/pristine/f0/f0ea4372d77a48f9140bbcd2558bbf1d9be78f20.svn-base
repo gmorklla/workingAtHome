@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def warContext
+def angularProject
+def command1
+def command2
+
+if(!project.hasProperty('banorteRender')) {
+     println "Creando el WAR Diseniador"
+	warContext = 'uf-ui-managment'
+	angularProject = 'banorte'
+}else{
+    println "Creando el WAR Render "
+	warContext = 'uf-ui-render'
+	angularProject = 'banorteRender'
+}
+
+task npmInstall(type:Exec) {
+	workingDir "${projectDir}/"
+	command1 = "npm install"
+	println command1
+	commandLine "cmd", "/c", command1
+	standardOutput = new ByteArrayOutputStream()
+	ext.output = {
+	  return standardOutput.toString()
+	}
+}
+
+task ngBuild(type: Exec, dependsOn: 'npmInstall') {
+	workingDir "${projectDir}/"
+	command2 =  "ng build ${angularProject} --prod --base-href \"/${warContext}/\" --deploy-url \"/${warContext}/\""
+	println command2
+	commandLine "cmd", "/c", command2
+	standardOutput = new ByteArrayOutputStream()
+	ext.output = {
+	  return standardOutput.toString()
+	}
+}
+war.dependsOn 'ngBuild'
+
+war {
+	from "${projectDir}/dist/${angularProject}"
+	into '/'
+	eachFile {
+		if (it.name == "ibm-web-ext.xml") {
+		  it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ["warContext": "${warContext}".toString()])
+		}
+	 }
+}
+
+
+
+
+

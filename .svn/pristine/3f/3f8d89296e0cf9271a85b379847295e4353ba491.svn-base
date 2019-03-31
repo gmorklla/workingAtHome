@@ -1,0 +1,48 @@
+import { ControlesI } from 'projects/banorte/src/app/shared/data/data';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EventEmitterService {
+  protected _eventSubject = new Subject();
+  public events = this._eventSubject.asObservable();
+
+  protected _shortcutSubject = new Subject();
+  public shortcuts = this._shortcutSubject.asObservable();
+
+  protected _styleSubject = new Subject();
+  public styles = this._styleSubject.asObservable();
+
+  public showS = new Subject<boolean>();
+  public lockAxisS = new Subject<string>();
+
+  public rzStartE = new Subject<ControlesI>();
+  public rzStopE = new Subject<{ width: number; height: number }>();
+  public onDragEndE = new Subject<string>();
+
+  public catalogImageEvent = new Subject<string>();
+  public control$ = new Subject<boolean>();
+  public windowStyles$ = new Subject<string>();
+
+  dispatchEvent(event) {
+    this._eventSubject.next(event);
+  }
+
+  dispatchShortcut(event) {
+    this._shortcutSubject.next(event);
+  }
+
+  dispatchShortcutsMenu(val) {
+    this.showS.next(val);
+  }
+
+  dispatchLockAxis(val) {
+    this.lockAxisS.next(val);
+  }
+
+  dispatchStyle(event) {
+    this._styleSubject.next(event);
+  }
+}

@@ -1,0 +1,73 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { InputFileService } from './input-file.service';
+
+@Component({
+  selector: 'lib-inputFile',
+  template: `
+    <button
+      mat-raised-button
+      color="primary"
+      [ngStyle]="estilos"
+      (click)="fileInput.click()"
+      disabled
+    >
+      <span class="inButton">
+        {{ valor }}
+        <mat-icon>attach_file</mat-icon>
+      </span>
+    </button>
+    <input
+      hidden
+      (change)="onFileSelected()"
+      #fileInput
+      type="file"
+      id="file"
+    />
+  `,
+  styleUrls: ['./input-file.css']
+})
+export class InputFileComponent implements OnInit {
+  @Input() ctrl;
+  valor: string;
+  backgroundColor: string;
+  color: string;
+  fontSize: string;
+  estilos;
+
+  constructor(private service: InputFileService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+      this.valor = value ? value : 'Mensaje';
+      const stylesObj = style ? this.service.stringToObj(style) : {};
+      this.backgroundColor =
+        stylesObj.background !== '' && stylesObj.background
+          ? stylesObj.background
+          : 'rgb(255,255,255)';
+      this.color =
+        stylesObj.color !== '' && stylesObj.color
+          ? stylesObj.color
+          : 'rgb(0,0,0)';
+      this.fontSize = stylesObj['font-size'] ? stylesObj['font-size'] : '14px';
+      this.estilos = {
+        'background-color': this.backgroundColor,
+        color: this.color,
+        'font-size': this.fontSize
+      };
+    }
+  }
+
+  onFileSelected() {
+    const inputNode: any = document.querySelector('#file');
+    if (typeof FileReader !== 'undefined') {
+      const reader = new FileReader();
+      reader.onloadstart = (e: any) => {
+        this.valor = inputNode.files[0].name;
+      };
+      reader.readAsArrayBuffer(inputNode.files[0]);
+    }
+  }
+}

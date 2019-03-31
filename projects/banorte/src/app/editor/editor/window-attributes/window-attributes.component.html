@@ -1,0 +1,24 @@
+<ng-container *ngIf="windowSelected; else sinItem">
+  <h3>{{windowSelected.name}}</h3>
+</ng-container>
+<ng-template #sinItem>
+  <p style="font-size: smaller; color: gray;">Selecciona un window para modificarlo</p>
+</ng-template>
+<mat-accordion>
+  <mat-expansion-panel
+    [disabled]="!windowSelected"
+
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Configuración
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <!-- ///////////////////// Width - Height - Name /////////////////////-->
+    <app-container-styles-win
+      *ngIf="windowSelected"
+      [windowSelected]="windowSelected"
+      (emitChangeFromForm)="propChangeEmit($event)"
+    ></app-container-styles-win>
+  </mat-expansion-panel>
+</mat-accordion>

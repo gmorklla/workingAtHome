@@ -1,0 +1,12 @@
+import {ServiceFieldDesign} from './service-field-design.model';
+
+export class ServiceDesign {
+  id: number;
+  designId: number;
+  windowId: number;
+  dataSourceId: number;
+  description: string;
+  fields: ServiceFieldDesign[];
+  creationDate: Date;
+  updateDate: Date;
+}

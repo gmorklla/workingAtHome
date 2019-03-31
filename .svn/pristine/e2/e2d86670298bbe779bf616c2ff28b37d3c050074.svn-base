@@ -1,0 +1,48 @@
+import { Injectable } from '@angular/core';
+import { StyleModel } from './models/style/style.model';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RenderRadioService {
+
+  constructor() {
+  }
+
+  stringToObj(styles: string): { [key: string]: any } {
+    if (styles) {
+      const styleObj = styles
+        .split(';')
+        .filter(val => val !== '')
+        .map(val => {
+          const arr = val.split(':');
+          const obj = {};
+          obj[arr[0]] = arr[1];
+          return obj;
+        })
+        .reduce((prev, curr) => {
+          return {...prev, ...curr};
+        });
+
+      return styleObj;
+    }
+  }
+
+  styleReOrder(stylesObj: any): StyleModel {
+
+    const resultado: StyleModel = {
+      '-webkit-appearance': 'none',
+      'position': stylesObj['position'],
+      'width': stylesObj['width'],
+      'height': stylesObj['height'],
+      'background-image': stylesObj['background-image'],
+      'background-repeat': 'no-repeat',
+      'background-size': '100px',
+      'background-position-x': 'left',
+      'transform': stylesObj['transform']
+    };
+
+    return resultado;
+  }
+}

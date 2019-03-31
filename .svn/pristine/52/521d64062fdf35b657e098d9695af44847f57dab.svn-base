@@ -1,0 +1,37 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { LinkService } from './link.service';
+
+@Component({
+  selector: 'lib-link',
+  template: `
+    <span>
+      <a [href]="textLink" target="_blank" [ngStyle]="stylesObj">{{ valor }}</a>
+    </span>
+  `,
+  styles: []
+})
+export class LinkComponent implements OnInit {
+  @Input() ctrl;
+  valor: string;
+  stylesObj;
+  textLink: string;
+
+  constructor(private service: LinkService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.valor = this.ctrl.attributes.value
+        ? this.ctrl.attributes.value
+        : 'Mensaje';
+      this.textLink = this.ctrl.attributes.href
+        ? this.ctrl.attributes.href
+        : 'http://www.google.com';
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+    }
+  }
+}

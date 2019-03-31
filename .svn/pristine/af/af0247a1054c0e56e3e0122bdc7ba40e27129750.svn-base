@@ -1,0 +1,11 @@
+export enum Messages {
+  MSG_RULE_VARIABLE_DATA_TYPE_GET_ALL_ERROR = 'Lo siento, no es posible recuperar la lista de tipos de dato',
+  MSG_RULE_VARIABLE_GET_ALL_ERROR = 'Lo siento, no es posible recuperar la lista de variables',
+  MSG_RULE_VARIABLE_SAVE_SUCCESS = 'La variable ha sido creada correctamente',
+  MSG_RULE_VARIABLE_SAVE_ERROR = 'Lo siento, no es posible crear la variable',
+  MSG_RULE_VARIABLE_DELETE_SUCCESS = 'La variable ha sido eliminada correctamente',
+  MSG_RULE_VARIABLE_DELETE_ERROR = 'Lo siento, no es posible eliminar la variable',
+  MSG_RULE_VARIABLE_UPDATE_SUCCESS = 'La variable ha sido actualizada correctamente',
+  MSG_RULE_VARIABLE_UPDATE_ERROR = 'Lo siento, no es posible actualizar la variable',
+  MSG_RULE_SERVICE_GET_ALL_ERROR = 'Lo siento, no es posible recuperar la lista de servicios'
+}

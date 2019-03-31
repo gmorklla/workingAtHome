@@ -1,0 +1,16 @@
+<div
+  class="chat"
+  [ngStyle]="{'height': height | async}"
+>
+  <div class="listMsgContainer">
+    <mat-card
+      *ngFor="let msg of messages"
+      [ngClass]="{'right': msg.username === nickname, 'left': msg.username !== nickname}"
+    >
+      <mat-card-content>
+        <div class="name">{{msg.username}}</div>
+        <div class="txt">{{msg.txt}}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$ims-app-primary: mat-palette($mat-indigo, 700, 300, 900);
+$ims-app-accent: mat-palette($mat-light-blue);
+$ims-app-warn: mat-palette($mat-deep-orange, A200);
+
+$ims-app-theme: mat-light-theme($ims-app-primary, $ims-app-accent, $ims-app-warn);
+
+@include angular-material-theme($ims-app-theme);
+
+.alternate-theme {
+  $alternate-primary: mat-palette($mat-light-blue);
+  $alternate-accent: mat-palette($mat-yellow, 400);
+
+  $alternate-theme: mat-light-theme($alternate-primary, $alternate-accent);
+
+  @include angular-material-theme($alternate-theme);
+}

@@ -1,0 +1,69 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { InputRangeService } from './input-range.service';
+import {buildOptimizerLoader} from "@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs";
+
+interface InputRangeCtrlModel {
+  id: number;
+  name: string;
+  type: string;
+  attributes: {
+    min: string;
+    max: string;
+    style: string;
+    step: string;
+    value: string;
+    showMinMax: string;
+  };
+  options: any;
+  tag: string;
+}
+
+@Component({
+  selector: 'lib-input-range',
+  template: `
+    <div *ngIf="showMinMax === 'true'">
+      <span style="color: black">{{ctrl.attributes.min}}</span>
+      <span style="color: black">{{ctrl.attributes.max}}</span>
+    </div>
+    <input
+      type="range"
+      [value]="value"
+      [min]="min"
+      [max]="max"
+      [step]="step"
+      [ngStyle]="stylesObj"
+    >
+  `,
+  styleUrls: ['./input-range.component.css']
+})
+export class InputRangeComponent implements OnInit {
+
+  @Input() public ctrl: InputRangeCtrlModel;
+  public stylesObj: any;
+  public estilos;
+  public value: string;
+  public min: number;
+  public max: number;
+  public step: number;
+  public showMinMax: string;
+
+  constructor(private service: InputRangeService) {
+  }
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { style, value, min, max, step, showMinMax }
+      } = this.ctrl;
+
+      this.min = this.ctrl.attributes.min ? Number(this.ctrl.attributes.min) : 0;
+      this.max = this.ctrl.attributes.max ? Number(this.ctrl.attributes.max) : 10;
+      this.step = this.ctrl.attributes.step ? Number(this.ctrl.attributes.step) : 1;
+      this.showMinMax = this.ctrl.attributes.showMinMax ? this.ctrl.attributes.showMinMax : 'true';
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      this.value = value ? value : 'this.ctrl.type';
+    }
+  }
+}

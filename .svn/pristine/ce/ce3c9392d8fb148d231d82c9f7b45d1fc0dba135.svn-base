@@ -1,0 +1,110 @@
+<div class="shortcuts">
+  <!-- <div class="titulo">
+    <mat-chip-list>
+      <mat-chip>ctrl</mat-chip>
+      <mat-chip>+</mat-chip>
+      <mat-chip>alt</mat-chip>
+      <mat-chip>+</mat-chip>
+    </mat-chip-list>
+  </div> -->
+  <div class="item">
+    <div class="key">m</div>
+    mensaje
+  </div>
+  <div class="item">
+    <div class="key">t</div>
+    texto
+  </div>
+  <div class="item">
+    <div class="key">e</div>
+    email
+  </div>
+  <div class="item">
+    <div class="key">c</div>
+    contraseña
+  </div>
+  <div class="item">
+    <div class="key">n</div>
+    número
+  </div>
+  <div class="item">
+    <div class="key">o</div>
+    combo
+  </div>
+  <div class="item">
+    <div class="key">r</div>
+    radio
+  </div>
+  <div class="item">
+    <div class="key">h</div>
+    checkbox
+  </div>
+  <div class="item">
+    <div class="key">a</div>
+    rango
+  </div>
+  <div class="item">
+    <div class="key">b</div>
+    botón
+  </div>
+  <div class="item">
+    <div class="key">x</div>
+    área
+  </div>
+  <div class="item">
+    <div class="key">l</div>
+    link
+  </div>
+  <div class="item">
+    <div class="key">f</div>
+    archivo
+  </div>
+  <div class="item">
+    <div class="key">i</div>
+    imagen
+  </div>
+  <div class="item">
+    <div class="key">v</div>
+    video
+  </div>
+  <div class="item">
+    <div class="key">k</div>
+    token
+  </div>
+  <div class="item">
+    <div class="key">p</div>
+    copiar
+  </div>
+  <div class="item">
+    <div class="key">s</div>
+    pegar
+  </div>
+  <div
+    class="item"
+    matTooltip="Próximo movimiento será horizontal"
+    [matTooltipPosition]="'left'"
+    matTooltipClass="shortcutsTooltip"
+  >
+    <div class="key">↔</div>
+    m horiz
+  </div>
+  <div
+    class="item"
+    matTooltip="Próximo movimiento será vertical"
+    [matTooltipPosition]="'left'"
+    matTooltipClass="shortcutsTooltip"
+  >
+    <div class="key">↕</div>
+    m vert
+  </div>
+  <div
+    class="item"
+    style="width:230px"
+    matTooltip="Salir shortcut mode"
+    [matTooltipPosition]="'left'"
+    matTooltipClass="shortcutsTooltip"
+  >
+    <div class="key">esc</div>
+    salir
+  </div>
+</div>

@@ -1,0 +1,19 @@
+import { NgModule } from '@angular/core';
+import { RenderRangeComponent } from './render-range.component';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [
+    RenderRangeComponent
+  ],
+  exports: [
+    RenderRangeComponent
+  ],
+  entryComponents: [
+    RenderRangeComponent
+  ]
+})
+export class RenderRangeModule { }

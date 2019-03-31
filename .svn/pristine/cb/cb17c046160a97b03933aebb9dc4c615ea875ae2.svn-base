@@ -1,0 +1,86 @@
+import { NgModule } from '@angular/core';
+import {CampaignsComponent} from './campaigns.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {CampaignRoutingModule} from "../../../banorte/src/app/campaign/campaign.routing.module";
+import {
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatCardModule, MatCheckboxModule, MatDialogModule, MatDividerModule, MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule, MatMenuModule,
+  MatPaginatorModule,
+  MatSelectModule, MatSnackBarModule,
+  MatTableModule, MatTooltipModule
+} from "@angular/material";
+import { FilterComponent } from './components/filter/filter.component';
+import {ChannelService} from "./services/channel.service";
+import {LinkedChannelService} from './services/linked-channel.service';
+import {CampaignService} from './services/campaign.service';
+import { LinkedChannelDialogComponent } from './components/dialog/linked-channel-dialog/linked-channel-dialog.component';
+import {NgxUiLoaderModule} from 'ngx-ui-loader';
+import { LoaderComponent } from './components/loader/loader.component';
+import { ConfirmationDialogComponent } from './components/dialog/confirmation-dialog/confirmation-dialog.component';
+import { ConfigurationDialogComponent } from './components/dialog/configuration-dialog/configuration-dialog.component';
+import { OptionsSheetComponent } from './components/sheet/options-sheet/options-sheet.component';
+import {ConfigurationService} from './services/configuration.service';
+import {AlertService} from './services/alert/alert.service';
+import {UtilsService} from './services/utils/utils.service';
+
+@NgModule({
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NgxUiLoaderModule,
+    CampaignRoutingModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatBottomSheetModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatSelectModule,
+    MatListModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatBadgeModule,
+    MatMenuModule,
+    MatSnackBarModule
+  ],
+  declarations: [
+    CampaignsComponent,
+    FilterComponent,
+    LinkedChannelDialogComponent,
+    LoaderComponent,
+    ConfirmationDialogComponent,
+    ConfigurationDialogComponent,
+    OptionsSheetComponent
+  ],
+  exports: [
+    CampaignsComponent,
+    FilterComponent
+  ],
+  providers: [
+    AlertService,
+    UtilsService,
+    ChannelService,
+    LinkedChannelService,
+    CampaignService,
+    ConfigurationService
+  ],
+  entryComponents: [
+    CampaignsComponent,
+    LinkedChannelDialogComponent,
+    ConfirmationDialogComponent,
+    ConfigurationDialogComponent,
+    OptionsSheetComponent
+  ]
+})
+export class CampaignsModule { }

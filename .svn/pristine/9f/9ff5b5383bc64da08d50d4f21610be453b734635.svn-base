@@ -1,0 +1,41 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ImageComponentService } from './image-component.service';
+
+@Component({
+  selector: 'lib-imageComponent',
+  template: `
+    <img
+      [src]="source"
+      [width]="stylesObj.width"
+      [height]="stylesObj.height"
+      [ngStyle]="stylesObj"
+    />
+  `,
+  styles: []
+})
+export class ImageComponentComponent implements OnInit {
+  @Input() ctrl;
+  source: string;
+  width: number;
+  height: number;
+  stylesObj;
+  @Output() sizeE = new EventEmitter();
+
+  constructor(private service: ImageComponentService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, src }
+      } = this.ctrl;
+      this.source = src ? src : '/assets/images/banorteLogo.jpg';
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      if (!this.stylesObj.width) {
+        this.stylesObj.height = 100;
+        this.stylesObj.width = 100;
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+.dashCard {
+  max-width: 100%;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+lib-chart-bar {
+  height: 100%;
+}
+
+.button {
+  color: white;
+}
+
+mat-card-header {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  justify-content: center;
+}
+
+mat-card-title {
+  font-size: small !important;
+}

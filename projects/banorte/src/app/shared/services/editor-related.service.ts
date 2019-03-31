@@ -1,0 +1,120 @@
+import { ControlRPostI } from './../data/data';
+import { Injectable } from '@angular/core';
+import { ControlI, WidgetI } from '../data/data';
+import { target } from '../data/port';
+import { HttpCallService } from 'projects/http-call/src/public_api';
+import { UpdateStylesService } from './update-styles.service';
+import { Observable } from 'rxjs';
+import { SnackBarService } from '../../shared/services/snack-bar.service';
+import { CleanTransformService } from './clean-transform.service';
+import { ctrlStyleMap } from 'projects/banorte/src/app/shared/data/controlesDefault';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EditorRelatedService {
+  constructor(
+    private http: HttpCallService,
+    private updateStylesServ: UpdateStylesService,
+    private snack: SnackBarService,
+    private cleanTransform: CleanTransformService
+  ) {}
+
+  insertaControl(ctrl: ControlI, windowId: string): Observable<Object> {
+    const obj: ControlRPostI = {
+      id: 0,
+      type: ctrl.type,
+      tag: ctrl.tag,
+      name: ctrl.type,
+      attributes: {
+        style: ctrlStyleMap[ctrl.type]
+      },
+      options: {}
+    };
+
+    if (ctrl.type === 'radio' || ctrl.type === 'checkbox' ) {
+      obj.attributes['href'] = 'http://lnxsapl1d.dev.unix.banorte.com:9080/uf-ui-managment/assets/images/checkboxx.png';
+    }
+
+
+    const url = `${target}control/window/${windowId}`;
+    return this.http.postRequest(url, obj, {});
+  }
+
+  insertaWidget(widget: WidgetI, windowId: string): Observable<Object> {
+    const obj = {
+      id: widget.id,
+      type: widget.type,
+      description: widget.description,
+      image: widget.image,
+      label: widget.label,
+      windowId: widget.windowId
+    };
+    const url = `${target}widget/window/${windowId}`;
+    return this.http.postRequest(url, obj, {});
+  }
+
+  execCommand(command: string, ctrlSelected = null, copyCmd = null) {
+    let result;
+    switch (command) {
+      case 'copy':
+        result = ctrlSelected
+          ? { status: true, code: 'copiarCtrl' }
+          : this.snack.open(
+              'Debes seleccionar un control antes de intentar copiar',
+              'Ok'
+            );
+        break;
+      case 'paste':
+        result =
+          copyCmd && ctrlSelected
+            ? { status: true, code: 'pegarCtrl' }
+            : this.snack.open(
+                'Primero debes copiar un control, después seleccionar otro y pegar',
+                'Ok'
+              );
+        break;
+      case 'delete':
+        result = ctrlSelected
+          ? { status: true, code: 'borrarCtrl' }
+          : this.snack.open('No hay control seleccionado para borrar', 'Ok');
+        break;
+      default:
+        break;
+    }
+    return result;
+  }
+
+  getWindow(windowId: string): Observable<Object> {
+    const url = `${target}window/${windowId}`;
+    return this.http.getRequest(url, {});
+  }
+
+  getControles(): Observable<Object> {
+    const url = `${target}catalog/controls`;
+    return this.http.getRequest(url, {});
+  }
+
+  getWidgets(): Observable<Object> {
+    const url = `${target}catalog/widgets`;
+    return this.http.getRequest(url, {});
+  }
+
+  getCloneUpdated(
+    clone: ControlI,
+    estilos: { [key: string]: any },
+    atributos: any
+  ): ControlI {
+    const { transform } = estilos;
+    if (transform) {
+      estilos.transform =
+        'translate3d(' + this.cleanTransform.cleanTransform(transform) + ')';
+    }
+    const newStylesObj = this.updateStylesServ.update(estilos, clone);
+    clone.attributes['style'] = newStylesObj;
+    if (atributos) {
+      clone.attributes = { ...clone.attributes, ...atributos };
+    }
+    return clone;
+  }
+}

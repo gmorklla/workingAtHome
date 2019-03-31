@@ -1,0 +1,3 @@
+<lib-flow-form-edit *ngIf="flow"
+  [flow]="flow"
+  (saveOrUpdate)="fn_update($event);"></lib-flow-form-edit>

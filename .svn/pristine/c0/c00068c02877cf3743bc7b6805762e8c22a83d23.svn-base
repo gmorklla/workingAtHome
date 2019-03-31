@@ -1,0 +1,425 @@
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  tap,
+  mergeMap
+} from 'rxjs/operators';
+import { of, iif } from 'rxjs';
+import { ControlesI, EModel } from 'projects/banorte/src/app/shared/data/data';
+import { FormatStylesService } from '../../../../../shared/services/format-styles.service';
+import { opcionesDefault, OpcionI } from '../../../../../shared/data/data';
+
+@Component({
+  selector: 'app-general-form',
+  templateUrl: './general-form.component.html',
+  styleUrls: ['./general-form.component.css']
+})
+export class GeneralFormComponent implements OnInit, OnChanges {
+  generalForm: FormGroup;
+  public selectForm: FormGroup;
+  public checkboxForm: FormGroup;
+  public radioForm: FormGroup;
+  linkForm: FormGroup;
+  iframeForm: FormGroup;
+  inputRangeForm: FormGroup;
+  // opciones: FormArray;
+  toCompare: string;
+  @Input() control: ControlesI;
+  @Output() propChange = new EventEmitter();
+  public opciones;
+  public styleObj: any;
+
+  constructor(
+    private fb: FormBuilder,
+    private formatStyles: FormatStylesService
+  ) {}
+
+  ngOnInit() {
+    this.initForm();
+    this.listenForm();
+    this.setFormValues();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.control) {
+      if (this.generalForm) {
+        this.setFormValues();
+      }
+    }
+  }
+
+  initForm() {
+    const opts = {
+      width: ['', [Validators.required]],
+      height: ['', [Validators.required]],
+      x: ['', [Validators.required]],
+      y: ['', [Validators.required]],
+      color: ['', [Validators.required]],
+      fondo: ['', Validators.required],
+      value: ['', Validators.required]
+    };
+    this.generalForm = this.fb.group(opts);
+  }
+
+  listenForm() {
+    this.generalForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        filter(val => JSON.stringify(val) !== this.toCompare),
+        tap(val => {
+          this.toCompare = JSON.stringify(val);
+          const objToEmit = this.getGeneralFormValues(val);
+          console.log('Before emit change on form', objToEmit);
+          this.propChange.emit(objToEmit);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  setFormValues() {
+    if (this.control.type === 'a') {
+      this.setLinkForm();
+    } else if (this.control.type === 'iframe') {
+      this.setIframeForm();
+    } else if (this.control.type === 'range') {
+      this.setinputRangeForm();
+    } else if (this.control.type === 'select') {
+      this.setSelectForm();
+    } else if (this.control.type === 'radio') {
+      this.setRadioForm();
+    } else if (this.control.type === 'checkbox') {
+      this.setCheckboxForm();
+    }
+    const value = this.control.attributes['value'];
+    const valueF = value ? value : 'Mensaje';
+    this.styleObj = this.control.attributes['style']
+      ? this.formatStyles.stringToObj(this.control.attributes['style'])
+      : {};
+    let { width = '150', height = '60' } = this.styleObj;
+    const {
+      transform = 'translate3d(0,0,0)',
+      color = 'rgb(0,0,0)',
+      background = 'rgba(255,255,255,0)'
+    } = this.styleObj;
+    const coords = transform
+      .slice(transform.indexOf('(') + 1, transform.indexOf(')'))
+      .split(',');
+    const x = this.getNumValueNoPX(coords[0]);
+    const y = this.getNumValueNoPX(coords[1]);
+    width = this.getNumValueNoPX(width);
+    height = this.getNumValueNoPX(height);
+    this.generalForm.setValue(
+      {
+        width: width,
+        height: height,
+        x: x,
+        y: y,
+        color: color,
+        fondo: background,
+        value: valueF
+      },
+      { emitEvent: false }
+    );
+  }
+
+  // general
+
+  getGeneralFormValues(val) {
+    const { width, height, x, y, color, value, fondo } = val;
+    const style = {
+      width: width,
+      height: height,
+      x: x,
+      y: y,
+      color: color !== '' ? color : 'rgb(0,0,0)',
+      background: fondo !== '' ? fondo : 'rgba(255,255,255,0)'
+    };
+    const attrs: Array<any> = [{ value: value }];
+    return { estilos: style, attrs: attrs };
+  }
+
+  // link
+
+  setLinkForm() {
+    const opts = {
+      link: ['', [Validators.required]]
+    };
+    this.linkForm = this.fb.group(opts);
+    const href = this.control.attributes['href'];
+    const hrefF = href ? href : 'http://www.google.com';
+    this.linkForm.setValue({
+      link: hrefF
+    });
+    this.linkForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const result = this.getGeneralFormValues(gFValues);
+          const { link } = val;
+          result.attrs.push({ href: link });
+          this.propChange.emit(result);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  // iframe (video)
+
+  setIframeForm(): void {
+    const opts = {
+      src: ['', [Validators.required]]
+    };
+    this.iframeForm = this.fb.group(opts);
+    const src = this.control.attributes['src'];
+    const srcF = src ? src : 'https://media.w3.org/2010/05/sintel/trailer.mp4';
+    this.iframeForm.setValue({
+      src: srcF
+    });
+    this.iframeForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const result = this.getGeneralFormValues(gFValues);
+          const { src: link } = val;
+          result.attrs.push({ src: link });
+          this.propChange.emit(result);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  // range
+
+  public setinputRangeForm(): void {
+    const opts = {
+      min: ['', [Validators.required]],
+      max: ['', [Validators.required]],
+      step: ['', [Validators.required]],
+      showMinMax: ['', [Validators.required]]
+    };
+    this.inputRangeForm = this.fb.group(opts);
+    const {
+      min = 0,
+      max = 10,
+      step = 0,
+      showMinMax = 'true'
+    } = this.control.attributes;
+
+    this.inputRangeForm.setValue({
+      min: Number(min),
+      max: Number(max),
+      step: Number(step),
+      showMinMax: showMinMax
+    });
+    this.inputRangeForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const result = this.getGeneralFormValues(gFValues);
+          const {
+            min: minR,
+            max: maxR,
+            step: stepR,
+            showMinMax: showMMR
+          } = val;
+          result.attrs.push(
+            { min: minR },
+            { max: maxR },
+            { step: stepR },
+            { showMinMax: showMMR }
+          );
+          this.propChange.emit(result);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  // select
+
+  public setSelectForm(): void {
+    const { options } = this.control;
+    const opciones = options ? options : opcionesDefault;
+    const opts = {
+      link: ['', [Validators.required]],
+      opciones: this.fb.array([])
+    };
+    this.selectForm = this.fb.group(opts);
+    opciones.forEach(op => this.agregaOpcion(op));
+    const src = this.control.attributes['src'];
+    const srcF = src ? src : '';
+    this.selectForm.setValue({
+      link: srcF,
+      opciones: opciones
+    });
+    this.selectForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const generalFormValues = this.getGeneralFormValues(gFValues);
+          const { link } = val;
+
+          /*
+          generalFormValues contiene tanto los atributos como los estilos.
+          La siguiente linea agrega estilos especializados del select a generalFormValues
+          También, si quisieramos agregar atributos usaríamos el push a generalFormValues.attrs
+          hay varios ejemplos de ello.
+          */
+          const eModel: EModel = this.selectWithImgInArrow(generalFormValues, {
+            src: link
+          });
+          this.propChange.emit(eModel);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  creaOpcion(option: OpcionI = null): FormGroup {
+    return option
+      ? this.fb.group({
+          value: [option.value, [Validators.required]],
+          viewValue: [option.viewValue, [Validators.required]]
+        })
+      : this.fb.group({
+          value: ['', [Validators.required]],
+          viewValue: ['', [Validators.required]]
+        });
+  }
+
+  agregaOpcion(option: OpcionI = null): void {
+    this.opciones = this.selectForm.get('opciones') as FormArray;
+    this.opciones.push(this.creaOpcion(option));
+  }
+
+  public selectWithImgInArrow(generalFormValues: any, src: any): EModel {
+    const eModel: EModel = generalFormValues;
+    if (src) {
+      eModel.estilos['background-image'] = `url(${src.src})`;
+      eModel.estilos['background-position'] = 'right';
+      eModel.estilos['background-repeat'] = 'no-repeat';
+      eModel.estilos['background-size'] = 'contain';
+      eModel.estilos['-webkit-appearance'] = 'none';
+    }
+    return eModel;
+  }
+
+  // radio
+
+  public setRadioForm(): void {
+    const opts = {
+      link: ['', [Validators.required]]
+    };
+    this.radioForm = this.fb.group(opts);
+    const src = this.control.attributes['src'];
+    const srcF = src ? src : '';
+    this.radioForm.setValue({
+      link: srcF
+    });
+    this.radioForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const generalFormValues = this.getGeneralFormValues(gFValues);
+          const { link } = val;
+          generalFormValues.estilos['background-image'] = `url(${link})`;
+          this.propChange.emit(generalFormValues);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  // checkbox
+
+  public setCheckboxForm(): void {
+    const opts = {
+      link: ['', [Validators.required]]
+    };
+    this.checkboxForm = this.fb.group(opts);
+    const src = this.control.attributes['src'];
+    const srcF = src ? src : '';
+    this.checkboxForm.setValue({
+      link: srcF
+    });
+    this.checkboxForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        tap(val => {
+          const gFValues = Object.assign({}, this.generalForm.value);
+          const generalFormValues = this.getGeneralFormValues(gFValues);
+          const { link } = val;
+          generalFormValues.estilos['background-image'] = `url(${link})`;
+          this.propChange.emit(generalFormValues);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  // otros
+
+  colorSelected(e, inputName) {
+    let obj;
+    switch (inputName) {
+      case 'color':
+        obj = { color: e };
+        break;
+      case 'fondo':
+        obj = { fondo: e };
+        break;
+      case 'boderColor':
+        obj = {
+          border: {
+            borderColor: e
+          }
+        };
+        break;
+      default:
+        break;
+    }
+    this.generalForm.patchValue(obj);
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+
+  deleteItem(e) {
+    const confirmP = confirm('¿Quieres borrar este ' + this.control.type + '?');
+    const delete$ = of(true).pipe(
+      tap(val => this.propChange.emit({ delete: this.control }))
+    );
+    const x$ = of('X');
+    of(confirmP)
+      .pipe(mergeMap(val => iif(() => val, delete$, x$)))
+      .subscribe(_ => {});
+  }
+}

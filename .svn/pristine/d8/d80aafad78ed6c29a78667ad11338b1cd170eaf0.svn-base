@@ -1,0 +1,44 @@
+<!-- <ng-template
+  #temp
+  let-value="value"
+  let-idx="idx"
+>
+  <h1>{{idx}} : {{value}}</h1>
+</ng-template>
+
+<ng-template #noItems>
+  <h1>No items</h1>
+</ng-template>
+
+<ng-container *ngIf="obs; else noItems">
+  <ng-container *ngFor="let item of (obs | async)">
+    <ng-container *ngTemplateOutlet="temp; context: item"></ng-container>
+  </ng-container>
+</ng-container>
+
+<ng-container #din></ng-container>
+
+<div class="example-boundary">
+  <div
+    class="example-box"
+    cdkDragBoundary=".example-boundary"
+    cdkDrag
+  >
+    I can only be dragged within the dotted container
+  </div>
+</div>
+
+<app-content-cmp></app-content-cmp> -->
+
+<div
+  #someName
+  *ngFor="let item of arr; let i = index"
+  class="container"
+>
+  <div
+    id="{{i}}"
+    ngDraggable
+  >{{item}}</div>
+</div>
+
+<!-- <app-drag-resize></app-drag-resize> -->

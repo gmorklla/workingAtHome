@@ -1,0 +1,35 @@
+<span
+  class="item"
+  [style.width.px]="width"
+  [style.height.px]="height"
+  [ngStyle]="containerStyles"
+  cdkDrag
+  (cdkDragStarted)="clickOnCtrl($event)"
+  (cdkDragEnded)="onDragEnd($event)"
+  [cdkDragBoundary]="'.contenedor'"
+  [cdkDragLockAxis]="lockAxis"
+  ngResizable
+  rzHandles="se"
+  (rzStart)="clickOnCtrl($event)"
+  (rzStop)="onResizeStop($event)"
+  matTooltip="Control: {{ ctrl.type }} - {{ ctrl.id }}"
+  [matTooltipPosition]="'above'"
+  (click)="clickOnCtrl($event); $event.stopPropagation()"
+>
+  <input
+    *ngIf="ctrl.type !== 'password'; else password"
+    [type]="ctrl.type"
+    [ngStyle]="stylesObj"
+    [placeholder]="valor"
+    [value]="valor"
+    disabled
+  />
+  <ng-template #password>
+    <input
+      [ngStyle]="stylesObj"
+      [placeholder]="valor"
+      [value]="valor"
+      disabled
+    />
+  </ng-template>
+</span>

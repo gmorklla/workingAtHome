@@ -1,0 +1,52 @@
+import { Component, OnInit } from '@angular/core';
+import { one, single, multi } from '../assets/data/data';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  data = one;
+  data2 = single;
+  data3 = multi;
+  date = new Date();
+  rdn = 0;
+  name = '';
+
+  constructor() {}
+
+  ngOnInit() {
+    setInterval(() => {
+      this.setUpdateData();
+      this.updateData();
+      this.updateData2();
+    }, 60000);
+  }
+
+  updateData() {
+    this.data = [
+      {
+        name: this.name,
+        value: this.rdn
+      }
+    ];
+  }
+
+  updateData2() {
+    const clone = [...this.data2];
+    clone.push({ name: this.name, value: this.rdn });
+    this.data2 = clone;
+  }
+
+  addMinutes(date, minutes): string {
+    const val = new Date(date.getTime() + minutes * 60000);
+    this.date = val;
+    return val.toTimeString().slice(0, 5);
+  }
+
+  setUpdateData() {
+    this.rdn = Math.round(Math.random() * 100) + 1;
+    this.name = this.addMinutes(this.date, 15);
+  }
+}

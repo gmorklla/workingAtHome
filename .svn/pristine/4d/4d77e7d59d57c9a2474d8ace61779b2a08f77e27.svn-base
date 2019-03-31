@@ -1,0 +1,13 @@
+.linked-channel {
+  width: 100%;
+  border-bottom: 1px white solid;
+}
+
+/* Collapse */
+.mat-list {
+  width: 100%;
+}
+.mat-list-base .mat-list-item {
+  height: auto !important;
+}
+

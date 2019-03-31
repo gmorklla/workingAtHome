@@ -1,0 +1,25 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { FormDivMessageComponent } from './form-div-message/form-div-message.component';
+import { DivMessageComponent } from './div-message.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ColorPickerModule
+  ],
+  declarations: [DivMessageComponent, FormDivMessageComponent],
+  exports: [DivMessageComponent],
+  entryComponents: [DivMessageComponent, FormDivMessageComponent]
+})
+export class DivMessageModule {}

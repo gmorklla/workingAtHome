@@ -1,0 +1,234 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$md-mcgpalette0: (50 : #f3e0e0,
+100 : #e0b3b3,
+200 : #cc8080,
+300 : #b84d4d,
+400 : #a82626,
+500 : #990000,
+600 : #910000,
+700 : #ee001f,
+800 : #7c0000,
+900 : #6b0000,
+A100 : #ff9a9a,
+A200 : #ff6767,
+A400 : #ff3434,
+A700 : #ff1a1a,
+contrast: (50 : #000000,
+100 : #000000,
+200 : #000000,
+300 : #ffffff,
+400 : #ffffff,
+500 : #ffffff,
+600 : #ffffff,
+700 : #ffffff,
+800 : #ffffff,
+900 : #ffffff,
+A100 : #000000,
+A200 : #000000,
+A400 : #ffffff,
+A700 : #ffffff,
+));
+
+$md-mcgpalette1: (50 : #fdebe9,
+100 : #fbccc7,
+200 : #f8aaa2,
+300 : #f5887d,
+400 : #f26f61,
+500 : #f05545,
+600 : #ee4e3e,
+700 : #ec4436,
+800 : #e93b2e,
+900 : #e52a1f,
+A100 : #ffffff,
+A200 : #ffe9e8,
+A400 : #ffb9b5,
+A700 : #ffa09c,
+contrast: (50 : #000000,
+100 : #000000,
+200 : #000000,
+300 : #000000,
+400 : #000000,
+500 : #000000,
+600 : #ffffff,
+700 : #ffffff,
+800 : #ffffff,
+900 : #ffffff,
+A100 : #000000,
+A200 : #000000,
+A400 : #000000,
+A700 : #000000,
+));
+
+$md-mcgpalette2: (50 : #fdf8e6,
+100 : #fbedc2,
+200 : #f8e199,
+300 : #f5d470,
+400 : #f3cb51,
+500 : #f1c232,
+600 : #efbc2d,
+700 : #edb426,
+800 : #ebac1f,
+900 : #e79f13,
+A100 : #ffffff,
+A200 : #fff4e2,
+A400 : #ffe2af,
+A700 : #ffd896,
+contrast: (50 : #000000,
+100 : #000000,
+200 : #000000,
+300 : #000000,
+400 : #000000,
+500 : #000000,
+600 : #000000,
+700 : #000000,
+800 : #000000,
+900 : #000000,
+A100 : #000000,
+A200 : #000000,
+A400 : #000000,
+A700 : #000000,
+));
+
+
+$banorte-app-primary: mat-palette($md-mcgpalette0, 700, 300, 900);
+$banorte-app-accent: mat-palette($md-mcgpalette2);
+$banorte-app-warn: mat-palette($md-mcgpalette1);
+
+$banorte-app-theme: mat-light-theme($banorte-app-primary, $banorte-app-accent, $banorte-app-warn);
+
+@include angular-material-theme($banorte-app-theme);
+
+.blue {
+  $blue-app-primary: mat-palette($mat-blue);
+  $blue-app-accent: mat-palette($mat-light-blue);
+  $blue-app-theme: mat-light-theme($blue-app-primary, $blue-app-accent);
+  @include angular-material-theme($blue-app-theme);
+}
+
+.light-blue {
+  $light-blue-app-primary: mat-palette($mat-light-blue);
+  $light-blue-app-accent: mat-palette($mat-light-blue);
+  $light-blue-app-theme: mat-light-theme($light-blue-app-primary, $light-blue-app-accent);
+  @include angular-material-theme($light-blue-app-theme);
+}
+
+.red {
+  $red-app-primary: mat-palette($mat-red);
+  $red-app-accent: mat-palette($mat-red);
+  $red-app-theme: mat-light-theme($red-app-primary, $red-app-accent);
+  @include angular-material-theme($red-app-theme);
+}
+
+.pink {
+  $pink-app-primary: mat-palette($mat-pink);
+  $pink-app-accent: mat-palette($mat-pink);
+  $pink-app-theme: mat-light-theme($pink-app-primary, $pink-app-accent);
+  @include angular-material-theme($pink-app-theme);
+}
+
+.purple {
+  $purple-app-primary: mat-palette($mat-purple);
+  $purple-app-accent: mat-palette($mat-purple);
+  $purple-app-theme: mat-light-theme($purple-app-primary, $purple-app-accent);
+  @include angular-material-theme($purple-app-theme);
+}
+
+.deep-purple {
+  $deep-purple-app-primary: mat-palette($mat-deep-purple);
+  $deep-purple-app-accent: mat-palette($mat-deep-purple);
+  $deep-purple-app-theme: mat-light-theme($deep-purple-app-primary, $deep-purple-app-accent);
+  @include angular-material-theme($deep-purple-app-theme);
+}
+
+.indigo {
+  $indigo-app-primary: mat-palette($mat-indigo);
+  $indigo-app-accent: mat-palette($mat-indigo);
+  $indigo-app-theme: mat-light-theme($indigo-app-primary, $indigo-app-accent);
+  @include angular-material-theme($indigo-app-theme);
+}
+
+.cyan {
+  $cyan-app-primary: mat-palette($mat-cyan);
+  $cyan-app-accent: mat-palette($mat-cyan);
+  $cyan-app-theme: mat-light-theme($cyan-app-primary, $cyan-app-accent);
+  @include angular-material-theme($cyan-app-theme);
+}
+
+.teal {
+  $teal-app-primary: mat-palette($mat-teal);
+  $teal-app-accent: mat-palette($mat-teal);
+  $teal-app-theme: mat-light-theme($teal-app-primary, $teal-app-accent);
+  @include angular-material-theme($teal-app-theme);
+}
+
+.green {
+  $green-app-primary: mat-palette($mat-green);
+  $green-app-accent: mat-palette($mat-green);
+  $green-app-theme: mat-light-theme($green-app-primary, $green-app-accent);
+  @include angular-material-theme($green-app-theme);
+}
+
+.light-green {
+  $light-green-app-primary: mat-palette($mat-light-green);
+  $light-green-app-accent: mat-palette($mat-light-green);
+  $light-green-app-theme: mat-light-theme($light-green-app-primary, $light-green-app-accent);
+  @include angular-material-theme($light-green-app-theme);
+}
+
+.lime {
+  $lime-app-primary: mat-palette($mat-lime);
+  $lime-app-accent: mat-palette($mat-lime);
+  $lime-app-theme: mat-light-theme($lime-app-primary, $lime-app-accent);
+  @include angular-material-theme($lime-app-theme);
+}
+
+.yellow {
+  $yellow-app-primary: mat-palette($mat-yellow);
+  $yellow-app-accent: mat-palette($mat-yellow);
+  $yellow-app-theme: mat-light-theme($yellow-app-primary, $yellow-app-accent);
+  @include angular-material-theme($yellow-app-theme);
+}
+
+.amber {
+  $amber-app-primary: mat-palette($mat-amber);
+  $amber-app-accent: mat-palette($mat-amber);
+  $amber-app-theme: mat-light-theme($amber-app-primary, $amber-app-accent);
+  @include angular-material-theme($amber-app-theme);
+}
+
+.orange {
+  $orange-app-primary: mat-palette($mat-orange);
+  $orange-app-accent: mat-palette($mat-orange);
+  $orange-app-theme: mat-light-theme($orange-app-primary, $orange-app-accent);
+  @include angular-material-theme($orange-app-theme);
+}
+
+.deep-orange {
+  $deep-orange-app-primary: mat-palette($mat-deep-orange);
+  $deep-orange-app-accent: mat-palette($mat-deep-orange);
+  $deep-orange-app-theme: mat-light-theme($deep-orange-app-primary, $deep-orange-app-accent);
+  @include angular-material-theme($deep-orange-app-theme);
+}
+
+.brown {
+  $brown-app-primary: mat-palette($mat-brown);
+  $brown-app-accent: mat-palette($mat-brown);
+  $brown-app-theme: mat-light-theme($brown-app-primary, $brown-app-accent);
+  @include angular-material-theme($brown-app-theme);
+}
+
+.grey {
+  $grey-app-primary: mat-palette($mat-grey);
+  $grey-app-accent: mat-palette($mat-grey);
+  $grey-app-theme: mat-light-theme($grey-app-primary, $grey-app-accent);
+  @include angular-material-theme($grey-app-theme);
+}
+
+.blue-grey {
+  $blue-grey-app-primary: mat-palette($mat-blue-grey);
+  $blue-grey-app-accent: mat-palette($mat-blue-grey);
+  $blue-grey-app-theme: mat-light-theme($blue-grey-app-primary, $blue-grey-app-accent);
+  @include angular-material-theme($blue-grey-app-theme);
+}

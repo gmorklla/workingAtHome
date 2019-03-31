@@ -1,0 +1,57 @@
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+
+@Component({
+  selector: 'lib-create-flow',
+  templateUrl: './create-flow.component.html',
+  styleUrls: ['./create-flow.component.css'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}
+  ]
+})
+export class CreateFlowComponent implements OnInit {
+
+  minDate = new Date();
+
+  mainForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.createMainForm();
+  }
+
+  private createMainForm() {
+    this.mainForm = this.formBuilder.group({
+      'name': new FormControl('Activación de nómina', [
+        Validators.required
+      ]),
+      'startDate': new FormControl({ value: new Date(), disabled: false }, [
+        Validators.required
+      ]),
+      'endDate': new FormControl({ value: new Date(), disabled: false }, [
+        Validators.required
+      ])
+    });
+  }
+
+  /**
+   * For validations
+   */
+
+  get name() {
+    return this.mainForm.get('name');
+  }
+
+  get startDate() {
+    return this.mainForm.get('startDate');
+  }
+
+  get endDate() {
+    return this.mainForm.get('endDate');
+  }
+}

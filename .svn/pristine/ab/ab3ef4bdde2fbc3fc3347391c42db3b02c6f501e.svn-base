@@ -1,0 +1,19 @@
+import { NgModule } from '@angular/core';
+import { RenderCheckboxComponent } from './render-checkbox.component';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [
+    RenderCheckboxComponent
+  ],
+  exports: [
+    RenderCheckboxComponent
+  ],
+  entryComponents: [
+    RenderCheckboxComponent
+  ]
+})
+export class RenderCheckboxModule { }

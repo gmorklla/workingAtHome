@@ -1,0 +1,21 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IframeComponent } from './iframe.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  declarations: [
+    IframeComponent
+  ],
+  exports: [
+    IframeComponent]
+  ,
+  entryComponents: [
+    IframeComponent
+  ]
+})
+export class IframeModule { }

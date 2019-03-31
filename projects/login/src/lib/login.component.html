@@ -1,0 +1,32 @@
+<div
+  class="loginContainer"
+  [ngStyle]="{'height': (height | async)}"
+>
+  <mat-card class="logoutCard">
+    <mat-card-content>
+      <!-- /////////////////////// User logged ///////////////////////-->
+      <ng-container *ngIf="(user | async); else loginTemplate">
+        <p style="margin-top: 10px;">{{(user | async)?.email}}</p>
+        <hr>
+        <p><button
+            mat-raised-button
+            color="warn"
+            (click)="login({type: 'logout'})"
+            class="button"
+          >Signout</button></p>
+      </ng-container>
+      <!-- /////////////////////// User without login ///////////////////////-->
+      <ng-template #loginTemplate>
+        <lib-login-form (dataForLogin)="login($event)"></lib-login-form>
+      </ng-template>
+    </mat-card-content>
+    <mat-card-actions>
+      <a
+        href="#"
+        target="blank"
+      >
+        Documentation
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,0 +1,45 @@
+/* Table */
+table {
+  width: 100%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+  tr.element-row:not(.expanded-row):hover {
+    background: rgba(120, 34, 46, 0.16); /* #ffe4e4 #EC0029 */
+    color: white !important;
+  }
+
+.element-row td {
+  border-bottom-width: 0;
+}
+  .element-row td.selector {
+    min-width: 50px;
+  }
+  .element-row td.id {
+    min-width: 120px;
+  }
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  background-color: whitesmoke;
+}
+  .element-detail .row {
+    width: 100%;
+    border-bottom: 1px white solid;
+  }
+
+/* Filter */
+.mat-form-field {
+  display: block !important;
+}
+
+/* Collapse */
+.mat-list {
+  width: 100%;
+}
+.mat-list-base .mat-list-item {
+  height: auto !important;
+}

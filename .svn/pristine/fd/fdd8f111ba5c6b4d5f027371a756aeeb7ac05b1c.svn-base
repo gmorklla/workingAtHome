@@ -1,0 +1,24 @@
+<span
+  class="item"
+  [style.width.px]="width"
+  [style.height.px]="height"
+  [ngStyle]="containerStyles"
+  cdkDrag
+  (cdkDragStarted)="clickOnCtrl($event)"
+  (cdkDragEnded)="onDragEnd($event)"
+  [cdkDragBoundary]="'.contenedor'"
+  ngResizable
+  rzHandles="se"
+  (rzStart)="clickOnCtrl($event)"
+  (rzStop)="onResizeStop($event)"
+  [rzAspectRatio]="true"
+  matTooltip="Control: {{ ctrl.type }} - {{ ctrl.id }}"
+  [matTooltipPosition]="'above'"
+  (click)="clickOnCtrl($event); $event.stopPropagation()"
+>
+  <input
+    type="radio"
+    [ngStyle]="estilos"
+    [value]="valor"
+  >
+</span>

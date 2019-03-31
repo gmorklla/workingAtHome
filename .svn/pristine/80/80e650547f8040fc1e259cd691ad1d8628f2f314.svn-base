@@ -1,0 +1,40 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { IframeService } from './iframe.service';
+
+@Component({
+  selector: 'lib-iframe',
+  template: `
+    <video
+      autoplay
+      loop
+      controls
+      width="100%"
+      height="100%"
+      [ngStyle]="stylesObj"
+    >
+      <source [src]="src" />
+    </video>
+  `,
+  styleUrls: ['./iframe.component.css']
+})
+export class IframeComponent implements OnInit {
+  @Input() public ctrl;
+  public stylesObj: any;
+  public src: string;
+
+  constructor(private service: IframeService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { style, src }
+      } = this.ctrl;
+      this.src = this.ctrl.attributes.src
+        ? this.ctrl.attributes.src
+        : 'https://media.w3.org/2010/05/sintel/trailer.mp4';
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+    }
+  }
+}

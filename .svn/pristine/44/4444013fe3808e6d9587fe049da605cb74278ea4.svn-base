@@ -1,0 +1,14 @@
+import {LinkedChannel} from '../../../../campaigns/src/lib/models/linked.channel.model';
+import {FlowStatus} from './flow.status.model';
+import {Process} from '../../../../campaigns/src/lib/models/process.interface';
+
+export class Flow implements Process {
+  id: string;
+  name: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  status: FlowStatus;
+  listLinkedChannels: LinkedChannel[];
+  creationDate: Date;
+}

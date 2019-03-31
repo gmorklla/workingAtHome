@@ -1,0 +1,11 @@
+<ng-container *ngIf="treeData; else sinTree">
+  <lib-tree
+    [treeData]="treeData"
+    [flowId]="flowId"
+    (reRender)="reRender($event)"
+    (navigate)="navigate($event)"
+  ></lib-tree>
+</ng-container>
+<ng-template #sinTree>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

@@ -1,0 +1,61 @@
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {ServiceDesign} from '../../../models/service/service-design.model';
+import {FormControl} from '@angular/forms';
+import {AlertService} from '../../../../../../../campaigns/src/lib/services/alert/alert.service';
+import {UtilsService} from '../../../../../../../campaigns/src/lib/services/utils/utils.service';
+import {ServiceDesignService} from '../../../services/service/service-design.service';
+import {Messages} from '../../../../shared/messages';
+
+@Component({
+  selector: 'app-rule-service-table',
+  templateUrl: './rule-service-table.component.html',
+  styleUrls: ['./rule-service-table.component.css']
+})
+export class RuleServiceTableComponent implements OnInit {
+
+  @Input() private designId: string;
+  @Input() private windowId: string;
+
+  search = new FormControl('');
+
+  displayedColumns: string[] = ['id', 'delete'];
+  dataSource: MatTableDataSource<ServiceDesign>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private serviceDesignService: ServiceDesignService,
+              private alertService: AlertService,
+              private utilsService: UtilsService,
+              private dialog: MatDialog) { }
+
+  ngOnInit() {
+    this.fn_getAllServiceDesign();
+  }
+
+  private fn_getAllServiceDesign(): void {
+    this.serviceDesignService.fn_getAll(this.designId).subscribe({
+      next: (result: ServiceDesign[]) => {
+        console.log('[RESPONSE]', result);
+
+        this.dataSource = new MatTableDataSource<ServiceDesign>(result);
+        this.dataSource.filterPredicate = (serviceDesign: ServiceDesign, filterValue: string) => {
+          const _filterValue = this.utilsService.fn_normalize(filterValue.trim());
+          const _serviceDescription = this.utilsService.fn_normalize(serviceDesign.description.trim());
+
+          return _serviceDescription.toLowerCase().indexOf(_filterValue) !== -1;
+        };
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error(Messages.MSG_RULE_SERVICE_GET_ALL_ERROR);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+}

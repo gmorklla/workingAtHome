@@ -1,0 +1,128 @@
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {debounceTime, distinctUntilChanged, filter, mergeMap, switchMap, tap} from 'rxjs/operators';
+import {fromEvent, iif, of} from 'rxjs';
+import {ControlesI, EModel, opcionesDefault, OpcionI} from 'projects/banorte/src/app/shared/data/data';
+import {InputRangeService} from '../input-range.service';
+import {FormatStylesService} from "../../../../banorte/src/app/shared/services/format-styles.service";
+import {ImageComponentService} from "../../../../image-component/src/lib/image-component.service";
+
+
+@Component({
+  selector: 'lib-form-range',
+  templateUrl: './form-range.component.html',
+  styleUrls: ['./form-range.component.css']
+})
+export class FormRangeComponent implements OnInit {
+  stylesContainerForm: FormGroup;
+  toCompare: string;
+  imageSizeSet: boolean;
+  @Input() control: ControlesI;
+  @Output() propChange = new EventEmitter();
+
+  constructor(private fb: FormBuilder, private service: ImageComponentService) {
+    this.imageSizeSet = true;
+    const attrOpts = {
+      value: ['', Validators.required],
+      width: ['', [Validators.required]],
+      height: ['', [Validators.required]],
+      x: ['', [Validators.required]],
+      y: ['', [Validators.required]]
+    };
+    this.stylesContainerForm = this.fb.group(attrOpts);
+    this.stylesContainerForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        filter(val => JSON.stringify(val) !== this.toCompare),
+        tap(val => {
+          this.toCompare = JSON.stringify(val);
+          const objToEmit = this.getGeneralFormValues(val);
+          console.log('Before emit change on form', objToEmit);
+          this.propChange.emit(objToEmit);
+        })
+      )
+      .subscribe(_ => {});
+
+  }
+
+  ngOnInit() {
+    this.setFormValues();
+  }
+
+  setFormValues(event? : any) {
+    var value;
+    var valueF = value ? value : '/assets/images/banorteLogo.jpg';
+
+
+    if (event !== undefined){
+      valueF = event.target.value;
+      this.stylesContainerForm.get('value').setValue(valueF);
+    } else {
+      value = this.control.attributes['src'];
+      valueF = value ? value : '/assets/images/banorteLogo.jpg';
+    }
+
+    const styleObj = this.control.attributes['style']
+      ? this.service.stringToObj(this.control.attributes['style'])
+      : {};
+    let {
+      width = null,
+      height = null,
+      transform = 'translate3d(0,0,0)'
+    } = styleObj;
+    const coords = transform
+      .slice(transform.indexOf('(') + 1, transform.indexOf(')'))
+      .split(',');
+    const x = this.getNumValueNoPX(coords[0]);
+    const y = this.getNumValueNoPX(coords[1]);
+
+
+    width = width ? this.getNumValueNoPX(width) : '100';
+    height = height ? this.getNumValueNoPX(height) : '100';
+    this.stylesContainerForm.setValue(
+      {
+        value: valueF,
+        width: width,
+        height: height,
+        x: x,
+        y: y
+      },
+      { emitEvent: false }
+    );
+  }
+
+  updateSrc(event? : any){
+    if (event !== undefined) {
+      this.stylesContainerForm.get('value').setValue(event.target.value);
+    }
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+
+  deleteItem(e) {
+    const confirmP = confirm('¿Quieres borrar este ' + this.control.type + '?');
+    const delete$ = of(true).pipe(
+      tap(val => this.propChange.emit({ delete: this.control }))
+    );
+    const x$ = of('X');
+    of(confirmP)
+      .pipe(mergeMap(val => iif(() => val, delete$, x$)))
+      .subscribe(_ => {});
+  }
+
+  getGeneralFormValues(val) {
+    const { width, height, x, y, value } = val;
+    const style = {
+      width: width,
+      height: height,
+      x: x,
+      y: y,
+    };
+    const attrs: Array<any> = [{ value: value }];
+    return { estilos: style, attrs: attrs };
+  }
+}

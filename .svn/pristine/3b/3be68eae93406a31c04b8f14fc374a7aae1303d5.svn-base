@@ -1,0 +1,20 @@
+import { NgModule } from '@angular/core';
+import { InputFileComponent } from './input-file.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule
+  ],
+  declarations: [InputFileComponent],
+  exports: [InputFileComponent],
+  entryComponents: [InputFileComponent]
+})
+export class InputFileModule {}

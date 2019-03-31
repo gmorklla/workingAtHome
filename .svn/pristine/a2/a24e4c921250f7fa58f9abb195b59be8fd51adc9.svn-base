@@ -1,0 +1,26 @@
+<span
+  class="item"
+  [style.width.px]="width"
+  [style.height.px]="height"
+  [ngStyle]="containerStyles"
+  cdkDrag
+  (cdkDragStarted)="clickOnCtrl($event)"
+  (cdkDragEnded)="onDragEnd($event)"
+  [cdkDragBoundary]="'.contenedor'"
+  [cdkDragLockAxis]="lockAxis"
+  ngResizable
+  rzHandles="se"
+  (rzStart)="clickOnCtrl($event)"
+  (rzStop)="onResizeStop($event)"
+  matTooltip="Control: {{ ctrl.type }} - {{ ctrl.id }}"
+  [matTooltipPosition]="'above'"
+  (click)="clickOnCtrl($event); $event.stopPropagation()"
+>
+  <video
+    width="100%"
+    height="100%"
+    [ngStyle]="estilos"
+  >
+    <source [src]="src" />
+  </video>
+</span>

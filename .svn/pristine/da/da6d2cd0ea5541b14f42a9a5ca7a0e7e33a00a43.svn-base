@@ -1,0 +1,30 @@
+# Get started
+
+### Paso 1 
+
+Una vez clonado se ejecuta en la consola: `npm install`
+
+### Paso 2
+
+Entrar a la siguiente dirección: `node_modules/ng2-dragula/dist/DragulaOptions.d.ts` y verificar que en la línea 4 se encuetre la propiedad `copy: any;`
+ 
+    /// <reference types="dragula" />
+    import { DragulaOptions as OriginalOptions } from 'dragula';
+    export interface DragulaOptions<T = any> extends OriginalOptions {
+        copy: any;
+        copySortSource?: boolean | ((el: Element, source: Element) => boolean);
+        /** You must provide this if you are using `copy` with `[dragulaModel]`. It
+         *  is responsible for cloning a model item. Your implementation should
+         *  ensure `x !== copyItem(x)` -- so you must create a *new* object.
+         **/
+        copyItem?: (item: T) => T;
+    } 
+    
+### Paso 3
+
+Verificar que el puerto coincida con el port del backend en el archivo `projects/banorte/src/app/shared/data/port.ts`  
+
+### Paso 4
+
+Ejecutar en la consola: `npm start`
+

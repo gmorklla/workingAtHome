@@ -1,0 +1,134 @@
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  tap,
+  mergeMap
+} from 'rxjs/operators';
+import { of, iif } from 'rxjs';
+import { ControlesI } from '../../../../input-button/src/lib/form/form-input-button.component';
+import { DivMessageService } from '../div-message.service';
+
+@Component({
+  selector: 'lib-form-div-message',
+  templateUrl: './form-div-message.component.html',
+  styleUrls: ['./form-div-message.component.css']
+})
+export class FormDivMessageComponent implements OnInit, OnChanges {
+  stylesContainerForm: FormGroup;
+  @Output() propChange = new EventEmitter();
+  @Input() control: ControlesI;
+  toCompare: string;
+  color;
+
+  constructor(private fb: FormBuilder, private service: DivMessageService) {
+    const attrOpts = {
+      width: ['', [Validators.required]],
+      height: ['', [Validators.required]],
+      x: ['', [Validators.required]],
+      y: ['', [Validators.required]],
+      color: ['', [Validators.required]],
+      value: ['', Validators.required],
+      fontSize: ['', Validators.required]
+    };
+    this.stylesContainerForm = this.fb.group(attrOpts);
+    this.stylesContainerForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        filter(val => JSON.stringify(val) !== this.toCompare),
+        tap(val => {
+          this.toCompare = JSON.stringify(val);
+          const { width, height, x, y, color, value } = val;
+          const style = {
+            width: width,
+            height: height,
+            x: x,
+            y: y,
+            color: color !== '' ? color : 'transparent',
+            'font-size': val.fontSize + 'px'
+          };
+          const attrs = [{ value: value }];
+          this.propChange.emit({ estilos: style, attrs: attrs });
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  ngOnInit() {
+    this.setFormValues();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes form div component', changes.control);
+  }
+
+  setFormValues() {
+    const value = this.control.attributes['value'];
+    const valueF = value ? value : 'Mensaje';
+    const styleObj = this.control.attributes['style']
+      ? this.service.stringToObj(this.control.attributes['style'])
+      : {};
+    let {
+      width = '100px',
+      height = '100px',
+      transform = 'translate3d(0,0,0)',
+      color = 'rgb(200,200,200)'
+    } = styleObj;
+    const coords = transform
+      .slice(transform.indexOf('(') + 1, transform.indexOf(')'))
+      .split(',');
+    const x = this.getNumValueNoPX(coords[0]);
+    const y = this.getNumValueNoPX(coords[1]);
+    width = this.getNumValueNoPX(width);
+    height = this.getNumValueNoPX(height);
+    const fontSize = styleObj['font-size']
+      ? this.getNumValueNoPX(styleObj['font-size'])
+      : '12';
+    this.stylesContainerForm.setValue(
+      {
+        width: width,
+        height: height,
+        x: x,
+        y: y,
+        color: color,
+        value: valueF,
+        fontSize: fontSize
+      },
+      { emitEvent: false }
+    );
+  }
+
+  colorSelected(e) {
+    this.stylesContainerForm.patchValue({
+      color: e
+    });
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+
+  deleteItem(e) {
+    const confirmP = confirm('¿Quieres borrar este ' + this.control.type + '?');
+    const delete$ = of(true).pipe(
+      tap(val => this.propChange.emit({ delete: this.control }))
+    );
+    const x$ = of('X');
+    of(confirmP)
+      .pipe(mergeMap(val => iif(() => val, delete$, x$)))
+      .subscribe(_ => {});
+  }
+}

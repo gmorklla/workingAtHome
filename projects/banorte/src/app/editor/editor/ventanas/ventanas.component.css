@@ -1,0 +1,69 @@
+mat-tree {
+  margin: 0 5px;
+}
+
+.treeNodeToggle {
+  display: flex;
+  align-items: center;
+  padding: 0px 10px 0 0;
+  border-radius: 10px;
+  color: #637079;
+  font-size: small;
+  cursor: pointer;
+}
+
+.mat-tree-node {
+  min-height: 42px;
+}
+
+.menuBtn {
+  margin-left: 10px;
+  color: #7392a7 !important
+}
+
+.menuBtn mat-icon {
+  font-size: 1.1em;
+  border: 1px solid #637079;
+  border-radius: 40px;
+}
+
+.chevExpn {
+  width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  position: relative;
+  left: 10px;
+  border: 1px solid #cacaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.levelIcon {
+  margin-right: 10px;
+}
+
+.name {
+  align-self: flex-end;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-chip {
+  width: 100%;
+  border-radius: 5px;
+  background: #eaeaea !important;
+  border: 1px solid #637079;
+  color: #7392a7 !important;
+  padding: 17px;
+  display: flex;
+}
+
+mat-chip.nodoSimple {
+  background-color: white !important;
+}

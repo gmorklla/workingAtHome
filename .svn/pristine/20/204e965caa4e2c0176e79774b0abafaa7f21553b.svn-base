@@ -1,0 +1,99 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ImageCatalog } from './model/image-catalog.model';
+import { Observable } from 'rxjs/index';
+import { catchError } from 'rxjs/internal/operators';
+import {
+  ip,
+  port,
+  target
+} from 'projects/banorteRender/src/app/shared/data/port';
+import {
+  faFolderOpen,
+  faSearchPlus,
+  faTrash,
+  faLink,
+  IconDefinition
+} from '@fortawesome/free-solid-svg-icons';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ImageCatalogService {
+  private url: string;
+
+  constructor(public http: HttpClient) {
+    this.url = 'http://' + ip + ':' + port + '/wconfig-services/';
+  }
+
+  addImageCatalog(image: ImageCatalog): Observable<ImageCatalog> {
+    return this.http
+      .post<ImageCatalog>(`${this.url}catalog/images`, image)
+      .pipe();
+  }
+
+  getImageCatalog(id: number): Observable<ImageCatalog> {
+    return this.http
+      .get<ImageCatalog>(`${this.url}catalog/images/` + id)
+      .pipe();
+  }
+
+  getAllImageCatalog(): Observable<ImageCatalog[]> {
+    return this.http.get<ImageCatalog[]>(`${this.url}catalog/images`).pipe();
+  }
+
+  deleteImageCatalog(id: number): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.url}catalog/images/` + id).pipe();
+  }
+
+  getCount(imageName: string, imageType: string): Observable<number[]> {
+    let url = `${this.url}catalog/images/count?type=` + imageType;
+    if (imageName === undefined) {
+      url += `&name=`;
+    } else {
+      url += `&name=` + imageName;
+    }
+    return this.http.get<number[]>(url).pipe();
+  }
+
+  getByPage(
+    pageNumber: number,
+    records: number,
+    imageName: string,
+    imageType: string
+  ): Observable<ImageCatalog[]> {
+    let url =
+      `${this.url}catalog/images/byPage?number=` +
+      pageNumber +
+      `&records=` +
+      records +
+      `&type=` +
+      imageType;
+    if (imageName === undefined) {
+      url += `&name=`;
+    } else {
+      url += `&name=` + imageName;
+    }
+    return this.http.get<ImageCatalog[]>(url).pipe();
+  }
+
+  getIcon(i: string): IconDefinition {
+    switch (i) {
+      case 'fas fa-link':
+        return faLink;
+        break;
+      case 'fas fa-folder-open':
+        return faFolderOpen;
+        break;
+      case 'fas fa-search-plus':
+        return faSearchPlus;
+        break;
+      case 'fas fa-trash':
+        return faTrash;
+        break;
+      default:
+        return faLink;
+        break;
+    }
+  }
+}

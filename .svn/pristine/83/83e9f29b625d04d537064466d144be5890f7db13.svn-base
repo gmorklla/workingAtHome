@@ -1,0 +1,15 @@
+.linked-channel {
+  border-bottom: 1px white solid;
+}
+  .linked-channel .row {
+    width: 100%;
+  }
+
+/* Collapse */
+.mat-list {
+  width: 100%;
+}
+.mat-list-base .mat-list-item {
+  height: auto !important;
+}
+

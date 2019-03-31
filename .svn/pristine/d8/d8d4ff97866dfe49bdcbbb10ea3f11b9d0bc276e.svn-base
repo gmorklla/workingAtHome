@@ -1,0 +1,12 @@
+<div class="container">
+  <ngx-charts-linear-gauge
+    [scheme]="colorScheme"
+    [value]="60"
+    [previousValue]="80"
+    [min]="0"
+    [max]="100"
+    [units]="'units'"
+    (select)="onSelect($event)"
+  >
+  </ngx-charts-linear-gauge>
+</div>

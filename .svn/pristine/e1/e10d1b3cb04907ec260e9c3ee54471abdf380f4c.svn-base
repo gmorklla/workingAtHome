@@ -1,0 +1,7 @@
+<ng-container *ngIf="ctrlSelected.type !== 'image'; else container">
+  <app-general-form
+    [control]="ctrlSelected"
+    (propChange)="propChangeToEmit($event)"
+  ></app-general-form>
+</ng-container>
+<ng-template #container></ng-template>

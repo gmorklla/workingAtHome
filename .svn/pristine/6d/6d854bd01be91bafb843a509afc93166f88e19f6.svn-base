@@ -1,0 +1,30 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {LinkedChannelDetailsComponent} from './linked-channel-details/linked-channel-details.component';
+import {
+  MatBottomSheetModule, MatButtonModule, MatIconModule, MatListModule, MatMenuModule,
+  MatTooltipModule
+} from '@angular/material';
+import {DesignService} from '../../services/design.service';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatTooltipModule,
+    MatMenuModule,
+    MatIconModule,
+    MatListModule,
+    MatButtonModule,
+    MatBottomSheetModule
+  ],
+  declarations: [
+    LinkedChannelDetailsComponent
+  ],
+  exports: [
+    LinkedChannelDetailsComponent
+  ],
+  providers: [
+    DesignService
+  ]
+})
+export class SectionModule { }

@@ -1,0 +1,89 @@
+<div class="tree-container">
+  <div class="tree-content">
+    <tree
+      #treeFFS
+      [tree]="treeData"
+      [settings]="settings"
+      (nodeRemoved)="onNodeRemoved($event)"
+      (nodeRenamed)="onNodeRenamed($event)"
+      (nodeSelected)="onNodeSelected($event)"
+      (nodeMoved)="onNodeMoved($event)"
+      (nodeCreated)="onNodeCreated($event)"
+    >
+      <ng-template let-node>
+        <div
+          style="display: flex; align-items: center; width: 100%; height: 30px;"
+          matTooltip="{{node.name}}"
+          [matTooltipPosition]="'right'"
+        >
+          <mat-icon
+            style="margin-right: 10px;"
+            (click)="navigateTo(node);"
+          >{{
+            node._foldingType._cssClass === 'node-leaf'
+            ? 'web_asset'
+            : 'folder'
+            }}</mat-icon>
+          <span
+            class="node-name"
+            (click)="navigateTo(node);"
+          >{{ node.name }}</span>
+          <span
+            class="spacer"
+            (click)="navigateTo(node);"
+          ></span>
+          <button
+            mat-icon-button
+            [matMenuTriggerData]="{ node: node }"
+            [matMenuTriggerFor]="menu"
+            #menuTrigger="matMenuTrigger"
+          >
+            <mat-icon aria-label="Opcioes">more_vert</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </tree>
+  </div>
+</div>
+<!-- ////////////////// Menu ////////////////// -->
+<mat-menu #menu="matMenu">
+  <ng-template
+    matMenuContent
+    let-node="node"
+  >
+    <div
+      mat-menu-item
+      (click)="$event.stopPropagation();"
+      class="addChildBtn"
+    >
+      <form
+        [formGroup]="windowName"
+        novalidate
+      >
+        <mat-form-field [floatLabel]="'never'">
+          <mat-icon matPrefix>web_asset</mat-icon>
+          <input
+            formControlName="name"
+            matInput
+            placeholder="Agregar ventana"
+          >
+        </mat-form-field>
+        <button
+          type="button"
+          mat-raised-button
+          [disabled]="!windowName.valid"
+          (click)="addWindow(node);"
+        >
+          <span>Crear</span>
+        </button>
+      </form>
+    </div>
+    <button
+      mat-menu-item
+      (click)="deleteWindow(node)"
+    >
+      <mat-icon>delete</mat-icon>
+      <span>Borrar</span>
+    </button>
+  </ng-template>
+</mat-menu>

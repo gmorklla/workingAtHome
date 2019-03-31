@@ -1,0 +1,7 @@
+.mat-form-field {
+  display: block;
+}
+.mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled) {
+  background-color: #ee001f;
+  color: white;
+}

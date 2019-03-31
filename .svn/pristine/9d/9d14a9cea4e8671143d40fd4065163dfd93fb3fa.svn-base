@@ -1,0 +1,49 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { InputCheckboxService } from './input-checkbox.service';
+import { CheckboxStyleModel } from './models/checbox-style/checkbox-style.model';
+
+@Component({
+  selector: 'lib-input-checkbox',
+  template: `
+    <input
+      type="checkbox"
+      [ngStyle]="stylesObj"
+      [value]="valor"
+    >
+  `,
+  styleUrls: ['./input-checkbox.component.css']
+})
+export class InputCheckboxComponent implements OnInit {
+  @Input() public ctrl;
+  public stylesObj: any;
+  public valor: string;
+  public estilos;
+
+  constructor(private service: InputCheckboxService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+
+      const {
+        attributes: { value, style }
+      } = this.ctrl;
+
+      const stylesObj: any = style ? this.service.stringToObj(style) : {};
+      const checkboxStyleModel: CheckboxStyleModel = this.service.generateStyleCheckbox(
+        stylesObj.width,
+        stylesObj.height,
+        stylesObj['background-image'] ? stylesObj['background-image'] : '/assets/images/checkboxx.png'
+      );
+
+      delete stylesObj['background-size'];
+      const union: any = { ...checkboxStyleModel, ...stylesObj };
+
+      this.stylesObj = union;
+
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      delete this.stylesObj.background; // Para que se muestren las imgs es necesaria esta linea, el orden importa.
+      this.valor = value ? value : 'this.ctrl.type';
+    }
+  }
+}

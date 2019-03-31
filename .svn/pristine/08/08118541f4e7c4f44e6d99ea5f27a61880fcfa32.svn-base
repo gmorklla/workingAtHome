@@ -1,0 +1,17 @@
+<div class="chatMsgContainer">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Message"
+      [formControl]="message"
+      class="message"
+    />
+  </mat-form-field>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="sendMessage()"
+  >
+    Send
+  </button>
+</div>

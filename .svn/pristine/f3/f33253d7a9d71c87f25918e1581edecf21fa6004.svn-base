@@ -1,0 +1,5 @@
+<input
+  type="checkbox"
+  [ngStyle]="stylesObj"
+  [value]="value"
+>

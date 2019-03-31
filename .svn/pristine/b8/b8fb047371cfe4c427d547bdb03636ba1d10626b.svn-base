@@ -1,0 +1,18 @@
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+.dashCard {
+  max-width: 100%;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+lib-linear-gauge {
+  height: 100%;
+}

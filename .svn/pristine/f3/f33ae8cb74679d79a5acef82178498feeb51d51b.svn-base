@@ -1,0 +1,7 @@
+<ng-container>
+  <app-window-form
+    [control]="windowSelected"
+    (propChange)="propChangeToEmit($event)"
+  ></app-window-form>
+</ng-container>
+<ng-container #container></ng-container>

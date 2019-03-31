@@ -1,0 +1,97 @@
+import { Injectable } from '@angular/core';
+import { Http, Response, URLSearchParams, Headers } from '@angular/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HttpCallService {
+  constructor(
+    private http: Http,
+    private client: HttpClient,
+    private snackBar: MatSnackBar
+  ) {}
+
+  deleteRequest(url: string, headersData: {}) {
+    const headers = new HttpHeaders();
+    for (const key in headersData) {
+      if (headersData.hasOwnProperty(key)) {
+        const val = headersData[key];
+        headers.set(key, val);
+      }
+    }
+    const options = {
+      headers: headers
+    };
+    return this.client.delete(url, options).pipe(
+      catchError(err => {
+        this.open(`${err.message}`, 'Ok');
+        return throwError(err);
+      })
+    );
+  }
+
+  putRequest(url: string, data: any, headersData: {}) {
+    const headers = new HttpHeaders();
+    for (const key in headersData) {
+      if (headersData.hasOwnProperty(key)) {
+        const val = headersData[key];
+        headers.set(key, val);
+      }
+    }
+    const options = {
+      headers: headers
+    };
+    return this.client.put(url, data, options).pipe(
+      catchError(err => {
+        this.open(`${err.message}`, 'Ok');
+        return throwError(err);
+      })
+    );
+  }
+
+  postRequest(url: string, data: any, headersData: {}) {
+    const headers = new HttpHeaders();
+    for (const key in headersData) {
+      if (headersData.hasOwnProperty(key)) {
+        const val = headersData[key];
+        headers.set(key, val);
+      }
+    }
+    const options = {
+      headers: headers
+    };
+    return this.client.post(url, data, options).pipe(
+      catchError(err => {
+        this.open(`${err.message}`, 'Ok');
+        return throwError(err);
+      })
+    );
+  }
+
+  // Standard get request
+  getRequest(url: string, param: any) {
+    let params: HttpParams = new HttpParams();
+    for (const key in param) {
+      if (param.hasOwnProperty(key)) {
+        const val = param[key];
+        params = params.append(key, val);
+      }
+    }
+    return this.client.get(url, { params }).pipe(
+      catchError(err => {
+        this.open(`${err.message}`, 'Ok');
+        return throwError(err);
+      })
+    );
+  }
+
+  open(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 20000
+    });
+  }
+}

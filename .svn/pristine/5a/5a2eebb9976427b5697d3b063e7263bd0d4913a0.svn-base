@@ -1,0 +1,26 @@
+<!--
+<button
+  mat-raised-button
+  type="file"
+  [ngStyle]="stylesObj"
+>
+  <mat-icon>attach_file</mat-icon>
+</button>
+-->
+<button
+  mat-raised-button
+  color="primary"
+  (click)="fileInput.click()"
+  [ngStyle]="stylesObj"
+>
+      <span class="inButton">
+        {{ value }}
+        <mat-icon>attach_file</mat-icon>
+      </span>
+</button>
+<input
+  hidden
+  #fileInput
+  type="file"
+>
+

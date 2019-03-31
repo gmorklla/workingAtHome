@@ -1,0 +1,51 @@
+<div [formGroup]="formGroup">
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Ancho"
+      type="number"
+      formControlName="borderWidth"
+    >
+  </mat-form-field>
+  <mat-form-field class="formItem">
+    <mat-select
+      placeholder="Estilo"
+      formControlName="borderStyle"
+    >
+      <mat-option value="solid">
+        Continuo
+      </mat-option>
+      <mat-option value="dashed">
+        Dashed
+      </mat-option>
+      <mat-option value="dotted">
+        Punteado
+      </mat-option>
+      <mat-option value="none">
+        Ninguno
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Radio"
+      type="number"
+      formControlName="borderRadius"
+    >
+  </mat-form-field>
+  <br>
+  <label for="boderColor">Color</label>
+  <input
+    id="boderColor"
+    placeholder="Color"
+    (colorPickerChange)="colorSelected($event)"
+    [(colorPicker)]="boderColor"
+    [style.background]="boderColor"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    formControlName="borderColor"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+</div>

@@ -1,0 +1,17 @@
+<ngx-ui-loader
+  [fgsColor]="'#F5FFEF'"
+  [pbColor]="'#F5FFEF'"
+>
+</ngx-ui-loader>
+<div
+  style="width: 100%;"
+  class="mainContainer"
+  #container
+>
+  <!-- Navbar component -->
+  <app-navbar class="navbar"></app-navbar>
+  <div class="routerContainer pt-5">
+    <!-- Router component -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

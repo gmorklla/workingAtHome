@@ -1,0 +1,26 @@
+.users mat-card {
+  padding: 16px 0;
+  box-shadow: none;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.54);
+  border-radius: 0;
+}
+
+.users mat-card-header {
+  margin-top: 10px;
+}
+
+ul {
+  padding: 0;
+}
+
+ul li {
+  list-style: none;
+  border-right: 1px solid #d4d4d5;
+  padding: 10px 5px;
+  display: inline;
+}
+
+ul li:last-child {
+  border-right: none;
+}

@@ -1,0 +1,27 @@
+form {
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.notification p {
+  text-align: center;
+}
+
+button {
+  width: 100%;
+}
+
+.loginBtns {
+  display: flex;
+}
+
+.loginBtns button {
+  color: white !important;
+}
+
+mat-tab-group {
+  align-items: center;
+}

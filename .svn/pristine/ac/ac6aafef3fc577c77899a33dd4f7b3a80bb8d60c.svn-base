@@ -1,0 +1,10 @@
+import { NgModule } from '@angular/core';
+import { FlowsModule } from '../../../../flows/src/lib/flows.module';
+import { FlowListComponent } from './views/flow-list/flow-list.component';
+import { FlowCreateComponent } from './views/flow-create/flow-create.component';
+
+@NgModule({
+  imports: [FlowsModule],
+  declarations: [FlowListComponent, FlowCreateComponent]
+})
+export class FlowModule { }

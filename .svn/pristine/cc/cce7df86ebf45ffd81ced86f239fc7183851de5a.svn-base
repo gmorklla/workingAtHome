@@ -1,0 +1,7 @@
+export class Design {
+  id: number;
+  status: string;
+  initWindowId: number;
+  windowsIds: number;
+  windows: any; // TODO: Es necesario tipar
+}

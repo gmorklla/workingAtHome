@@ -1,0 +1,19 @@
+import { NgModule } from '@angular/core';
+import { RenderSelectComponent } from './render-select.component';
+import { CommonModule } from '@angular/common';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  declarations: [
+    RenderSelectComponent
+  ],
+  exports: [
+    RenderSelectComponent
+  ],
+  entryComponents: [
+    RenderSelectComponent
+  ]
+})
+export class RenderSelectModule { }

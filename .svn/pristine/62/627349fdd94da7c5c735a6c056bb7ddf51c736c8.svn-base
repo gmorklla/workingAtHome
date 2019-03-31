@@ -1,0 +1,10 @@
+{
+  "name": "pdf-generator",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1"
+  }
+}

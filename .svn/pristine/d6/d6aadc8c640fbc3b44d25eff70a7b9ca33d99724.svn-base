@@ -1,0 +1,68 @@
+<form
+  [formGroup]="backForm"
+  novalidate
+>
+  <div>
+    <label for="color1">Color 1</label>
+    <input
+      id="color1"
+      placeholder="Color 1"
+      (colorPickerChange)="colorSelected($event, 'color1')"
+      [(colorPicker)]="color1"
+      [style.background]="color1"
+      [cpPosition]="'bottom'"
+      [cpOutputFormat]="'rgba'"
+      formControlName="color1"
+      style="margin-bottom: 10px; width: 100%;"
+      class="formItem"
+    />
+  </div>
+  <div>
+    <label for="color2">Color 2</label>
+    <input
+      id="color2"
+      placeholder="Color 2"
+      (colorPickerChange)="colorSelected($event, 'color2')"
+      [(colorPicker)]="color2"
+      [style.background]="color2"
+      [cpPosition]="'bottom'"
+      [cpOutputFormat]="'rgba'"
+      formControlName="color2"
+      style="margin-bottom: 10px; width: 100%;"
+      class="formItem"
+    />
+  </div>
+  <mat-slide-toggle formControlName="gradient">Gradiente</mat-slide-toggle>
+  <div style="margin-bottom: 10px;">
+    <mat-radio-group
+      aria-label="Tipo de gradiente"
+      formControlName="linearRadial"
+    >
+      <mat-radio-button value="linear">Lineal</mat-radio-button>
+      <mat-radio-button
+        style="margin-left: 5px;"
+        value="radial"
+      >Radial</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Imagen"
+        type="text"
+        formControlName="image"
+      >
+    </mat-form-field>
+  </div>
+  <mat-slide-toggle formControlName="useImg">Imagen</mat-slide-toggle>
+  <mat-slide-toggle formControlName="repeat">Repetir</mat-slide-toggle>
+  <div class="checks">
+    <mat-checkbox formControlName="x">H</mat-checkbox>
+    <mat-checkbox formControlName="y">V</mat-checkbox>
+  </div>
+</form>
+<!-- <div
+  class="ejemplo"
+  [ngStyle]="style"
+></div> -->

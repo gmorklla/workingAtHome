@@ -1,0 +1,13 @@
+<input
+  type="radio"
+  id="{{ctrl.id}}"
+  name="{{ctrl.id}}"
+  [value]="value"
+>
+<label
+  for="{{ctrl.id}}"
+  [ngStyle]="stylesObj"
+  (click)="change($event)"
+>
+</label>
+

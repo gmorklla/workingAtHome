@@ -1,0 +1,32 @@
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EventEmitterService {
+  protected _eventSubject = new Subject();
+  public events = this._eventSubject.asObservable();
+
+  protected _shortcutSubject = new Subject();
+  public shortcuts = this._shortcutSubject.asObservable();
+
+  public showS = new Subject<boolean>();
+  public lockAxisS = new Subject<string>();
+
+  dispatchEvent(event) {
+    this._eventSubject.next(event);
+  }
+
+  dispatchShortcut(event) {
+    this._shortcutSubject.next(event);
+  }
+
+  dispatchShortcutsMenu(val) {
+    this.showS.next(val);
+  }
+
+  dispatchLockAxis(val) {
+    this.lockAxisS.next(val);
+  }
+}

@@ -1,0 +1,34 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputRangeComponent } from './input-range.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormRangeComponent } from './form-range/form-range.component';
+import { MatButtonModule, MatFormFieldModule, MatInputModule, MatRadioModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { ColorPickerModule } from 'ngx-color-picker';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    DragDropModule,
+    AngularDraggableModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatIconModule,
+    MatDividerModule,
+    ColorPickerModule
+  ],
+  declarations: [InputRangeComponent, FormRangeComponent],
+  exports: [InputRangeComponent],
+  entryComponents: [InputRangeComponent, FormRangeComponent]
+})
+export class InputRangeModule {}

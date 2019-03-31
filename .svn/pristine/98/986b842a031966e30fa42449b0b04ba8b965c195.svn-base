@@ -1,0 +1,46 @@
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { InputGeneralService } from './input-general.service';
+
+@Component({
+  selector: 'lib-inputGeneral',
+  template: `
+    <input
+      [type]="ctrl.type"
+      [ngStyle]="stylesObj"
+      [style.width.px]="stylesObj.width"
+      [style.height.px]="stylesObj.height"
+      [placeholder]="valor"
+      disabled
+    />
+  `,
+  styleUrls: ['./input-general.css']
+})
+export class InputGeneralComponent implements OnInit, OnChanges {
+  @Input() ctrl;
+  valor: string;
+  stylesObj;
+
+  constructor(private service: InputGeneralService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      this.valor = value ? value : this.ctrl.type;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes on input', changes);
+  }
+}

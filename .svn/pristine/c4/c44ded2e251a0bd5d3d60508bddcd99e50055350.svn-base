@@ -1,0 +1,47 @@
+<h1 mat-dialog-title class="mb-0">
+  Configuración
+</h1>
+<form novalidate
+  autocomplete="off"
+  [formGroup]="configurationForm">
+  <div mat-dialog-content class="mt-2">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <mat-form-field class="form-field">
+          <input matInput type="time" placeholder="Horario - Inicio" formControlName="scheduleFrom">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <mat-form-field class="form-field">
+          <input matInput type="time" placeholder="Horario - Fin" formControlName="scheduleTo">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <mat-form-field class="form-field">
+          <mat-select placeholder="Días" formControlName="listDays" multiple>
+            <mat-select-trigger>
+              {{configurationForm.value.listDays ? configurationForm.value.listDays[0].name : ''}}
+              <span *ngIf="configurationForm.value.listDays?.length > 1" class="additional-selection">
+                (+{{configurationForm.value.listDays.length - 1}} {{configurationForm.value.listDays?.length === 2 ? 'día' : 'días'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let day of data.listDays" [value]="day">{{day.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <mat-form-field class="form-field">
+          <mat-select placeholder="Recurrencia (hrs)" formControlName="recurrency">
+            <mat-option *ngFor="let recurrency of listRecurrency" [value]="recurrency">
+              {{recurrency}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end btn-actions" mat-dialog-actions>
+    <button mat-button class="btn-action" (click)="fn_onClose();"><i class="material-icons">reply</i> Salir </button>
+    <button mat-button class="btn-action" color="primary" [mat-dialog-close]="fn_generateConfig()"><i class="material-icons">save_alt</i> Guardar </button>
+  </div>
+</form>

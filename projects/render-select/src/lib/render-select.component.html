@@ -1,0 +1,14 @@
+<mat-form-field
+  [ngStyle]="stylesObj"
+>
+  <mat-label>{{value}}</mat-label>
+  <mat-select>
+    <mat-option
+      *ngFor="let option of options"
+      [value]="option.key"
+    >
+      {{option.value}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

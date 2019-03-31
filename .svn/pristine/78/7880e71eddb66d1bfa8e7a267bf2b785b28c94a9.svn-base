@@ -1,0 +1,11 @@
+<div class="nickContainer">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Nickname"
+      [formControl]="nickname"
+      class="message"
+      [readonly]="readOnly"
+    />
+  </mat-form-field>
+</div>

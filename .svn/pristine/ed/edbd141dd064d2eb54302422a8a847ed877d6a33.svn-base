@@ -1,0 +1,7 @@
+<input
+  id="{{ctrl.id}}"
+  type="checkbox"
+  [ngStyle]="stylesObj"
+  [value]="value"
+  (change)="change($event)"
+>

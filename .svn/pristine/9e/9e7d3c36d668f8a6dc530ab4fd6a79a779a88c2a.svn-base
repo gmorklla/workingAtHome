@@ -1,0 +1,64 @@
+.titulo {
+  width: 100%;
+  height: 55px;
+  border-bottom: 1px dotted white;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-chip-list {
+  display: flex;
+}
+
+.shortcuts {
+  position: absolute;
+  top: 84px;
+  right: 0;
+  width: 245px;
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 2px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  border: 5px solid darkgray;
+  border-right: none;
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.shortcuts .item {
+  width: 115px;
+  height: 40px;
+  margin-bottom: 1px;
+  color: ghostwhite;
+  font-size: small;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  margin: 1px;
+  border-radius: 5px;
+  border: 1px solid;
+}
+
+.shortcuts .item .key {
+  width: 20px;
+  height: 20px;
+  background-color: ghostwhite;
+  border-radius: 5px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  margin: 0 5px;
+  color: black;
+}
+
+.shortcutsTooltip {
+  background: crimson;
+}

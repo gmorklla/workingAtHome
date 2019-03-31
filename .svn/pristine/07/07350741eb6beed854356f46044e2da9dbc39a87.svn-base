@@ -1,0 +1,11 @@
+<!--contenedor principal-->
+<ng-container *ngIf="window">
+  <!--window-->
+  <div [ngStyle]="setStylesOfWindow(window)">
+    <!--controles (iterados)-->
+    <ng-container *ngFor="let control of window.controls">
+      <!--app-dinamico (renderiza cada control de acuerdo a su propieda type)-->
+      <app-dinamico [control]="control"></app-dinamico>
+    </ng-container>
+  </div>
+</ng-container>

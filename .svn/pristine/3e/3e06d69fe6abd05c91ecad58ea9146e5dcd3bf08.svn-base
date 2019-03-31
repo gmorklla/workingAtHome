@@ -1,0 +1,72 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { InputGeneralService } from './input-general.service';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+
+@Component({
+  selector: 'lib-inputGeneral',
+  templateUrl: 'input-general.html',
+  styleUrls: ['./input-general.css']
+})
+export class InputGeneralComponent implements OnInit {
+  @Input() ctrl;
+  @Output() rzStartE = new EventEmitter();
+  @Output() rzStopE = new EventEmitter();
+  @Output() dragEndE = new EventEmitter();
+  public width: number;
+  public height: number;
+  valor: string;
+  stylesObj;
+  containerStyles;
+
+  constructor(private service: InputGeneralService) {}
+
+  ngOnInit() {
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      this.containerStyles = this.setStylesOfContainer();
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      delete this.stylesObj.width;
+      delete this.stylesObj.height;
+      this.valor = value ? value : 'Mensaje';
+    }
+  }
+
+  clickOnCtrl(e) {
+    this.rzStartE.emit(this.ctrl);
+  }
+
+  onResizeStop(e) {
+    this.width = e.size.width;
+    this.height = e.size.height;
+    this.rzStopE.emit(e.size);
+  }
+
+  onDragEnd(event: CdkDragEnd) {
+    const transform = event.source.element.nativeElement.style.transform;
+    this.dragEndE.emit(transform);
+  }
+
+  // Obtiene estilos que deben aplicarse al contenedor
+  setStylesOfContainer() {
+    const {
+      width = '100px',
+      height = '100px',
+      transform = 'translate3d(0,0,0)'
+    } = this.stylesObj;
+    this.width = this.getNumValueNoPX(width);
+    this.height = this.getNumValueNoPX(height);
+    const fObj = {
+      transform: transform,
+      position: 'absolute'
+    };
+    return { ...fObj };
+  }
+
+  getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+}

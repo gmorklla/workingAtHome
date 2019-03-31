@@ -1,0 +1,73 @@
+<div [formGroup]="formGroup">
+  <mat-form-field class="formItem">
+    <mat-select
+      placeholder="Fuente"
+      formControlName="fontFamily"
+    >
+      <mat-option value="Georgia, serif">
+        Georgia
+      </mat-option>
+      <mat-option value="Times, serif">
+        Times
+      </mat-option>
+      <mat-option value="Arial, Helvetica, sans-serif">
+        Arial
+      </mat-option>
+      <mat-option value="Impact, Charcoal, sans-serif">
+        Impact
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Tamaño"
+      type="number"
+      formControlName="fontSize"
+    >
+  </mat-form-field>
+
+  <mat-button-toggle-group
+    #group="matButtonToggleGroup"
+    formControlName="textAlign"
+    style="margin-bottom: 10px;"
+  >
+    <mat-button-toggle value="left">
+      <mat-icon>format_align_left</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="center">
+      <mat-icon>format_align_center</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="right">
+      <mat-icon>format_align_right</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="justify">
+      <mat-icon>format_align_justify</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-button-toggle-group
+    #group="matButtonToggleGroup"
+    formControlName="fontStyle"
+    style="margin-bottom: 10px;"
+  >
+    <mat-button-toggle value="normal">
+      <mat-icon>title</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="italic">
+      <mat-icon>format_italic</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <br>
+
+  <mat-form-field class="formItem">
+    <input
+      matInput
+      placeholder="Interlineado"
+      type="number"
+      formControlName="lineHeight"
+    >
+  </mat-form-field>
+</div>

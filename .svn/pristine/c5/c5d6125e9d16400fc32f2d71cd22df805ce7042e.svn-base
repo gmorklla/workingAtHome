@@ -1,0 +1,43 @@
+<form
+  [formGroup]="windowForm"
+  novalidate
+>
+  <label for="fondo">Fondo</label>
+  <input
+    id="fondo"
+    placeholder="Color de fondo"
+    (colorPickerChange)="colorSelected($event, 'fondo')"
+    [(colorPicker)]="fondo"
+    [style.background]="fondo"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    [cpCancelButton]="true"
+    [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+    [cpPresetColors]="['rgb(255,255,255)', 'rgb(0,0,0)', 'rgb(40,137,233)', 'rgb(233,32,233)', 'rgb(236,64,64)',
+'rgb(67,236,64)']"
+    formControlName="fondo"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+  <label for="fondo">Fondo 2</label>
+  <input
+    id="fondo"
+    placeholder="Color de fondo 2"
+    (colorPickerChange)="colorSelected($event, 'fondo2')"
+    [(colorPicker)]="fondo2"
+    [style.background]="fondo2"
+    [cpPosition]="'left'"
+    [cpOutputFormat]="'rgba'"
+    [cpCancelButton]="true"
+    [cpCancelButtonClass]="'btn btn-primary btn-xs'"
+    [cpPresetColors]="['rgb(255,255,255)', 'rgb(0,0,0)', 'rgb(40,137,233)', 'rgb(233,32,233)', 'rgb(236,64,64)',
+'rgb(67,236,64)']"
+    formControlName="fondo2"
+    style="margin-bottom: 10px; width: 100%;"
+    class="formItem"
+  />
+</form>
+<mat-checkbox
+  (change)="setGradient($event)"
+  [checked]="gradient"
+>Usar gradient</mat-checkbox>

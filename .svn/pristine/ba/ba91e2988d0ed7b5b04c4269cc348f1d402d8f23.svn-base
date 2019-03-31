@@ -1,0 +1,326 @@
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import { ImageCatalog } from './model/image-catalog.model';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ImageCatalogService } from './image-catalog.service';
+import { Observable } from 'rxjs';
+import { ControlHTML } from 'projects/questions/src/lib/models/controlHTML.model';
+import { GetIconsService } from '../../../questions/src/lib/services/get-font-awesome/get-icons.service';
+import { MatPaginator, PageEvent } from '@angular/material';
+
+@Component({
+  selector: 'lib-image-catalog',
+  templateUrl: './image-catalog.component.html',
+  providers: [GetIconsService]
+})
+export class ImageCatalogComponent implements OnInit {
+  @Input() public controlHTML: ControlHTML;
+  @Output() public returnImageCatalog = new EventEmitter();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public imageCatalogForm: FormGroup;
+  public imageDetailForm: FormGroup;
+  public uploadImageCatalogForm: FormGroup;
+  public images: Observable<ImageCatalog[]>;
+  public closeResult: string;
+  public controlImage: ImageCatalog;
+  public upload: any;
+  public uploadImage: File;
+  public imageCatalog: ImageCatalog;
+  public selectedType: number;
+  public paginationConfig: any;
+  public validTypes: string[] = [
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+    'image/bmp',
+    'image/gif',
+    'image/icon'
+  ];
+  public validUFTypes: string[] = ['common', 'background', 'icon'];
+  public maxFileSize: number = 5242880;
+  public imageUrl: string = '/wconfig-services/images.htm?id=';
+
+  constructor(
+    private imageCatalogService: ImageCatalogService,
+    private formBuilder: FormBuilder,
+    private modalService: NgbModal,
+    private getIcons: GetIconsService
+  ) {
+    //this.imageCatalogForm = null;
+    //this.imageDetailForm = null;
+  }
+
+  ngOnInit() {
+    this.selectedType = 1;
+    this.controlImage = {
+      id: 0,
+      type: 'common',
+      description: 'png',
+      image: 'a',
+      name: '',
+      height: '20',
+      width: '20'
+    };
+    this.imageCatalog = {
+      id: 0,
+      type: 'common',
+      description: 'png',
+      name: '',
+      image: 'a',
+      height: '20',
+      width: '20'
+    };
+    this.uploadImage = null;
+    this.upload = {
+      file: File,
+      route: '',
+      type: ''
+    };
+    this.paginationConfig = {
+      page: 0,
+      records: 10,
+      imageName: '',
+      imageType: 1,
+      collectionSize: -1
+    };
+    this.createImageCatalogForm();
+    this.createImageDetailForm();
+    this.createUploadImageCatalogForm();
+    this.uploadImageCatalogForm.value.imageType = this.selectedType;
+    this.imageCatalogForm.value.imageNamec = this.paginationConfig.imageName;
+    this.imageCatalogForm.value.imageTypec = this.paginationConfig.imageType;
+  }
+
+  createImageCatalogForm() {
+    this.imageCatalogForm = this.formBuilder.group({
+      imageCatalog: new FormControl('', [Validators.required]),
+      imageNamec: new FormControl('', Validators.required),
+      imageTypec: new FormControl('', Validators.required)
+    });
+  }
+
+  createImageDetailForm() {
+    this.imageDetailForm = this.formBuilder.group({
+      '': new FormControl('', [Validators.required])
+    });
+  }
+
+  createUploadImageCatalogForm() {
+    this.uploadImageCatalogForm = this.formBuilder.group({
+      imageName: new FormControl('', Validators.required),
+      imageType: new FormControl('', Validators.required)
+    });
+  }
+
+  deleteImageCatalog(image?: ImageCatalog) {
+    this.imageCatalogService.deleteImageCatalog(image.id).subscribe({
+      next: result => {
+        this.searchImageCatalog();
+      }
+    });
+  }
+
+  validateUpload(event: any) {
+    var image: File = event.target.files[0];
+    if (this.isValidFileFormat(image) && !this.isMaxSize(image)) {
+      this.upload = {
+        file: image,
+        route: event.target.value,
+        type: image.type
+      };
+    } else {
+      this.upload = {
+        file: File,
+        route: '',
+        type: ''
+      };
+      event.srcElement.value = null;
+    }
+  }
+
+  isValidFileFormat(image: File) {
+    return this.validTypes.find(x => x === image.type);
+  }
+
+  isMaxSize(image: File) {
+    return image.size > this.maxFileSize;
+  }
+
+  async saveImageCatalog(event: any) {
+    let image: HTMLImageElement;
+
+    let baseImage: string[];
+    if (this.upload.route != '') {
+      this.imageCatalog.type = this.validUFTypes[
+        this.uploadImageCatalogForm.controls['imageType'].value - 1
+      ];
+      this.imageCatalog.description = this.upload.type;
+      this.imageCatalog.image = await this.parseUploadImage();
+      image = await this.getImageDimensions();
+      this.imageCatalog.width = '' + image.width;
+      this.imageCatalog.height = '' + image.height;
+      baseImage = this.imageCatalog.image.split(',');
+      this.imageCatalog.image = baseImage[1];
+      this.imageCatalog.name =
+        this.uploadImageCatalogForm.value.imageName === undefined ||
+        this.uploadImageCatalogForm.value.imageName === ''
+          ? 'imagen'
+          : this.uploadImageCatalogForm.value.imageName;
+      this.imageCatalogService.addImageCatalog(this.imageCatalog).subscribe({
+        next: result => {
+          this.searchImageCatalog();
+          this.imageCatalog = {
+            id: 0,
+            type: '',
+            description: '',
+            image: '',
+            name: '',
+            height: '0',
+            width: '0'
+          };
+          this.selectedType = 1;
+          this.uploadImageCatalogForm.value.imageType = this.selectedType;
+          this.uploadImageCatalogForm.controls['imageName'].reset();
+          this.upload = {
+            file: File,
+            route: '',
+            type: ''
+          };
+          (<HTMLInputElement>(
+            document.getElementById('image_uploads')
+          )).value = null;
+        }
+      });
+    }
+  }
+
+  async parseUploadImage(): Promise<string> {
+    const reader = new FileReader();
+    return await new Promise<string>(resolve => {
+      reader.onload = ev => {
+        resolve(ev.target.result);
+      };
+      reader.readAsDataURL(this.upload.file);
+    });
+  }
+
+  async getImageDimensions(): Promise<HTMLImageElement> {
+    const image = new Image();
+    return await new Promise<HTMLImageElement>(resolve => {
+      image.onload = ev => {
+        resolve(image);
+      };
+      image.src = this.imageCatalog.image;
+    });
+  }
+
+  searchImageCatalog(event?: any) {
+    if (event !== undefined) {
+      this.paginationConfig.page = event.pageIndex;
+    }
+
+    this.paginationConfig.imageName =
+      this.imageCatalogForm.controls['imageNamec'].value == undefined ||
+      this.imageCatalogForm.controls['imageNamec'].value == '' ||
+      this.imageCatalogForm.controls['imageNamec'].value == null
+        ? ''
+        : this.imageCatalogForm.controls['imageNamec'].value;
+    this.paginationConfig.imageType =
+      this.imageCatalogForm.controls['imageTypec'].value == undefined ||
+      this.imageCatalogForm.controls['imageTypec'].value == '' ||
+      this.imageCatalogForm.controls['imageTypec'].value == null
+        ? 1
+        : this.imageCatalogForm.controls['imageTypec'].value;
+
+    this.imageCatalogService
+      .getCount(
+        this.paginationConfig.imageName,
+        this.validUFTypes[this.paginationConfig.imageType - 1]
+      )
+      .subscribe({
+        next: (x: any) => {
+          if (x > 0) {
+            this.paginationConfig.collectionSize = x;
+            const records =
+              this.paginationConfig.records > x
+                ? x
+                : this.paginationConfig.records;
+            this.paginationConfig.page =
+              this.paginationConfig.page + 1 * this.paginationConfig.records > x
+                ? 0
+                : this.paginationConfig.page;
+            this.images = this.imageCatalogService.getByPage(
+              this.paginationConfig.page + 1,
+              records,
+              this.paginationConfig.imageName,
+              this.validUFTypes[this.paginationConfig.imageType - 1]
+            );
+            this.images.subscribe();
+          }
+        }
+      });
+  }
+
+  linkImageToControl(event: any, image: ImageCatalog) {
+    (<HTMLInputElement>document.getElementById('in-image-source')).value =
+      this.imageUrl + image.id;
+    var element = document.getElementById('in-image-source');
+    var updateEvent = new Event('change');
+    element.dispatchEvent(updateEvent);
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  open(content, image?: ImageCatalog) {
+    if (image != undefined) {
+      this.createImageDetailForm();
+      this.imageCatalog = image;
+    } else {
+      this.searchImageCatalog();
+    }
+
+    this.modalService
+      .open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+      .result.then(
+        result => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        reason => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          this.uploadImageCatalogForm.controls['imageName'].reset();
+          this.uploadImageCatalogForm.controls['imageType'].reset();
+          this.imageCatalogForm.controls['imageNamec'].reset();
+          this.imageCatalogForm.controls['imageTypec'].reset();
+          this.paginationConfig.imageName = '';
+          this.paginationConfig.imageType = 1;
+          this.paginationConfig.page = 0;
+          this.paginationConfig.collectionSize = 0;
+        }
+      );
+  }
+
+  getIcon(i) {
+    return this.imageCatalogService.getIcon(i);
+  }
+}

@@ -1,0 +1,17 @@
+<div class="modalAttrs">
+  <mat-checkbox
+    (change)="checkChange($event)"
+    [checked]="checked"
+  >Agregar modal</mat-checkbox>
+  <ng-container *ngIf="checked">
+    <button
+      mat-mini-fab
+      color="accent"
+      matTooltip="Editar modal"
+      [matTooltipPosition]="'above'"
+      (click)="editModalWindow()"
+    >
+      <mat-icon aria-label="Editar modal">edit</mat-icon>
+    </button>
+  </ng-container>
+</div>

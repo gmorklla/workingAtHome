@@ -1,0 +1,274 @@
+<form
+  novalidate
+  autocomplete="off"
+  [formGroup]="imageCatalogForm"
+>
+  <div class="form-row">
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      type="button"
+      (click)="open(content)"
+    >
+      <fa-icon [icon]="getIcon('fas fa-folder-open')"></fa-icon>
+    </button>
+  </div>
+</form>
+<!--Modal-->
+<ng-template
+  #content
+  let-modal
+>
+  <div class="modal-header">
+    <h4
+      class="modal-title"
+      id="modal-basic-title"
+    >Catálogo de imagenes</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div
+    class="modal-body"
+    data-backdrop="false"
+  >
+    <form [formGroup]="imageCatalogForm">
+      <div class="list-group">
+        <table>
+          <tr>
+            <td>
+              <input
+                class="form-control form-control-sm"
+                placeholder="Nombre a buscar de imagen"
+                formControlName="imageNamec"
+                (blur)="searchImageCatalog()"
+              >
+            </td>
+            <td>
+              <select
+                class="form-control-plaintext"
+                style="width: auto"
+                formControlName="imageTypec"
+                (change)="searchImageCatalog()"
+              >
+                <option [ngValue]="1">Imagen</option>
+                <option [ngValue]="2">Fondo</option>
+                <option [ngValue]="3">Icono</option>
+              </select>
+            </td>
+            <td>
+              <select
+                class="form-control-plaintext"
+                style="width: auto"
+                [(ngModel)]="paginationConfig.records"
+                [ngModelOptions]="{standalone: true}"
+                (change)="searchImageCatalog()"
+              >
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="20">20</option>
+                <option [ngValue]="50">50</option>
+                <option [ngValue]="100">100</option>
+              </select>
+            </td>
+            <td>
+              <mat-paginator
+                [length]="paginationConfig.collectionSize"
+                [pageSize]="paginationConfig.records"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="true"
+                [pageIndex]="paginationConfig.page"
+                (page)="searchImageCatalog($event)"
+              >
+              </mat-paginator>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="list-group">
+        <table class="table-view">
+          <th>
+            Imagen
+          </th>
+          <th>
+            Nombre
+          </th>
+          <th>
+            Tipo
+          </th>
+          <th>
+            Formato
+          </th>
+          <th>
+            Ancho
+          </th>
+          <th>
+            Alto
+          </th>
+          <th>
+            Detalle
+          </th>
+          <th>
+            Vincular
+          </th>
+          <th>
+            Eliminar
+          </th>
+          <ng-container
+            *ngFor="let image of images | async"
+            class="list-group-item   disabled"
+          >
+            <tr class="table-row-cell">
+              <td>
+                <img
+                  src="{{imageUrl + image.id}}"
+                  width="{{controlImage.width}}"
+                  height="{{controlImage.height}}"
+                />
+              </td>
+              <td>
+                {{image.name}}
+              </td>
+              <td>
+                {{image.type == 'common' ? 'Imagen' :
+                   image.type == 'background' ? 'Fondo' :
+                   image.type == 'icon' ? 'Icono' : ''}}
+              </td>
+              <td>
+                {{image.description}}
+              </td>
+              <td>
+                {{image.width}}px
+              </td>
+              <td>
+                {{image.height}}px
+              </td>
+              <td>
+                <button
+                  class="btn btn-outline-dark"
+                  (click)="open(detail,image)"
+                >
+                  <fa-icon [icon]="getIcon('fas fa-search-plus')"></fa-icon>
+                </button>
+              </td>
+              <td>
+                <button
+                  class="btn btn-outline-dark"
+                  type="button"
+                  (click)="linkImageToControl($event,image)"
+                >
+                  <fa-icon [icon]="getIcon('fas fa-link')"></fa-icon>
+                </button>
+              </td>
+              <td>
+                <button
+                  class="btn btn-outline-dark"
+                  (click)="deleteImageCatalog(image)"
+                >
+                  <fa-icon [icon]="getIcon('fas fa-trash')"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </div>
+    </form>
+    <form [formGroup]="uploadImageCatalogForm">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Cargar Imagen
+            </mat-panel-title>
+            <mat-panel-description>
+              Máximo {{maxFileSize/1048576}}MB
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div>
+            <table>
+              <tr>
+                <td>
+                  <input
+                    type="file"
+                    id="image_uploads"
+                    name="image_uploads"
+                    accept=".jpg, .jpeg, .png, .gif, .bmp"
+                    (change)="validateUpload($event)"
+                  >
+                </td>
+                <td>
+                  <select
+                    class="form-control-plaintext"
+                    style="width: auto"
+                    formControlName="imageType"
+                  >
+                    <option [ngValue]="1">Imagen</option>
+                    <option [ngValue]="2">Fondo</option>
+                    <option [ngValue]="3">Icono</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    class="form-control form-control-sm"
+                    placeholder="Nombre de imagen"
+                    formControlName="imageName"
+                    required
+                  />
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    [disabled]="uploadImageCatalogForm.invalid"
+                    type="button"
+                    (click)="saveImageCatalog($event)"
+                  >Cargar
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </form>
+  </div>
+</ng-template>
+<!--Image Detail-->
+<ng-template
+  #detail
+  let-modal
+>
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form
+      *ngIf="imageDetailForm"
+      novalidate
+      autocomplete="off"
+      [formGroup]="imageDetailForm"
+    >
+      <div class="container">
+        <div class="span12">
+          <img
+            class="img-fluid"
+            style="display: block; margin: 0 auto;"
+            src="{{imageUrl + imageCatalog.id}}"
+            width="{{imageCatalog.width}}"
+            height="{{imageCatalog.height}}"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

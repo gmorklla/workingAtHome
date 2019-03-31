@@ -1,0 +1,30 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { TextareaService } from './textarea.service';
+
+@Component({
+  selector: 'lib-textarea',
+  template: `
+    <textarea [ngStyle]="stylesObj" [placeholder]="valor" disabled></textarea>
+  `,
+  styleUrls: ['./textarea.component.css']
+})
+export class TextareaComponent implements OnInit {
+  @Input() ctrl;
+  valor: string;
+  stylesObj;
+
+  constructor(private service: TextareaService) {}
+
+  ngOnInit() {
+    console.log('input control', this.ctrl);
+    if (this.ctrl) {
+      const {
+        attributes: { value, style, placeholder }
+      } = this.ctrl;
+      this.stylesObj = style ? this.service.stringToObj(style) : {};
+      delete this.stylesObj.position;
+      delete this.stylesObj.transform;
+      this.valor = value ? value : this.ctrl.type;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<mat-grid-list
+  [cols]="cols | async"
+  id="dashboard"
+>
+  <mat-grid-tile
+    *ngFor="let card of cards"
+    [colspan]="card.input.cols.value | async"
+    [rowspan]="card.input.rows.value | async"
+  >
+    <app-card-spawner [card]="card"></app-card-spawner>
+  </mat-grid-tile>
+</mat-grid-list>

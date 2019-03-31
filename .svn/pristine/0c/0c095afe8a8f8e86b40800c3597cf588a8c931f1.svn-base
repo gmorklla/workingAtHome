@@ -1,0 +1,9 @@
+<form autocomplete="off">
+  <input
+    [type]="ctrl.type"
+    [placeholder]="placeholder"
+    [ngStyle]="stylesObj"
+    style="box-sizing: border-box;"
+    autocomplete="false"
+  >
+</form>

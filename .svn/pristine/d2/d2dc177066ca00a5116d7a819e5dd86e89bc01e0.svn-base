@@ -1,0 +1,51 @@
+/* Filter */
+.mat-form-field {
+  display: block !important;
+}
+
+/* Search */
+.search {
+  display: inline-block !important;
+  width: calc(100% - 80px);
+}
+
+/* Table */
+table {
+  width: 100%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+  tr.element-row:not(.expanded-row):hover {
+    background-color: silver;
+    color: white !important;
+  }
+
+.element-row td {
+  border-bottom-width: 0;
+}
+  .element-row td.selector {
+    min-width: 50px;
+  }
+  .element-row td.id {
+    min-width: 120px;
+  }
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  background-color: whitesmoke;
+}
+  .element-detail .row {
+    width: 100%;
+    border-bottom: 1px white solid;
+  }
+
+/* Collapse */
+.mat-list {
+  width: 100%;
+}
+.mat-list-base .mat-list-item {
+  height: auto !important;
+}

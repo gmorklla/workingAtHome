@@ -1,0 +1,150 @@
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  tap,
+  mergeMap
+} from 'rxjs/operators';
+import { of, iif } from 'rxjs';
+import { WindowModel } from '../../../../../models/window/window.model';
+import { FormatStylesService } from '../../../../../shared/services/format-styles.service';
+import { ControlesI } from 'projects/banorte/src/app/shared/data/data';
+import { opcionesDefault, OpcionI } from '../../../../../shared/data/data';
+
+@Component({
+  selector: 'app-window-form',
+  templateUrl: './window-form.component.html',
+  styleUrls: ['./window-form.component.css']
+})
+export class WindowFormComponent implements OnInit, OnChanges {
+  @Output() public propChange = new EventEmitter();
+  @Input() public control: WindowModel;
+  gradient: boolean;
+  fondo;
+  fondo2;
+
+  public windowForm: FormGroup;
+  public toCompare: string;
+
+  constructor(
+    private fb: FormBuilder,
+    private formatStyles: FormatStylesService
+  ) {}
+
+  public ngOnInit() {
+    this.initForm();
+    this.listenForm();
+    this.setFormValues();
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.control) {
+      if (this.windowForm) {
+        this.setFormValues();
+      }
+    }
+  }
+
+  public initForm(): void {
+    const opts = {
+      fondo: ['', Validators.required],
+      fondo2: [{ value: '', disabled: true }]
+    };
+    this.windowForm = this.fb.group(opts);
+  }
+
+  public listenForm(): void {
+    this.windowForm.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(1000),
+        switchMap(val => of(val)),
+        filter(val => JSON.stringify(val) !== this.toCompare),
+        tap(val => {
+          this.toCompare = JSON.stringify(val);
+          const objToEmit: any = this.getGeneralFormValues(val);
+          this.propChange.emit(objToEmit);
+        })
+      )
+      .subscribe(_ => {});
+  }
+
+  public getGeneralFormValues(val): any {
+    const { fondo, fondo2 } = val;
+    const style = {
+      background:
+        fondo2 && fondo2 !== ''
+          ? `linear-gradient(to bottom right,${fondo},${fondo2})`
+          : fondo !== ''
+          ? fondo
+          : 'rgba(255,255,255,0)'
+    };
+
+    return { estilos: style };
+  }
+
+  public setFormValues(): void {
+    const styleObj =
+      this.control.attributes && this.control.attributes['style']
+        ? this.formatStyles.stringToObj(this.control.attributes['style'])
+        : {};
+
+    const { background = 'rgba(255,255,255,0)' } = styleObj;
+    const gradient =
+      background.indexOf('linear-gradient') !== -1
+        ? this.getGradientValues(background)
+        : null;
+    this.windowForm.setValue(
+      {
+        fondo: gradient ? gradient[0] : background,
+        fondo2: gradient ? gradient[1] : background
+      },
+      { emitEvent: false }
+    );
+  }
+
+  public getGradientValues(background: string) {
+    const gradientContent = background.slice(background.indexOf('(') + 1, -1);
+    const reg = /\(([^)]+)\)/g;
+    const matches = gradientContent.match(reg);
+    return matches.map(val =>
+      val.split(',').length > 3 ? `rgba${val}` : `rgb${val}`
+    );
+  }
+
+  public getNumValueNoPX(value): number {
+    return Number(value.replace('px', ''));
+  }
+
+  public colorSelected(colorRGB: string, inputName): void {
+    let obj;
+    switch (inputName) {
+      case 'fondo':
+        obj = { fondo: colorRGB };
+        break;
+      case 'fondo2':
+        obj = { fondo2: colorRGB };
+        break;
+      default:
+        break;
+    }
+    this.windowForm.patchValue(obj);
+  }
+
+  public setGradient(e) {
+    e.checked
+      ? this.windowForm.controls['fondo2'].enable()
+      : this.windowForm.controls['fondo2'].disable();
+  }
+}
