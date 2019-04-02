@@ -27,7 +27,7 @@ import { CleanTransformService } from '../../shared/services/clean-transform.ser
 import { SnackBarService } from '../../shared/services/snack-bar.service';
 import { target } from '../../shared/data/port';
 import { WindowModel } from '../../models/window/window.model';
-import { Subject, of, iif, Observable } from 'rxjs';
+import { Subject, of, iif, Observable, timer } from 'rxjs';
 import { ShortcutsService } from '../../shared/services/shortcuts.service';
 import { EditorRelatedService } from '../../shared/services/editor-related.service';
 import { InputRangeService } from 'projects/input-range/src/public_api';
@@ -59,7 +59,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public windowId: string;
   public controlesHTML;
   public widgets;
-  public ctrlIdxSelected: number;
   public ctrlSelected: ControlI;
   public windowSelected: WindowI;
   public width: number;
@@ -92,6 +91,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.setWindow();
     this.getControles();
     this.getWidgets();
+    this.update$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(val => timer(10000)),
+        tap(val => this.emitterS.control$.next(true))
+      )
+      .subscribe(_ => console.log('timer'));
     this.emitterS.control$
       .pipe(
         takeUntil(this.destroy$),
@@ -178,8 +184,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     const emit$ = this.emitterS.createControl$;
     const insertCtrl$ = emit$.pipe(
       debounceTime(100),
+      tap(val => this.emitterS.control$.next(true)),
       switchMap(shortcut => {
-        this.emitterS.control$.next(true);
         const control = this.controlesHTML.filter(
           ctrl => ctrl.id === shortcut['id']
         )[0];
@@ -202,7 +208,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.windowId = this.route.snapshot.paramMap.get('windowId');
     this.getWindow();
     this.ctrlSelected = null;
-    this.ctrlIdxSelected = null;
   }
 
   insertaControl$(e: ControlesI): Observable<any> {
@@ -307,7 +312,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.emitterS.control$.next(true);
     }
     const idx = this.window.controls.findIndex(ctrl => ctrl.id === control.id);
-    this.ctrlIdxSelected = idx;
     this.ctrlSelected = this.window.controls[idx];
   }
 
@@ -315,7 +319,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (this.ctrlSelected && this.ctrlSelected.id !== control.id) {
       this.emitterS.control$.next(true);
     }
-    this.ctrlIdxSelected = idx;
     this.ctrlSelected = control;
   }
 
@@ -373,7 +376,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       tap(val => {
         this.getWindow();
         this.ctrlSelected = null;
-        this.ctrlIdxSelected = null;
       })
     );
     const x$ = of('X');
@@ -385,6 +387,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       .subscribe(
         next => {},
         error => {
+          const clone = [...this.window.controls].filter(
+            ctrl => ctrl.id !== id
+          );
+          this.window.controls = [...clone];
           this.snack.open('Error al intentar borrar el control', 'Ok');
           console.log('error', error);
         }
@@ -394,7 +400,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   clickOnWindow(window: WindowI): void {
     this.windowSelected = window; // TODO: A este wiwndow creo que deberíamos quitarle los controles para aligerar el binding.
     this.ctrlSelected = null;
-    this.ctrlIdxSelected = null;
     this.emitterS.control$.next(true);
   }
 

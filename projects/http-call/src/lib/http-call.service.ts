@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams, Headers } from '@angular/http';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, retryWhen } from 'rxjs/operators';
 import { Observable, throwError, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
+import { genStrategy } from './genStrategic';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +24,13 @@ export class HttpCallService {
       headers: headers
     };
     return this.client.delete(url, options).pipe(
-      catchError(err => {
-        // this.open(`${err.message}`, 'Ok');
-        return throwError(err);
-      })
+      // retryWhen(
+      //   genStrategy({
+      //     scalingDuration: 2000,
+      //     excludedStatusCodes: [500]
+      //   })
+      // ),
+      catchError(error => throwError(error))
     );
   }
 
