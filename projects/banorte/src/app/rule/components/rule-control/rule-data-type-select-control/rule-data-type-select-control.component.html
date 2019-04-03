@@ -2,14 +2,14 @@
       autocomplete="off"
       [formGroup]="parentForm">
   <mat-form-field class="d-block">
-    <mat-select placeholder="Tipo de dato" formControlName="variableDataType">
-      <mat-option [value]="">No aplica</mat-option>
-      <mat-option *ngFor="let dataType of listDataType" [value]="dataType">
-        {{dataType.name}}
+    <mat-select placeholder="Tipo de dato" formControlName="dataType" [compareWith]="utilsService.fn_compareObjectsById">
+      <mat-option [value]="">Seleccione</mat-option>
+      <mat-option *ngFor="let dt of listDataType" [value]="dt">
+        {{dt.name}}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="variableDataType.hasError('required')">
-      Campo <strong>requerido</strong>
+    <mat-error *ngIf="dataType.hasError('required')">
+      * Campo <strong>requerido</strong>
     </mat-error>
   </mat-form-field>
 </form>

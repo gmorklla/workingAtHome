@@ -1,0 +1,35 @@
+<form novalidate
+      autocomplete="off"
+      [formGroup]="mainForm">
+  <div class="row">
+    <div class="col-6 pl-0">
+      <button mat-icon-button matTooltip="Quitar" [matTooltipPosition]="'above'" (click)="fn_removeField();">
+        <mat-icon aria-label="Remove">highlight_off</mat-icon>
+      </button>
+      <mat-form-field class="form-field-one-buttom">
+        <mat-select placeholder="Campo de servicio" formControlName="field" (selectionChange)="fn_updateField();">
+          <mat-option [value]="">Seleccione</mat-option>
+          <mat-option *ngFor="let f of listFields" [value]="f.id">
+            {{f.normalizacion.nombre}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="_field.hasError('required')">
+          * Campo <strong>requerido</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-6 pr-0">
+      <app-rule-variable-design-search-control
+        [designId]="serviceDesign.designId"
+        [windowId]="serviceDesign.windowId"
+        [source]="VariableSource.SERVICE"
+        [type]="VariableType.DYNAMIC"
+        [scope]="VariableScope.SESSION"
+        [placeholder]="'Asociar variable'"
+        [parentForm]="mainForm"
+        [listVariableDesign]="listVariableDesign"
+        (update)="fn_updateField();">
+      </app-rule-variable-design-search-control>
+    </div>
+  </div>
+</form>

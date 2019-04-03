@@ -12,8 +12,8 @@ export class ShortcutsService {
     private snack: SnackBarService
   ) {
     window.addEventListener('keydown', event => {
-      if (event.ctrlKey && event.key === 'a') {
-        this.snack.open('Listo para agregar control', 'Ok');
+      if (event.altKey && event.key === 'a') {
+        this.snack.open('Listo para agregar control o ejecutar comando', 'Ok');
         this.emitterS.dispatchShortcutsMenu(true);
         this.listening = true;
       }

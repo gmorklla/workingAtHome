@@ -18,6 +18,9 @@ export class EventEmitterService {
   protected _attrSubject = new Subject();
   public attrs = this._attrSubject.asObservable();
 
+  protected _optionsSubject = new Subject();
+  public options = this._optionsSubject.asObservable();
+
   public showS = new Subject<boolean>();
   public lockAxisS = new Subject<string>();
 
@@ -50,6 +53,10 @@ export class EventEmitterService {
 
   dispatchStyle(event) {
     this._styleSubject.next(event);
+  }
+
+  dispatchOptions(event) {
+    this._optionsSubject.next(event);
   }
 
   dispatchAttr(event) {

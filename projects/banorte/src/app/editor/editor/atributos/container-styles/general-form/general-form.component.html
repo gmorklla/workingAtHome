@@ -1,14 +1,4 @@
-<div class="deleteBtn">
-  <button
-    mat-raised-button
-    color="warn"
-    matTooltip="Borrar item"
-    [matTooltipPosition]="'right'"
-    (click)="deleteItem($event)"
-  >
-    <mat-icon aria-label="Borrar item">delete</mat-icon>
-  </button>
-</div>
+
 
 <!-- /////////////////////// Forma para radio /////////////////////// -->
 <ng-container *ngIf="control.type === 'radio' || control.type === 'checkbox'">
@@ -47,38 +37,7 @@
         formControlName="link"
       >
     </mat-form-field>
-    <div
-      formArrayName="opciones"
-      *ngFor="let item of selectForm.get('opciones').controls; let i = index;"
-    >
-      <div [formGroupName]="i">
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="Nombre de opción"
-            type="text"
-            formControlName="viewValue"
-          >
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="Valor de opción"
-            type="text"
-            formControlName="value"
-          >
-        </mat-form-field>
-      </div>
-    </div>
   </form>
-  <div class="agregaOpcion">
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="agregaOpcion($event)"
-      style="color:white;"
-    >Agrega opción</button>
-  </div>
 </ng-container>
 
 <!-- /////////////////////// Forma para link en a tag /////////////////////// -->

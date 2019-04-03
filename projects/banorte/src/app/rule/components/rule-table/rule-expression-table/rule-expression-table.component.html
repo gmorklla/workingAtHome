@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-sm-8 col-md-9">
+    <label class="font-weight-bold pt-3"> Lista de expresiones </label>
+  </div>
+  <div class="col-sm-4 col-md-3">
+    <mat-form-field class="d-block">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" autocomplete="off" [formControl]="search">
+      <button mat-button *ngIf="search.value" matSuffix mat-icon-button aria-label="Clear" (click)="fn_resetFilter();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="fn_applySort($event)" class="uf-table">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let row; let i = index;"> {{row.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+        <td mat-cell *matCellDef ="let row">
+          <a class="uf-button font-weight-bold d-block h-color-red" (click)="fn_openDialogForEdit(row);">
+            <span matTooltip="Editar" [matTooltipPosition]="'above'">
+              {{row.name}}
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleExpressionDialogService.fn_isNewEntity(row)"> Nuevo </span>
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleExpressionDialogService.fn_isEntityModified(row)"> Modificado </span>
+            </span>
+          </a>
+        </td>
+      </ng-container>
+
+      <!-- Type Column -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+        <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+      </ng-container>
+
+      <!-- Expression Column -->
+      <ng-container matColumnDef="expression">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Expresión </th>
+        <td mat-cell *matCellDef="let row"> {{row.expression}} </td>
+      </ng-container>
+
+      <!-- Natural expression Column -->
+      <ng-container matColumnDef="naturalExpression">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Expresión natural </th>
+        <td mat-cell *matCellDef="let row"> {{row.naturalExpression}} </td>
+      </ng-container>
+
+      <!-- Result variable Column -->
+      <ng-container matColumnDef="resultVariable">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Resultado </th>
+        <td mat-cell *matCellDef="let row"> {{row.resultVariable.variable.name}} </td>
+      </ng-container>
+
+      <!-- Delete Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="width-40"> </th>
+        <td mat-cell *matCellDef="let row" class="p-0">
+          <button mat-icon-button color="primary" aria-label="Delete"
+                  matTooltip="Eliminar" [matTooltipPosition]="'before'"
+                  (click)="fn_openDialogForDelete(row);">
+            <mat-icon>highlight_off</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Results not found column -->
+      <ng-container matColumnDef="notFound">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+          <div class="d-flex align-items-center color-red p-3 m-0" *ngIf="dataSource && dataSource.filteredData.length === 0">
+            <i class="material-icons">error_outline</i> <span class="ml-2"> No se encontró ningún resultado </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-simple-row"></tr>
+      <tr mat-footer-row *matFooterRowDef="['notFound']" class="h-auto"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="100" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  </div>
+</div>

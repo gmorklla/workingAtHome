@@ -1,68 +1,104 @@
 <ng-container *ngIf="ctrlSelected; else sinItem">
   <h3>{{ctrlSelected.type}} - {{ctrlSelected.id}}</h3>
-</ng-container>
-<ng-template #sinItem>
-  <p style="font-size: smaller; color: gray;">Selecciona un item para modificarlo</p>
-</ng-template>
-<mat-accordion>
-  <mat-expansion-panel [disabled]="!ctrlSelected">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Estilos
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <!-- ///////////////////// CONTROL FORM ///////////////////// -->
-    <ng-container *ngIf="ctrlSelected">
+  <mat-accordion>
+
+      
+    <!-- /////////////////////// DELETE /////////////////////// -->
+    <app-button-delete
+          [control]="ctrlSelected"
+    ></app-button-delete>
+   
+      <!-- /////////////////////// Placeholder /////////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type !== 'range'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Placeholder
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <app-container-styles
+        *ngIf="ctrlSelected"
         [ctrlSelected]="ctrlSelected"
         (emitChangeFromForm)="propChangeEmit($event)"
       ></app-container-styles>
-      <!-- /////////////////////// General /////////////////////// -->
-      <ng-container *ngIf="ctrlSelected.type !== 'image'">
-        <h3>General</h3>
-        <app-general [ctrlSelected]="ctrlSelected"></app-general>
-      </ng-container>
-      <!-- /////////////////////// Range /////////////////////// -->
-      <ng-container *ngIf="ctrlSelected.type === 'range'">
-        <h3>Rango</h3>
-        <lib-form-range [ctrl]="ctrlSelected"></lib-form-range>
-      </ng-container>
-      <!-- /////////////////////// Texto /////////////////////// -->
-      <ng-container *ngIf="ctrlSelected.type !== 'image' && ctrlSelected.type !== 'range'">
-        <h3>Texto</h3>
-        <app-texto [ctrlSelected]="ctrlSelected"></app-texto>
-      </ng-container>
-      <!-- /////////////////////// Fondo /////////////////////// -->
-      <h3>Fondo</h3>
+    </mat-expansion-panel>
+    <!-- /////////////////////// Only Range /////////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type === 'range'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Rango
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <lib-form-range [ctrl]="ctrlSelected"></lib-form-range>
+    </mat-expansion-panel>
+    <!-- /////////////////////// General /////////////////////// -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Posición/dimensión
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-general [ctrlSelected]="ctrlSelected"></app-general>
+    </mat-expansion-panel>
+    <!-- /////////////////////// Texto /////////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type !== 'image' && ctrlSelected.type !== 'range' && ctrlSelected.type !== 'radio' &&
+      ctrlSelected.type !== 'checkbox'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Texto
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-texto [ctrlSelected]="ctrlSelected"></app-texto>
+    </mat-expansion-panel>
+    <!-- /////////////////////// Fondo /////////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type !== 'image' && ctrlSelected.type !== 'radio' && ctrlSelected.type !== 'checkbox' &&
+      ctrlSelected.type !== 'range'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Fondo
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <app-fondo [ctrlSelected]="ctrlSelected"></app-fondo>
-      <!-- /////////////////////// Borde /////////////////////// -->
-      <h3>Borde</h3>
+    </mat-expansion-panel>
+    <!-- /////////////////////// Borde /////////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type !== 'range'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borde
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <app-borde [ctrlSelected]="ctrlSelected"></app-borde>
-    </ng-container>
-  </mat-expansion-panel>
-  <!-- ///////////////////// EVENTOS ///////////////////// -->
-  <!--[expanded]="ctrlSelected && (ctrlSelected.type === 'button' || ctrlSelected.type === 'a')" -->
-  <mat-expansion-panel [disabled]="!ctrlSelected || (ctrlSelected.type !== 'button' && ctrlSelected.type !== 'a')">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Eventos
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <app-eventos
-      *ngIf="ctrlSelected"
-      [ctrl]="ctrlSelected"
-    ></app-eventos>
-  </mat-expansion-panel>
-  <!-- ///////////////////// CATALOGO IMAGENES ///////////////////// -->
-  <mat-expansion-panel [disabled]="!ctrlSelected || (ctrlSelected.type !== 'image')">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Catálogo Imagenes
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <lib-image-catalog
-      *ngIf="ctrlSelected !== null && ctrlSelected.type === 'image'"
-      [controlHTML]="ctrlSelected"
-    ></lib-image-catalog>
-  </mat-expansion-panel>
-</mat-accordion>
+    </mat-expansion-panel>
+    <!-- ///////////////////// OPCIONES ///////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected && ctrlSelected.type === 'select'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Opciones
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-options [control]="ctrlSelected">
+      </app-options>
+    </mat-expansion-panel>
+    <!-- ///////////////////// Eventos ///////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type === 'button' || ctrlSelected.type === 'a'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Eventos
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-eventos [ctrl]="ctrlSelected"></app-eventos>
+    </mat-expansion-panel>
+    <!-- ///////////////////// Catalogo de imagenes ///////////////////// -->
+    <mat-expansion-panel *ngIf="ctrlSelected.type === 'image'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Catálogo Imagenes
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <lib-image-catalog [controlHTML]="ctrlSelected"></lib-image-catalog>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-container>
+<ng-template #sinItem>
+  <hr>
+  <p style="font-size: smaller; color: gray;">Selecciona un item para modificarlo</p>
+</ng-template>

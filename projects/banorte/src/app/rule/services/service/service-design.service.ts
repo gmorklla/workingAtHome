@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import {Loadable} from '../../../../../../campaigns/src/lib/components/loader/loadable.interface';
 import {ServiceDesign} from '../../models/service/service-design.model';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Observable} from 'rxjs/Rx';
-import {target} from '../../../shared/data/port';
+import {targetRules} from '../../../shared/data/port';
 import {catchError, finalize} from 'rxjs/internal/operators';
 import {throwError} from 'rxjs/index';
 import {DataSourceService} from './dataSource/data-source.service';
-import {DataSource} from '../../models/service/dataSource/data-source.model';
 import {AlertService} from '../../../../../../campaigns/src/lib/services/alert/alert.service';
-import {Messages} from '../../../shared/messages';
 
 @Injectable()
 export class ServiceDesignService implements Loadable {
@@ -18,30 +16,27 @@ export class ServiceDesignService implements Loadable {
   idLoader = 'loader-01';
 
   private listServiceDesign: ServiceDesign[];
-  private idSeq = 3;
+  private idSeq = 0;
 
   constructor(private dataSourceService: DataSourceService,
-              public http: HttpClient,
+              private http: HttpClient,
               private ngxService: NgxUiLoaderService,
               private alertService: AlertService) {
-    this.listServiceDesign = Array.from({length: this.idSeq}, (_, k) => createNewServiceDesign(k + 1, '800'));
+    this.listServiceDesign = Array.from({length: this.idSeq}, (_, k) => createNewServiceDesign(k + 1, 800));
   }
 
-  fn_getAll(designId: string): Observable<ServiceDesign[]> {
-    /*this.ngxService.startLoader(this.idLoader);
+  fn_getAll(designId: number): Observable<ServiceDesign[]> {
+    this.ngxService.startLoader(this.idLoader);
 
-    const params = new HttpParams()
-      .set('designId', designId);
-
-    const url = `${target}rule/service/serviceDesign`;
-    return this.http.get<ServiceDesign[]>(url, {params}).pipe(
+    const url = `${targetRules}service/design/${designId}`;
+    return this.http.get<ServiceDesign[]>(url).pipe(
       finalize(() => {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    this.listServiceDesign.forEach((_serviceDesign) => {
+    /*this.listServiceDesign.forEach((_serviceDesign) => {
       this.dataSourceService.fn_get(_serviceDesign.dataSourceId).subscribe({
         next: (result: DataSource) => {
           console.log('[RESPONSE]', result);
@@ -49,7 +44,7 @@ export class ServiceDesignService implements Loadable {
         },
         error: (error: any) => {
           console.log(error);
-          this.alertService.fn_error(Messages.MSG_RULE_DATA_SOURCE_GET_ERROR);
+          this.alertService.fn_error(Messages.MSG014_RULE_DATA_SOURCE_GET_ALL_ERROR);
         },
         complete: () => {
           console.log('OK');
@@ -59,25 +54,37 @@ export class ServiceDesignService implements Loadable {
 
     const observable = new Observable<ServiceDesign[]>(observer => {
       setTimeout(() => {
-        observer.next(this.listServiceDesign);
+        observer.next(this.listServiceDesign.slice(0));
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
+  }
+
+  fn_get(idServiceDesign: number): Observable<ServiceDesign> {
+    this.ngxService.startLoader(this.idLoader);
+
+    const url = `${targetRules}service/${idServiceDesign}`;
+    return this.http.get<ServiceDesign>(url).pipe(
+      finalize(() => {
+        this.ngxService.stopLoader(this.idLoader)
+      }),
+      catchError(err => throwError(err))
+    );
   }
 
   fn_save(serviceDesign: ServiceDesign): Observable<ServiceDesign> {
-    /*this.ngxService.startLoader(this.idLoader);
+    this.ngxService.startLoader(this.idLoader);
 
-    const url = `${target}rule/service/serviceDesign`;
+    const url = `${targetRules}service`;
     return this.http.post<ServiceDesign>(url, serviceDesign).pipe(
       finalize(() => {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    this.idSeq = this.idSeq + 1;
+    /*this.idSeq = this.idSeq + 1;
     serviceDesign.id = this.idSeq;
 
     this.listServiceDesign.unshift(serviceDesign);
@@ -88,21 +95,21 @@ export class ServiceDesignService implements Loadable {
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 
   fn_update(serviceDesign: ServiceDesign): Observable<ServiceDesign> {
-    /*this.ngxService.startLoader(this.idLoader);
+    this.ngxService.startLoader(this.idLoader);
 
-    const url = `${target}rule/service/serviceDesign`;
+    const url = `${targetRules}service`;
     return this.http.put<ServiceDesign>(url, serviceDesign).pipe(
       finalize(() => {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    this.listServiceDesign.forEach((_serviceDesign, index) => {
+    /*this.listServiceDesign.forEach((_serviceDesign, index) => {
       if (_serviceDesign.id === serviceDesign.id) {
         this.listServiceDesign[index] = serviceDesign;
 
@@ -116,21 +123,21 @@ export class ServiceDesignService implements Loadable {
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 
   fn_delete(serviceDesign: ServiceDesign): Observable<boolean> {
-    /*this.ngxService.startLoader(this.idLoader);
+    this.ngxService.startLoader(this.idLoader);
 
-    const url = `${target}rule/service/serviceDesign/${serviceDesign.id}`;
-    return this.http.delete<ServiceDesign>(url).pipe(
+    const url = `${targetRules}service/${serviceDesign.id}`;
+    return this.http.delete<boolean>(url).pipe(
       finalize(() => {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    let _delete = false;
+    /*let _delete = false;
     this.listServiceDesign.forEach((_serviceDesign, index) => {
       if (_serviceDesign.id === serviceDesign.id) {
         this.listServiceDesign.splice(index, 1);
@@ -146,14 +153,14 @@ export class ServiceDesignService implements Loadable {
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 }
 
-function createNewServiceDesign(i: number, designId: string): ServiceDesign {
+function createNewServiceDesign(i: number, designId: number): ServiceDesign {
   const serviceDesign = new ServiceDesign();
   serviceDesign.id = i;
-  serviceDesign.designId = Number(designId);
+  serviceDesign.designId = designId;
   serviceDesign.dataSourceId = 179;
   serviceDesign.description = 'Description ' + i;
   serviceDesign.fields = [];

@@ -1,3 +1,4 @@
-export const port = '8090';
+export const target = 'http://lnxsapl1d.dev.unix.banorte.com:9080/wconfig-services/';
+
 export const ip = 'localhost';
-export const target = 'http://localhost:8090/wconfig-services/';
+export const port = '8080';

@@ -65,7 +65,8 @@ export class TextoComponent implements OnInit, OnChanges {
       textAlign: ['', Validators.required],
       fontFamily: ['', Validators.required],
       fontStyle: ['', [Validators.required]],
-      lineHeight: ['', [Validators.required]]
+      lineHeight: ['', [Validators.required]],
+      fontWeight: ['']
     });
   }
 
@@ -89,7 +90,8 @@ export class TextoComponent implements OnInit, OnChanges {
       textAlign = null,
       fontFamily = null,
       fontStyle = null,
-      lineHeight = null
+      lineHeight = null,
+      fontWeight = null
     } = val;
     const style = {
       color: color ? color : null,
@@ -97,7 +99,8 @@ export class TextoComponent implements OnInit, OnChanges {
       'text-align': textAlign,
       'font-family': fontFamily,
       'font-style': fontStyle,
-      'line-height': lineHeight ? lineHeight + 'px' : null
+      'line-height': lineHeight ? lineHeight + 'px' : null,
+      'font-weight': fontWeight
     };
     return style;
   }
@@ -114,7 +117,8 @@ export class TextoComponent implements OnInit, OnChanges {
       color = 'rgba(0,0,0,1)',
       'text-align': textAlign = 'left',
       'font-family': fontFamily = 'Arial, Helvetica, sans-serif',
-      'font-style': fontStyle = 'normal'
+      'font-style': fontStyle = 'normal',
+      'font-weight': fontWeight = 'normal'
     } = this.styleObj;
     fontSize = this.getNumValueNoPX(fontSize);
     lineHeight = this.getNumValueNoPX(lineHeight);
@@ -125,7 +129,8 @@ export class TextoComponent implements OnInit, OnChanges {
         textAlign: textAlign,
         fontFamily: fontFamily,
         fontStyle: fontStyle,
-        lineHeight: lineHeight
+        lineHeight: lineHeight,
+        fontWeight: fontWeight
       },
       { emitEvent: false }
     );

@@ -1,0 +1,59 @@
+<mat-divider></mat-divider>
+<form
+  [formGroup]="selectForm"
+  novalidate
+>
+  <div
+    formArrayName="opciones"
+    *ngFor="let item of selectForm.get('opciones')['controls']; let i = index;"
+  >
+    <div [formGroupName]="i">
+      <h5>Opción {{i + 1}}</h5>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Nombre de opción"
+          type="text"
+          formControlName="viewValue"
+        >
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Valor de opción"
+          type="text"
+          formControlName="value"
+        >
+
+      </mat-form-field>
+
+      <div class="deleteBtn">
+        <button
+          mat-raised-button
+          color="warn"
+          matTooltip="Borrar opción"
+          [matTooltipPosition]="'right'"
+          [disabled]="selectForm.get('opciones')['controls'].length === 1"
+          (click)="deleteInvoiceParticulars(i)"
+        >
+          <mat-icon aria-label="Borrar item">delete</mat-icon>
+        </button>
+      </div>
+
+    </div>
+    <mat-divider></mat-divider>
+  </div>
+</form>
+
+<div class="agregaOpcion">
+  <button
+    mat-raised-button
+    class="agregar-opcion-child"
+    color="accent"
+    (click)="agregaOpcion($event)"
+    style="color:white;"
+    [disabled]="selectForm.invalid"
+  >
+    Agrega opción
+  </button>
+</div>

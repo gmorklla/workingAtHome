@@ -11,9 +11,11 @@ export class FormatStylesService {
       .split(';')
       .filter(val => val !== '')
       .map(val => {
-        const arr = val.split(':');
+        const idx = val.search(':');
+        const prop = val.slice(0, idx);
+        const value = val.slice(idx + 1);
         const obj = {};
-        obj[arr[0]] = arr[1];
+        obj[prop] = value;
         return obj;
       })
       .reduce((prev, curr) => {

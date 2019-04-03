@@ -36,7 +36,7 @@ export class RenderRadioService {
     return Number(value.replace('px', ''));
   }
 
-  styleReOrder(stylesObj: any): StyleModel {
+  styleReOrder(stylesObj: any, href: string): StyleModel {
 
     const resultado: StyleModel = {
       '-webkit-appearance': 'none',
@@ -47,7 +47,7 @@ export class RenderRadioService {
       'width': stylesObj['width'],
       'position': stylesObj['position'],
       'height': stylesObj['height'],
-      'background-image': stylesObj['background-image'],
+      'background-image': `url(${href})`,
       'background-repeat': 'no-repeat',
       'background-size': stylesObj['background-size'],
       'background-position-x': 'right',

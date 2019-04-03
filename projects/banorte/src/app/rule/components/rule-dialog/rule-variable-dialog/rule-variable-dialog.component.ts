@@ -5,7 +5,6 @@ import {VariableDesign} from '../../../models/variable/variable-design.model';
 import {DataType} from '../../../models/variable/data-type.model';
 import {Variable} from '../../../models/variable/variable.model';
 import {Status} from '../../../../models/status.enum';
-import {VariableSource} from '../../../models/variable/variable-source.enum';
 
 export interface RuleVariableDialogData {
   variableDesign: VariableDesign;
@@ -36,30 +35,32 @@ export class RuleVariableDialogComponent implements OnInit {
   }
 
   private createMainForm() {
-    const variableDesign = this.data.variableDesign;
+    const variableDesign = JSON.parse(JSON.stringify(this.data.variableDesign));
+    console.log(variableDesign);
 
-    let variableName = null;
-    let variableDescription = null;
-    let variableDataType = null;
-    let variableValue = null;
+    let variable = null;
+    let description = null;
+    let dataType = null;
+    let value = null;
+
     if (variableDesign) {
       if (variableDesign.variable) {
-        variableName = variableDesign.variable.name;
-        variableDescription = variableDesign.variable.description;
-        variableDataType = variableDesign.variable.dataType;
+        variable = variableDesign.variable;
+        description = variableDesign.variable.description;
+        dataType = variableDesign.variable.dataType;
       }
-      variableValue = variableDesign.value;
+      value = variableDesign.value;
     }
 
     this.mainForm = this.formBuilder.group({
-      'variableName': new FormControl(variableName, [
+      'variable': new FormControl(variable, [
         Validators.required
       ]),
-      'value': new FormControl(variableValue),
-      'variableDataType': new FormControl(variableDataType, [
+      'value': new FormControl(value),
+      'dataType': new FormControl(dataType, [
         Validators.required
       ]),
-      'variableDescription': new FormControl(variableDescription, [
+      'description': new FormControl(description, [
         Validators.required
       ])
     });
@@ -73,8 +74,15 @@ export class RuleVariableDialogComponent implements OnInit {
     return this.mainForm.get('value');
   }
 
-  get variableDescription() {
-    return this.mainForm.get('variableDescription');
+  get description() {
+    return this.mainForm.get('description');
+  }
+
+  fn_updateVariable(variable: Variable): void {
+    this.mainForm.patchValue({
+      'dataType': variable.dataType,
+      'description': variable.description
+    });
   }
 
   fn_onClose(): void {
@@ -88,16 +96,22 @@ export class RuleVariableDialogComponent implements OnInit {
     variableDesign.windowId = this.data.variableDesign.windowId;
     variableDesign.htmlControlId = this.data.variableDesign.htmlControlId;
 
-    const variable = new Variable();
-    variable.name = this.mainForm.value.variableName;
-    variable.description = this.mainForm.value.variableDescription;
-    variable.dataType = this.mainForm.value.variableDataType;
-    variable.statusId = Status.ACTIVE;
-    variable.source = this.data.source;
+    let variable = this.mainForm.value.variable;
+    if (variable) {
+      if (!variable.name) {
+        // TODO: YDM - Consultar por nombre
+
+        variable = new Variable();
+        variable.name = this.mainForm.value.variable;
+        variable.source = this.data.source;
+      }
+      variable.statusId = Status.ACTIVE;
+      variable.dataType = this.mainForm.value.dataType;
+      variable.description = this.mainForm.value.description;
+    }
+
     variableDesign.variable = variable;
-
     variableDesign.value = this.mainForm.value.value;
-
     variableDesign.type = this.data.type;
     variableDesign.scope = this.data.scope;
     return variableDesign;

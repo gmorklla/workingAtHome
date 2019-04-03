@@ -1,0 +1,22 @@
+<form novalidate
+      autocomplete="off"
+      [formGroup]="parentForm">
+  <mat-form-field class="form-field-one-buttom">
+    <input matInput placeholder="{{placeholder}}" aria-label="VariableDesign" [matAutocomplete]="auto" formControlName="variableDesign">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="fn_display" (optionSelected)="fn_optionSelected($event);">
+      <mat-option *ngFor="let vd of filteredVariableDesign | async" [value]="vd" class="uf-autocomplete">
+        <span class="d-block color-red">{{vd.variable.name}}</span>
+        <small>{{vd.variable.description}}</small>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="variableDesign.hasError('required')">
+      * Campo <strong>requerido</strong>
+    </mat-error>
+    <mat-error *ngIf="variableDesign.hasError('notSelected')">
+      * Campo <strong>inválido</strong>
+    </mat-error>
+  </mat-form-field>
+  <button mat-icon-button matTooltip="Agregar" [matTooltipPosition]="'above'" (click)="fn_openDialogForNew();">
+    <mat-icon aria-label="Add">add</mat-icon>
+  </button>
+</form>

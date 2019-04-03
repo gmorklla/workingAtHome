@@ -11,4 +11,8 @@ export class VariableDesign {
   scope: string;
 
   variableId: number;
+
+  constructor(id?: number) {
+    this.id = id;
+  }
 }

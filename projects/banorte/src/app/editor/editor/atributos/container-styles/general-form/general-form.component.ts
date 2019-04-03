@@ -154,6 +154,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   }
 
   // iframe (video)
+
   setIframeForm(): void {
     const opts = {
       src: ['', [Validators.required]]
@@ -228,19 +229,14 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   // select
 
   public setSelectForm(): void {
-    const { options } = this.control;
-    const opciones = options ? options : opcionesDefault;
     const opts = {
-      link: ['', [Validators.required]],
-      opciones: this.fb.array([])
+      link: ['', [Validators.required]]
     };
     this.selectForm = this.fb.group(opts);
-    opciones.forEach(op => this.agregaOpcion(op));
     const src = this.control.attributes['src'];
     const srcF = src ? src : '';
     this.selectForm.setValue({
-      link: srcF,
-      opciones: opciones
+      link: srcF
     });
     this.selectForm.valueChanges
       .pipe(
@@ -265,23 +261,6 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         })
       )
       .subscribe(_ => {});
-  }
-
-  creaOpcion(option: OpcionI = null): FormGroup {
-    return option
-      ? this.fb.group({
-          value: [option.value, [Validators.required]],
-          viewValue: [option.viewValue, [Validators.required]]
-        })
-      : this.fb.group({
-          value: ['', [Validators.required]],
-          viewValue: ['', [Validators.required]]
-        });
-  }
-
-  agregaOpcion(option: OpcionI = null): void {
-    this.opciones = this.selectForm.get('opciones') as FormArray;
-    this.opciones.push(this.creaOpcion(option));
   }
 
   public selectWithImgInArrow(generalFormValues: any, src: any): EModel {
@@ -324,6 +303,30 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         })
       )
       .subscribe(_ => {});
+  }
+
+  // otros
+
+  colorSelected(e, inputName) {
+    let obj;
+    switch (inputName) {
+      case 'color':
+        obj = { color: e };
+        break;
+      case 'fondo':
+        obj = { fondo: e };
+        break;
+      case 'boderColor':
+        obj = {
+          border: {
+            borderColor: e
+          }
+        };
+        break;
+      default:
+        break;
+    }
+    this.generalForm.patchValue(obj);
   }
 
   getNumValueNoPX(value): number {

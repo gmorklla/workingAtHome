@@ -73,7 +73,9 @@ export class DynamicCompDirective implements OnInit {
     );
     // drag end event
     this.componentRef.instance['dragEndE'].subscribe((transform: string) =>
-      this.emitterS.dispatchStyle({ transform: transform })
+      this.emitterS.dispatchStyle({
+        transform: transform
+      })
     );
   }
 }

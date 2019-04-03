@@ -17,6 +17,11 @@ import {DialogModule} from '../../../../campaigns/src/lib/components/dialog/dial
 import { RuleServiceComponent } from './views/rule-service/rule-service.component';
 import {ServiceDesignService} from './services/service/service-design.service';
 import {DataSourceService} from './services/service/dataSource/data-source.service';
+import {RuleVariableDialogService} from './components/rule-dialog/rule-variable-dialog/rule-variable-dialog.service';
+import {RuleServiceDialogService} from './components/rule-dialog/rule-service-dialog/rule-service-dialog.service';
+import { RuleExpressionComponent } from './views/rule-expression/rule-expression.component';
+import {ExpressionService} from './services/expression/expression.service';
+import {RuleExpressionDialogService} from './components/rule-dialog/rule-expression-dialog/rule-expression-dialog.service';
 
 @NgModule({
   imports: [
@@ -35,15 +40,20 @@ import {DataSourceService} from './services/service/dataSource/data-source.servi
     RuleComponent,
     RuleConfigurationComponent,
     RuleVariableComponent,
-    RuleServiceComponent
+    RuleServiceComponent,
+    RuleExpressionComponent
   ],
   providers: [
     UtilsService,
     AlertService,
+    RuleVariableDialogService,
     VariableDesignService,
     DataTypeService,
+    RuleServiceDialogService,
     ServiceDesignService,
-    DataSourceService
+    DataSourceService,
+    RuleExpressionDialogService,
+    ExpressionService
   ]
 })
 export class RuleModule { }

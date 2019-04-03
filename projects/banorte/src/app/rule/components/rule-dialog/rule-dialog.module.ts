@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule} from '@angular/material';
 import {RuleControlModule} from '../rule-control/rule-control.module';
 import { RuleServiceDialogComponent } from './rule-service-dialog/rule-service-dialog.component';
+import { RuleExpressionDialogComponent } from './rule-expression-dialog/rule-expression-dialog.component';
 
 @NgModule({
   imports: [
@@ -20,11 +21,13 @@ import { RuleServiceDialogComponent } from './rule-service-dialog/rule-service-d
   ],
   declarations: [
     RuleVariableDialogComponent,
-    RuleServiceDialogComponent
+    RuleServiceDialogComponent,
+    RuleExpressionDialogComponent
   ],
   entryComponents: [
     RuleVariableDialogComponent,
-    RuleServiceDialogComponent
+    RuleServiceDialogComponent,
+    RuleExpressionDialogComponent
   ]
 })
 export class RuleDialogModule { }

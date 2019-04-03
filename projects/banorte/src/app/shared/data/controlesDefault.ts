@@ -3,14 +3,14 @@ const styleGeneral =
   'position:absolute;transform:translate3d(0,0,0);width:150px;height:35px;font-size:12px;text-align:center;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;color:rgb(0,0,0);background:rgb(255,255,255,0);border-width:1px;border-style:solid;border-color:rgb(173,173,173);';
 
 const styleRange =
-  'position:absolute;transform:translate3d(0,0,0);width:160px;height:50px';
+  'position:absolute;transform:translate3d(0,0,0);width:160px;height:50px;background:rgb(255,255,255,0);';
 
 const styleVideo =
-  'position:absolute;transform:translate3d(0,0,0);width:360px;height:220px';
+  'position:absolute;transform:translate3d(0,0,0);width:360px;height:220px;background:rgb(255,255,255,0);';
 
 const styleLink =
   // tslint:disable-next-line:max-line-length
-  'position:absolute;transform:translate3d(0,0,0);width:160px;height:70px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;';
+  'position:absolute;transform:translate3d(0,0,0);background:rgb(255,255,255,0);width:160px;height:70px;font-size:12px;text-align:left;font-family:Arial,Helvetica,sans-serif;font-style:normal;line-height:12px;';
 
 const styleImage =
   'position:absolute;transform:translate3d(0,0,0);width:100px;height:100px';

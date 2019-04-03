@@ -8,6 +8,10 @@ import {ServiceDesignService} from '../../../services/service/service-design.ser
 import {Messages} from '../../../../shared/messages';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ConfirmationDialogComponent} from '../../../../../../../campaigns/src/lib/components/dialog/confirmation-dialog/confirmation-dialog.component';
+import {RuleServiceDialogService} from '../../rule-dialog/rule-service-dialog/rule-service-dialog.service';
+import {RuleVariableComponent} from '../../../views/rule-variable/rule-variable.component';
+import {DataSourceService} from '../../../services/service/dataSource/data-source.service';
+import {DataSource} from '../../../models/service/dataSource/data-source.model';
 
 @Component({
   selector: 'app-rule-service-table',
@@ -23,8 +27,9 @@ import {ConfirmationDialogComponent} from '../../../../../../../campaigns/src/li
 })
 export class RuleServiceTableComponent implements OnInit {
 
-  @Input() private designId: string;
-  @Input() private windowId: string;
+  @Input() private designId: number;
+  @Input() private windowId: number;
+  @Input() private ruleVariableComponent: RuleVariableComponent;
 
   search = new FormControl('');
 
@@ -35,7 +40,9 @@ export class RuleServiceTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private serviceDesignService: ServiceDesignService,
+  constructor(private ruleServiceDialogService: RuleServiceDialogService,
+              private serviceDesignService: ServiceDesignService,
+              private dataSourceService: DataSourceService,
               private alertService: AlertService,
               private utilsService: UtilsService,
               private dialog: MatDialog) { }
@@ -49,7 +56,30 @@ export class RuleServiceTableComponent implements OnInit {
       next: (result: ServiceDesign[]) => {
         console.log('[RESPONSE]', result);
 
-        this.dataSource = new MatTableDataSource<ServiceDesign>(result);
+        result.forEach((_serviceDesign) => {
+          this.dataSourceService.fn_get(_serviceDesign.dataSourceId).subscribe({
+            next: (result: DataSource) => {
+              console.log('[RESPONSE]', result);
+              _serviceDesign.dataSource = result;
+            },
+            error: (error: any) => {
+              console.log(error);
+              this.alertService.fn_error(Messages.MSG014_RULE_DATA_SOURCE_GET_ALL_ERROR);
+            },
+            complete: () => {
+              console.log('OK');
+            }
+          });
+        });
+
+        if (!this.dataSource) {
+          this.dataSource = new MatTableDataSource<ServiceDesign>(result);
+        } else {
+          this.dataSource.data.length = 0;
+          result.forEach((_service) => {
+            this.dataSource.data.push(_service);
+          });
+        }
         this.dataSource.filterPredicate = (serviceDesign: ServiceDesign, filterValue: string) => {
           const _filterValue = this.utilsService.fn_normalize(filterValue.trim());
           const _serviceDescription = this.utilsService.fn_normalize(serviceDesign.description.trim());
@@ -61,7 +91,7 @@ export class RuleServiceTableComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(error);
-        this.alertService.fn_error(Messages.MSG_RULE_SERVICE_GET_ALL_ERROR);
+        this.alertService.fn_error(Messages.MSG009_RULE_SERVICE_GET_ALL_ERROR);
       },
       complete: () => {
         console.log('OK');
@@ -108,6 +138,33 @@ export class RuleServiceTableComponent implements OnInit {
   }
 
   /**
+   * Edit service
+   */
+  fn_openDialogForEdit(serviceDesign: ServiceDesign): void {
+    console.log('serviceDesign: ', serviceDesign);
+
+    this.serviceDesignService.fn_get(serviceDesign.id).subscribe({
+      next: (result: ServiceDesign) => {
+        result.dataSource = serviceDesign.dataSource;
+
+        this.ruleServiceDialogService.open(result,
+          {
+            designId: this.designId,
+            windowId: this.windowId,
+            listVariableDesign: this.ruleVariableComponent.table.dataSource ? this.ruleVariableComponent.table.dataSource.data: []
+          });
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.alertService.fn_error(Messages.MSG027_RULE_SERVICE_GET_ERROR);
+      },
+      complete: () => {
+        console.log('OK');
+      }
+    });
+  }
+
+  /**
    * Delete service
    */
   fn_openDialogForDelete(serviceDesign: ServiceDesign): void {
@@ -127,16 +184,16 @@ export class RuleServiceTableComponent implements OnInit {
           next: (result: boolean) => {
             console.log('[RESPONSE]', result);
             if (result === true) {
-              this.alertService.fn_success(Messages.MSG_RULE_SERVICE_DELETE_SUCCESS);
+              this.alertService.fn_success(Messages.MSG012_RULE_SERVICE_DELETE_SUCCESS);
             } else {
-              this.alertService.fn_error(Messages.MSG_RULE_SERVICE_DELETE_ERROR);
+              this.alertService.fn_error(Messages.MSG013_RULE_SERVICE_DELETE_ERROR);
             }
 
             this.fn_refresh();
           },
           error: (error: any) => {
             console.log(error);
-            this.alertService.fn_error(Messages.MSG_RULE_SERVICE_DELETE_ERROR);
+            this.alertService.fn_error(Messages.MSG013_RULE_SERVICE_DELETE_ERROR);
           },
           complete: () => {
             console.log('OK');

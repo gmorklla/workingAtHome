@@ -9,9 +9,9 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
-import {target, targetModels, targetRules} from './shared/data/port';
+import { target, targetModels, targetRules } from './shared/data/port';
 import { DialogComponent } from './shared/dialog/dialog/dialog.component';
-import {LoaderModule} from '../../../campaigns/src/lib/components/loader/loader.module';
+import { LoaderModule } from '../../../campaigns/src/lib/components/loader/loader.module';
 
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
@@ -29,7 +29,13 @@ export function getBaseUrl() {
     NgxUiLoaderModule,
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true,
-      exclude: [`${target}campaign/`, `${target}flow/`, `${targetRules}`, `${targetModels}`]
+      exclude: [
+        `${target}campaign/`,
+        `${target}flow/`,
+        `${target}control/`,
+        `${targetRules}`,
+        `${targetModels}`
+      ]
     }),
     LoaderModule
   ],

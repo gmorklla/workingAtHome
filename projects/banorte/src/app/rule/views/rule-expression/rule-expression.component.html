@@ -1,0 +1,18 @@
+<div class="container-fluid mt-2">
+  <div class="row">
+    <div class="col-md-12">
+      <app-rule-expression-table
+        [designId]="designId"
+        [windowId]="windowId"
+        [ruleVariableComponent]="ruleVariableComponent"></app-rule-expression-table>
+    </div>
+  </div>
+</div>
+<mat-card class="page-footer py-2 d-flex justify-content-between">
+  <button mat-button color="primary" class="btn-action mr-1"
+          [routerLink]="['/flows']"><i class="material-icons">navigate_before</i> Regresar </button>
+  <div>
+    <button mat-raised-button color="primary" class="btn-action"
+            (click)="fn_openDialogForNew();"><i class="material-icons">add</i> Nuevo </button>
+  </div>
+</mat-card>

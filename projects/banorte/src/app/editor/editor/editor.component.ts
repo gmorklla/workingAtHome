@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import {
   ControlesI,
   ControlI,
@@ -19,15 +19,19 @@ import {
   takeUntil,
   debounceTime
 } from 'rxjs/operators';
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { HttpCallService } from 'projects/http-call/src/public_api';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  NavigationEnd,
+  NavigationStart
+} from '@angular/router';
 import { EventEmitterService } from '../../shared/services/event-emitter.service';
 import { CleanTransformService } from '../../shared/services/clean-transform.service';
-import { SnackBarService } from '../../shared/services/snack-bar.service';
+import { MatSnackBar } from '@angular/material';
 import { target } from '../../shared/data/port';
 import { WindowModel } from '../../models/window/window.model';
-import { Subject, of, iif, Observable, timer } from 'rxjs';
+import { Subject, of, iif, Observable, interval, timer } from 'rxjs';
 import { ShortcutsService } from '../../shared/services/shortcuts.service';
 import { EditorRelatedService } from '../../shared/services/editor-related.service';
 import { InputRangeService } from 'projects/input-range/src/public_api';
@@ -59,6 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public windowId: string;
   public controlesHTML;
   public widgets;
+  public ctrlIdxSelected: number;
   public ctrlSelected: ControlI;
   public windowSelected: WindowI;
   public width: number;
@@ -80,11 +85,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     private router: Router,
     public emitterS: EventEmitterService,
     private cleanTransform: CleanTransformService,
-    private snack: SnackBarService,
     private shortcuts: ShortcutsService,
     private editorRS: EditorRelatedService,
     private rangeS: InputRangeService,
-    public openD: OpenDialogService
+    public openD: OpenDialogService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -111,7 +116,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         val => console.log('saveCtrl$ request //////////// ', val),
-        error => console.log('Error intentando salvar ', this.lastChange, error)
+        error => {
+          this.open('Error intentando salvar', 'Ok', 5000);
+          console.log('Error intentando salvar: ', error);
+        }
       );
     this.emitterS.events
       .pipe(
@@ -174,6 +182,15 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.rangeS.emitChange
       .pipe(takeUntil(this.destroy$))
       .subscribe(change => this.newUpdateStyles({}, change));
+
+    // Opciones para los select
+    /*
+    this.emitterS.options.subscribe(options => this.updateOptionsSelect(options));
+    */
+
+    this.emitterS.options
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(options => this.updateOptionsSelect(options));
   }
 
   ngOnDestroy() {
@@ -199,7 +216,10 @@ export class EditorComponent implements OnInit, OnDestroy {
           ? this.window.controls.push(ctrl)
           : (this.window['controls'] = [ctrl]);
       },
-      err => console.log('Error', err)
+      error => {
+        this.open('Error al intentar insertar control', 'Ok', 5000);
+        console.log('Error intentando insertar control: ', error);
+      }
     );
   }
 
@@ -208,6 +228,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.windowId = this.route.snapshot.paramMap.get('windowId');
     this.getWindow();
     this.ctrlSelected = null;
+    this.ctrlIdxSelected = null;
   }
 
   insertaControl$(e: ControlesI): Observable<any> {
@@ -233,7 +254,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   copiarCtrl() {
     this.copyCmd = this.ctrlSelected.attributes['style'];
-    this.snack.open('Copiado', 'Ok');
+    this.open('Copiado', 'Ok', 5000);
   }
 
   pegarCtrl() {
@@ -256,7 +277,8 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.setStylesOfWindow();
       },
       error => {
-        this.window = sWindow;
+        this.open('Error al intentar obtener window', 'Ok', 5000);
+        console.log('Error intentando obtener window: ', error);
       }
     );
   }
@@ -267,6 +289,12 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.controlesHTML = controles;
       },
       error => {
+        this.open(
+          'Error al intentar obtener lista de controles, se usará default',
+          'Ok',
+          5000
+        );
+        console.log('Error intentando obtener lista de controles: ', error);
         this.controlesHTML = sControles;
       }
     );
@@ -276,7 +304,13 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.editorRS
       .getWidgets()
       .pipe(tap(val => (this.widgets = val)))
-      .subscribe(widget$ => {}, error => console.log('Error en getWidgets'));
+      .subscribe(
+        widget$ => {},
+        error => {
+          this.open('Error al intentar obtener lista de widgets', 'Ok', 5000);
+          console.log('Error intentando obtener widgets: ', error);
+        }
+      );
   }
 
   // Obtiene estilos que deben aplicarse a cada window
@@ -285,6 +319,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.window.attributes && this.window.attributes['style']
         ? this.formatStyles.stringToObj(this.window.attributes['style'])
         : {};
+    console.log('styleObj window', styleObj);
     this.windowStyles = { ...styleObj };
   }
 
@@ -312,6 +347,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.emitterS.control$.next(true);
     }
     const idx = this.window.controls.findIndex(ctrl => ctrl.id === control.id);
+    this.ctrlIdxSelected = idx;
     this.ctrlSelected = this.window.controls[idx];
   }
 
@@ -319,6 +355,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     if (this.ctrlSelected && this.ctrlSelected.id !== control.id) {
       this.emitterS.control$.next(true);
     }
+    this.ctrlIdxSelected = idx;
     this.ctrlSelected = control;
   }
 
@@ -352,7 +389,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       atributos
     );
     this.ctrlSelected = Object.assign({}, clone);
-    console.log('after newUpdate', this.ctrlSelected);
     this.makeUpdateRequest();
   }
 
@@ -376,6 +412,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       tap(val => {
         this.getWindow();
         this.ctrlSelected = null;
+        this.ctrlIdxSelected = null;
       })
     );
     const x$ = of('X');
@@ -387,12 +424,12 @@ export class EditorComponent implements OnInit, OnDestroy {
       .subscribe(
         next => {},
         error => {
-          const clone = [...this.window.controls].filter(
-            ctrl => ctrl.id !== id
+          this.open(
+            `Error al intentar borrar control con id ${id}`,
+            'Ok',
+            5000
           );
-          this.window.controls = [...clone];
-          this.snack.open('Error al intentar borrar el control', 'Ok');
-          console.log('error', error);
+          console.log(`Error al intentar borrar control con id ${id}`, error);
         }
       );
   }
@@ -400,6 +437,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   clickOnWindow(window: WindowI): void {
     this.windowSelected = window; // TODO: A este wiwndow creo que deberíamos quitarle los controles para aligerar el binding.
     this.ctrlSelected = null;
+    this.ctrlIdxSelected = null;
     this.emitterS.control$.next(true);
   }
 
@@ -435,5 +473,33 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.http
       .putRequest(url, this.window, {})
       .subscribe(result => this.getWindow());
+  }
+
+  // [ini] Sección de opciones para los select
+  updateOptionsSelect(val: any): void {
+    const url = `${target}control/options`;
+
+    console.log('Se envian las opciones del select al back: ');
+    console.log(val);
+
+    this.http.putRequest(url, val, {}).subscribe(
+      (control: ControlI) => {
+        this.getWindow();
+      },
+      err => {
+        this.open(`Error al actualizar opciones de select`, 'Ok', 5000);
+        console.log(`Error al actualizar opciones de select`);
+      }
+    );
+  }
+  // Para prevenir que cierren la ventana con un mensaje
+  doBeforeUnload() {
+    return true;
+  }
+  // Muestra mensaje
+  open(message: string, action: string, duration: number = 10000) {
+    this.snackBar.open(message, action, {
+      duration: duration
+    });
   }
 }

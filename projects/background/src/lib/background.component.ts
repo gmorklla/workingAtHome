@@ -73,7 +73,8 @@ export class BackgroundComponent implements OnInit {
   }
 
   setForm(estilos) {
-    const valueToCheck = estilos.background || estilos['background-color'];
+    let valueToCheck = estilos.background || estilos['background-color'];
+    valueToCheck = valueToCheck ? valueToCheck : 'rgba(255,255,255,1)';
     const linear = valueToCheck.includes('linear');
     const radial = valueToCheck.includes('radial');
     const gradient = linear || radial ? true : false;
@@ -85,7 +86,9 @@ export class BackgroundComponent implements OnInit {
     const useImg = valueToCheck.includes('url');
     const regUrl = /(url)\(.+\)/g;
     const image = useImg
-      ? valueToCheck.match(/(?:url)\((.+)\)/)[1].slice(1, -1)
+      ? valueToCheck.match(/(?:url)\((.+)\)/)
+        ? valueToCheck.match(/(?:url)\((.+)\)/)[1].slice(1, -1)
+        : ''
       : '';
     const repeat = valueToCheck.includes(' repeat ');
     const repeatX = valueToCheck.includes('repeat-x');

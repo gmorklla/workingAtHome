@@ -1,6 +1,7 @@
 const PROXY_CONFIG = {
   "**": {
-    "target": 'http://lnxsapl1d.dev.unix.banorte.com:9080/wconfig-services/',
+    //"target": 'http://lnxsapl1d.dev.unix.banorte.com:9080/wconfig-services/',
+    "target": 'localhost:8080/wconfig-services/',
     "secure": false,
     "bypass": function (req) {
       if (req && req.headers && req.headers.accept &&

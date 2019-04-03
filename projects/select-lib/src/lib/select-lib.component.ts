@@ -29,7 +29,7 @@ export class SelectLibComponent implements OnInit {
   ngOnInit() {
     if (this.ctrl) {
       const {
-        attributes: { value, style, placeholder }
+        attributes: { value, style }
       } = this.ctrl;
       this.estilos = style ? this.service.stringToObj(style) : {};
       this.containerStyles = this.setStylesOfContainer();

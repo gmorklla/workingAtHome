@@ -8,6 +8,7 @@ import {
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RuleServiceTableComponent } from './rule-service-table/rule-service-table.component';
+import { RuleExpressionTableComponent } from './rule-expression-table/rule-expression-table.component';
 
 @NgModule({
   imports: [
@@ -25,11 +26,13 @@ import { RuleServiceTableComponent } from './rule-service-table/rule-service-tab
   ],
   declarations: [
     RuleVariableTableComponent,
-    RuleServiceTableComponent
+    RuleServiceTableComponent,
+    RuleExpressionTableComponent
   ],
   exports: [
     RuleVariableTableComponent,
-    RuleServiceTableComponent
+    RuleServiceTableComponent,
+    RuleExpressionTableComponent
   ]
 })
 export class RuleTableModule { }

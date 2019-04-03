@@ -10,7 +10,7 @@
           <app-rule-service
             [designId]="designId"
             [windowId]="windowId"
-            [listDataType]="listDataType">
+            [ruleVariableComponent]="ruleVariableComponent">
           </app-rule-service>
         </mat-tab>
         <mat-tab>
@@ -20,8 +20,7 @@
           </ng-template>
           <app-rule-variable
             [designId]="designId"
-            [windowId]="windowId"
-            [listDataType]="listDataType">
+            [windowId]="windowId">
           </app-rule-variable>
         </mat-tab>
         <mat-tab>
@@ -36,7 +35,11 @@
             <mat-icon class="mr-2">exposure</mat-icon>
             Expresiones
           </ng-template>
-          Content 2
+          <app-rule-expression
+            [designId]="designId"
+            [windowId]="windowId"
+            [ruleVariableComponent]="ruleVariableComponent">
+          </app-rule-expression>
         </mat-tab>
       </mat-tab-group>
     </div>

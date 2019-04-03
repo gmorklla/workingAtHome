@@ -6,5 +6,8 @@ export class ServiceFieldDesign {
   type: string;
   designVariable: VariableDesign;
 
+  modelFieldId: number;
   designVariableId: number;
+
+  _index: number;
 }

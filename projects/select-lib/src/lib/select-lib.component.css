@@ -20,3 +20,10 @@ select {
 select * {
   outline: 0;
 }
+
+.handle {
+  background: rgba(20, 73, 220, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+}

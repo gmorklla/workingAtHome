@@ -6,6 +6,7 @@ const appRoutes: Routes = [
     path: 'render',
     loadChildren: './render/render.module#RenderModule'
   },
+
   {
     path: '',
     redirectTo: '/render',
@@ -14,4 +15,6 @@ const appRoutes: Routes = [
   { path: '**', redirectTo: '/render' }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(appRoutes, {
+  useHash: true
+});

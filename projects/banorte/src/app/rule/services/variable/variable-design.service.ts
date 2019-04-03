@@ -15,16 +15,16 @@ export class VariableDesignService implements Loadable {
 
   idLoader = 'loader-01';
 
-  private listVariableDesign: VariableDesign[];
+  private listVariableDesign: VariableDesign[]; // TODO: YDM - Quitar
   private idSeq = 100;
 
   constructor(public http: HttpClient,
               private ngxService: NgxUiLoaderService) {
-    this.listVariableDesign = Array.from({length: this.idSeq}, (_, k) => createNewVariableDesign(k + 1, '800'));
+    this.listVariableDesign = Array.from({length: this.idSeq}, (_, k) => createNewVariableDesign(k + 1, 800));
   }
 
-  fn_getAll(designId: string): Observable<VariableDesign[]> {
-    /*this.ngxService.startLoader(this.idLoader);
+  fn_getAll(designId: number): Observable<VariableDesign[]> {
+    this.ngxService.startLoader(this.idLoader);
 
     const url = `${targetRules}variable/design/${designId}`;
     return this.http.get<VariableDesign[]>(url).pipe(
@@ -32,19 +32,19 @@ export class VariableDesignService implements Loadable {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    const observable = new Observable<VariableDesign[]>(observer => {
+    /*const observable = new Observable<VariableDesign[]>(observer => {
       setTimeout(() => {
         observer.next(this.listVariableDesign);
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 
   fn_save(variableDesign: VariableDesign): Observable<VariableDesign> {
-    /*this.ngxService.startLoader(this.idLoader);
+    this.ngxService.startLoader(this.idLoader);
 
     const url = `${targetRules}variable`;
     return this.http.post<VariableDesign>(url, variableDesign).pipe(
@@ -52,9 +52,9 @@ export class VariableDesignService implements Loadable {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    this.idSeq = this.idSeq + 1;
+    /*this.idSeq = this.idSeq + 1;
     variableDesign.id = this.idSeq;
 
     this.listVariableDesign.unshift(variableDesign);
@@ -65,9 +65,10 @@ export class VariableDesignService implements Loadable {
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 
+  // @Deprecated
   fn_update(variableDesign: VariableDesign): Observable<VariableDesign> {
     /*this.ngxService.startLoader(this.idLoader);
 
@@ -97,17 +98,17 @@ export class VariableDesignService implements Loadable {
   }
 
   fn_delete(variableDesign: VariableDesign): Observable<boolean> {
-    /*this.ngxService.startLoader(this.idLoader);
+    this.ngxService.startLoader(this.idLoader);
 
-    const url = `${target}rule/variable/variableDesign/${variableDesign.id}`;
-    return this.http.delete<VariableDesign>(url).pipe(
+    const url = `${targetRules}variable/${variableDesign.id}`;
+    return this.http.delete<boolean>(url).pipe(
       finalize(() => {
         this.ngxService.stopLoader(this.idLoader)
       }),
       catchError(err => throwError(err))
-    );*/
+    );
 
-    let _delete = false;
+    /*let _delete = false;
     this.listVariableDesign.forEach((_variableDesign, index) => {
       if (_variableDesign.id === variableDesign.id) {
         this.listVariableDesign.splice(index, 1);
@@ -123,14 +124,14 @@ export class VariableDesignService implements Loadable {
       }, 1000);
     });
 
-    return observable;
+    return observable;*/
   }
 }
 
-function createNewVariableDesign(i: number, designId: string): VariableDesign {
+function createNewVariableDesign(i: number, designId: number): VariableDesign {
   const variableDesign = new VariableDesign();
   variableDesign.id = i;
-  variableDesign.designId = Number(designId);
+  variableDesign.designId = designId;
   variableDesign.windowId = 1000;
   variableDesign.htmlControlId = 2000;
 

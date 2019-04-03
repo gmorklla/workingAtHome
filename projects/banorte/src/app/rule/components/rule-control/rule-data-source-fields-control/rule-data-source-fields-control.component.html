@@ -1,0 +1,58 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">cloud_upload</mat-icon>
+      <span *ngIf="!listFields"> Entrada </span>
+      <span matBadge="{{listServiceFieldDesignIn.length}}" matBadgeOverlap="false" *ngIf="listFields"> Entrada </span>
+    </ng-template>
+    <mat-card class="card-fields">
+      <mat-card-content>
+        <div *ngIf="!listFields"> Por favor, seleccione una <strong>fuente de datos</strong> </div>
+        <div class="row" *ngFor="let field of listServiceFieldDesignIn">
+          <div class="col-12">
+            <app-rule-data-source-field-control
+              [serviceDesign]="serviceDesign"
+              [field]="field"
+              [listFields]="listFieldsIn"
+              [listVariableDesign]="listVariableDesign"
+              (remove)="fn_removeFieldIn($event);">
+            </app-rule-data-source-field-control>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="d-flex justify-content-start">
+        <button mat-button class="btn-action" (click)="fn_addFieldIn();" *ngIf="listFields">
+          <i class="material-icons">add</i> Agregar campo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">cloud_download</mat-icon>
+      <span *ngIf="!listFields"> Salida </span>
+      <span matBadge="{{listServiceFieldDesignOut.length}}" matBadgeOverlap="false" *ngIf="listFields"> Salida </span>
+    </ng-template>
+    <mat-card class="card-fields">
+      <mat-card-content>
+        <div *ngIf="!listFields"> Por favor, seleccione una <strong>fuente de datos</strong> </div>
+        <div class="row" *ngFor="let field of listServiceFieldDesignOut">
+          <div class="col-12">
+            <app-rule-data-source-field-control
+              [serviceDesign]="serviceDesign"
+              [field]="field"
+              [listFields]="listFieldsOut"
+              [listVariableDesign]="listVariableDesign"
+              (remove)="fn_removeFieldOut($event);">
+            </app-rule-data-source-field-control>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="d-flex justify-content-start">
+        <button mat-button class="btn-action" (click)="fn_addFieldOut();" *ngIf="listFields">
+          <i class="material-icons">add</i> Agregar campo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

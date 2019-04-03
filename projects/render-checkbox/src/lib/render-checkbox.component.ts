@@ -29,6 +29,7 @@ export class RenderCheckboxComponent implements OnInit {
 
   public renderCtrl(): void {
     if (this.ctrl) {
+
       const {
         attributes: { value, style }
       } = this.ctrl;
@@ -36,8 +37,7 @@ export class RenderCheckboxComponent implements OnInit {
       // El string debe convertirse a objeto para el [ngStyle]
       const stylesObj: any = style ? this.service.stringToObj(style) : {};
 
-      this.stylesObj = this.service.styleReOrder(stylesObj);
-
+      this.stylesObj = this.service.styleReOrder(stylesObj, this.ctrl.attributes.href);
 
       this.value = value ? value : this.ctrl.type;
     }

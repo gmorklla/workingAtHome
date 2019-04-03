@@ -36,6 +36,10 @@ export class EditorRelatedService {
       obj.attributes['href'] = 'http://lnxsapl1d.dev.unix.banorte.com:9080/uf-ui-managment/assets/images/checkboxx.png';
     }
 
+    if (ctrl.type === 'image') {
+      obj.attributes['src'] = 'http://lnxsapl1d.dev.unix.banorte.com:9080/uf-ui-managment/assets/images/banorteLogo.jpg';
+    }
+
 
     const url = `${target}control/window/${windowId}`;
     return this.http.postRequest(url, obj, {});

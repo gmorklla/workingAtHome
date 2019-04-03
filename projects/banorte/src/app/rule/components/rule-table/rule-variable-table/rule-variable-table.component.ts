@@ -7,8 +7,7 @@ import {FormControl} from '@angular/forms';
 import {ConfirmationDialogComponent} from '../../../../../../../campaigns/src/lib/components/dialog/confirmation-dialog/confirmation-dialog.component';
 import {AlertService} from '../../../../../../../campaigns/src/lib/services/alert/alert.service';
 import {Messages} from '../../../../shared/messages';
-import {RuleVariableDialogComponent} from '../../rule-dialog/rule-variable-dialog/rule-variable-dialog.component';
-import {DataType} from '../../../models/variable/data-type.model';
+import {RuleVariableDialogService} from '../../rule-dialog/rule-variable-dialog/rule-variable-dialog.service';
 
 @Component({
   selector: 'app-rule-variable-table',
@@ -17,9 +16,8 @@ import {DataType} from '../../../models/variable/data-type.model';
 })
 export class RuleVariableTableComponent implements OnInit {
 
-  @Input() private designId: string;
-  @Input() private windowId: string;
-  @Input() private listDataType: DataType[];
+  @Input() private designId: number;
+  @Input() private windowId: number;
 
   search = new FormControl('');
 
@@ -29,7 +27,8 @@ export class RuleVariableTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private variableDesignService: VariableDesignService,
+  constructor(private ruleVariableDialogService: RuleVariableDialogService,
+              private variableDesignService: VariableDesignService,
               private alertService: AlertService,
               private utilsService: UtilsService,
               private dialog: MatDialog) {
@@ -44,7 +43,14 @@ export class RuleVariableTableComponent implements OnInit {
       next: (result: VariableDesign[]) => {
         console.log('[RESPONSE]', result);
 
-        this.dataSource = new MatTableDataSource<VariableDesign>(result);
+        if (!this.dataSource) {
+          this.dataSource = new MatTableDataSource<VariableDesign>(result);
+        } else {
+          this.dataSource.data.length = 0;
+          result.forEach((_variableDesign) => {
+            this.dataSource.data.push(_variableDesign);
+          });
+        }
         this.dataSource.filterPredicate = (variableDesign: VariableDesign, filterValue: string) => {
           const _filterValue = this.utilsService.fn_normalize(filterValue.trim());
           const _variableName = this.utilsService.fn_normalize(variableDesign.variable.name.trim());
@@ -60,7 +66,7 @@ export class RuleVariableTableComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(error);
-        this.alertService.fn_error(Messages.MSG_RULE_VARIABLE_GET_ALL_ERROR);
+        this.alertService.fn_error(Messages.MSG002_RULE_VARIABLE_GET_ALL_ERROR);
       },
       complete: () => {
         console.log('OK');
@@ -112,40 +118,10 @@ export class RuleVariableTableComponent implements OnInit {
   fn_openDialogForEdit(variableDesign: VariableDesign): void {
     console.log('variableDesign: ', variableDesign);
 
-    const dialogRef = this.dialog.open(RuleVariableDialogComponent, {
-      width: '500px',
-      data: {
-        variableDesign: variableDesign,
-        source: variableDesign.variable.source,
-        type: variableDesign.type,
-        scope: variableDesign.scope,
-        listDataType: this.listDataType
-      }
-    });
-
-    dialogRef.afterClosed().subscribe((result: VariableDesign) => {
-      if (result !== undefined) {
-        console.log('Updating...', result);
-        this.variableDesignService.fn_update(result).subscribe({
-          next: (result: VariableDesign) => {
-            console.log('[RESPONSE]', result);
-            if (result.id) {
-              this.alertService.fn_success(Messages.MSG_RULE_VARIABLE_UPDATE_SUCCESS);
-            } else {
-              this.alertService.fn_error(Messages.MSG_RULE_VARIABLE_UPDATE_ERROR);
-            }
-
-            this.fn_refresh();
-          },
-          error: (error: any) => {
-            console.log(error);
-            this.alertService.fn_error(Messages.MSG_RULE_VARIABLE_UPDATE_ERROR);
-          },
-          complete: () => {
-            console.log('OK');
-          }
-        });
-      }
+    this.ruleVariableDialogService.open(variableDesign,
+    {
+      designId: this.designId,
+      windowId: this.windowId
     });
   }
 
@@ -169,16 +145,16 @@ export class RuleVariableTableComponent implements OnInit {
           next: (result: boolean) => {
             console.log('[RESPONSE]', result);
             if (result === true) {
-              this.alertService.fn_success(Messages.MSG_RULE_VARIABLE_DELETE_SUCCESS);
+              this.alertService.fn_success(Messages.MSG005_RULE_VARIABLE_DELETE_SUCCESS);
             } else {
-              this.alertService.fn_error(Messages.MSG_RULE_VARIABLE_DELETE_ERROR);
+              this.alertService.fn_error(Messages.MSG006_RULE_VARIABLE_DELETE_ERROR);
             }
 
             this.fn_refresh();
           },
           error: (error: any) => {
             console.log(error);
-            this.alertService.fn_error(Messages.MSG_RULE_VARIABLE_DELETE_ERROR);
+            this.alertService.fn_error(Messages.MSG006_RULE_VARIABLE_DELETE_ERROR);
           },
           complete: () => {
             console.log('OK');

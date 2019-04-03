@@ -19,6 +19,10 @@ export class UtilsService {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
+  fn_compareObjectsById(object1: any, object2: any): boolean {
+    return object1 && object2 && object1.id === object2.id;
+  }
+
   fn_normalize = (function() {
     var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
       to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",

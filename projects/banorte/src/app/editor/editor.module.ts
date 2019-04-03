@@ -65,7 +65,8 @@ import { BackgroundModule } from 'projects/background/src/public_api';
 import { MatCardModule } from '@angular/material/card';
 import { GeneralComponent } from './editor/atributos/general/general.component';
 import { FondoComponent } from './editor/atributos/fondo/fondo.component';
-
+import { OptionsComponent } from './editor/atributos/options/options.component';
+import { DeleteComponent } from './editor/atributos/delete/input-button-delete.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -133,7 +134,9 @@ import { FondoComponent } from './editor/atributos/fondo/fondo.component';
     BordeComponent,
     FormRangeComponent,
     GeneralComponent,
-    FondoComponent
+    FondoComponent,
+    OptionsComponent,
+    DeleteComponent
   ],
   entryComponents: [
     FormWindowEditComponent,

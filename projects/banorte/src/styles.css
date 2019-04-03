@@ -65,6 +65,11 @@ body {
   font-family: 'Nunito Sans', sans-serif;
 }
 
+/* Quitar de toda la app un contorno azul del navegador chrome que aparece cuando seleccionamos algun button. */
+*:focus {
+  outline: none !important;
+}
+
 /* in-flight clone */
 .gu-mirror {
   position: fixed !important;
@@ -215,10 +220,15 @@ tree-internal ul {
 .uf-button {
   cursor: pointer;
 }
+  .btn-action {
+    min-width: 120px !important;
+    line-height: 30px !important;
+  }
 
-.btn-action {
-  min-width: 120px !important;
-  line-height: 30px !important;
+.uf-autocomplete {
+  min-height: 48px;
+  height: auto !important;
+  line-height: normal !important;
 }
 
 .width-40 {

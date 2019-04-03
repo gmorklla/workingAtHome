@@ -24,7 +24,15 @@
       <!-- Description Column -->
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
-        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        <td mat-cell *matCellDef="let element">
+          <a class="uf-button font-weight-bold d-block h-color-red" (click)="fn_openDialogForEdit(element);">
+            <span matTooltip="Editar" [matTooltipPosition]="'above'">
+              {{element.description}}
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleServiceDialogService.fn_isNewEntity(element)"> Nuevo </span>
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleServiceDialogService.fn_isEntityModified(element)"> Modificado </span>
+            </span>
+          </a>
+        </td>
       </ng-container>
 
       <!-- DataSource Column -->
@@ -94,7 +102,7 @@
                 <div class="col-sm-12 col-md-4">
                   <mat-form-field class="d-block">
                     <input matInput placeholder="Recurso" disabled value="{{element.dataSource.recurso}}">
-                    <mat-icon matSuffix="">https</mat-icon>
+                    <mat-icon matSuffix="">vpn_lock</mat-icon>
                   </mat-form-field>
                 </div>
               </div>

@@ -1,11 +1,17 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { RenderComponent } from './render/render.component';
 
-const routes: Routes = [{ path: '', component: RenderComponent }];
+const routes: Routes = [
+  {
+    path: 'window/:windowId',
+    component: RenderComponent
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RenderRoutingModule {}
+export class RenderRoutingModule {
+}

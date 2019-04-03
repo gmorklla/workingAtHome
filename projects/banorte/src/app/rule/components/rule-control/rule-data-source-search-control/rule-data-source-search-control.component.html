@@ -1,0 +1,18 @@
+<form novalidate
+      autocomplete="off"
+      [formGroup]="parentForm">
+  <mat-form-field class="d-block">
+    <input matInput placeholder="Fuente de datos" aria-label="DataSource" [matAutocomplete]="auto" formControlName="dataSource">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="fn_display" (optionSelected)="fn_optionSelected($event);">
+      <mat-option *ngFor="let ds of filteredDataSource | async" [value]="ds">
+        <span>{{ds.nombre}}</span>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="dataSource.hasError('required')">
+      * Campo <strong>requerido</strong>
+    </mat-error>
+    <mat-error *ngIf="dataSource.hasError('notSelected')">
+      * Campo <strong>inválido</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

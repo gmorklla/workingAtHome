@@ -37,3 +37,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.gradle/*
+/.gradle
+.svn
+.gradle/4.10.2/fileHashes/fileHashes.bin
+.gradle/4.10.2/fileHashes/fileHashes.lock
+

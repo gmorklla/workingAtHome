@@ -13,6 +13,7 @@ import {FilterComponent} from './components/filter/filter.component';
 import {FlowService} from './services/flow.service';
 import {Flow} from './models/flow.model';
 import {UtilsService} from '../../../campaigns/src/lib/services/utils/utils.service';
+import {Messages} from '../../../banorte/src/app/shared/messages';
 
 @Component({
   selector: 'lib-flows',
@@ -115,7 +116,7 @@ export class FlowsComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(error);
-        // this.alertasService.operacionFallida(error.message);
+        this.alertService.fn_error(Messages.MSG016_FLOW_GET_PAGE_ALL_ERROR);
       },
       complete: () => {
         console.log('OK');
@@ -129,7 +130,7 @@ export class FlowsComponent implements OnInit {
       },
       error: (error: any) => {
         console.log(error);
-        // this.alertasService.operacionFallida(error.message);
+        this.alertService.fn_error(Messages.MSG017_FLOW_GET_PAGE_COUNT_ERROR);
       },
       complete: () => {
         console.log('OK');

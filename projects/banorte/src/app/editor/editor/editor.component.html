@@ -1,4 +1,7 @@
-<div class="wrapper">
+<div
+  class="wrapper"
+  (window:beforeunload)="doBeforeUnload()"
+>
   <!---------------------------- Window ---------------------------->
   <article class="main">
     <div class="window">
@@ -100,10 +103,10 @@
   <!---------------------------- Atributos ---------------------------->
   <aside class="aside aside-2">
     <app-window-attributes
+      *ngIf="!ctrlSelected"
       [windowSelected]="window"
       (click)="otherClick()"
     ></app-window-attributes>
-    <hr />
     <app-atributos [ctrlSelected]="ctrlSelected"></app-atributos>
   </aside>
 </div>

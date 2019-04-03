@@ -1,6 +1,7 @@
 import {DataSourceType} from './data-source-type.model';
 import {DataSourceStatus} from './data-source-status.model';
 import {OperationType} from './operation-type.model';
+import {Field} from './field/field.model';
 
 export class DataSource {
   id: number;
@@ -16,7 +17,7 @@ export class DataSource {
   tipoOperacion: OperationType;
   seguridad: any;
   header: any;
-  listaCampos: any;
+  listaCampos: Field[];
   ejecucion: any;
   log: any;
   fechaCreacion: string;

@@ -29,10 +29,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -148,10 +150,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "projects/testW/src/environments/environment.ts",
-                "with": "projects/testW/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "projects/testW/src/environments/environment.ts",
+                  "with": "projects/testW/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -371,10 +375,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "projects/ims/src/environments/environment.ts",
-                "with": "projects/ims/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "projects/ims/src/environments/environment.ts",
+                  "with": "projects/ims/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -804,10 +810,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "projects/practice/src/environments/environment.ts",
-                "with": "projects/practice/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "projects/practice/src/environments/environment.ts",
+                  "with": "projects/practice/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -924,10 +932,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "projects/banorte/src/environments/environment.ts",
-                "with": "projects/banorte/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "projects/banorte/src/environments/environment.ts",
+                  "with": "projects/banorte/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -1672,10 +1682,12 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [{
-                "replace": "projects/banorteRender/src/environments/environment.ts",
-                "with": "projects/banorteRender/src/environments/environment.prod.ts"
-              }],
+              "fileReplacements": [
+                {
+                  "replace": "projects/banorteRender/src/environments/environment.ts",
+                  "with": "projects/banorteRender/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -2316,6 +2328,125 @@
               "projects/background/tsconfig.lib.json",
               "projects/background/tsconfig.spec.json"
             ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "gridsterTest": {
+      "root": "projects/gridsterTest/",
+      "sourceRoot": "projects/gridsterTest/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/gridsterTest",
+            "index": "projects/gridsterTest/src/index.html",
+            "main": "projects/gridsterTest/src/main.ts",
+            "polyfills": "projects/gridsterTest/src/polyfills.ts",
+            "tsConfig": "projects/gridsterTest/tsconfig.app.json",
+            "assets": [
+              "projects/gridsterTest/src/favicon.ico",
+              "projects/gridsterTest/src/assets"
+            ],
+            "styles": [
+              "projects/gridsterTest/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/gridsterTest/src/environments/environment.ts",
+                  "with": "projects/gridsterTest/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "gridsterTest:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "gridsterTest:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "gridsterTest:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/gridsterTest/src/test.ts",
+            "polyfills": "projects/gridsterTest/src/polyfills.ts",
+            "tsConfig": "projects/gridsterTest/tsconfig.spec.json",
+            "karmaConfig": "projects/gridsterTest/karma.conf.js",
+            "styles": [
+              "projects/gridsterTest/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/gridsterTest/src/favicon.ico",
+              "projects/gridsterTest/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/gridsterTest/tsconfig.app.json",
+              "projects/gridsterTest/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "gridsterTest-e2e": {
+      "root": "projects/gridsterTest-e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/gridsterTest-e2e/protractor.conf.js",
+            "devServerTarget": "gridsterTest:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gridsterTest:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/gridsterTest-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

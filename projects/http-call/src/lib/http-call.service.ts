@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, Headers } from '@angular/http';
+// import { Response, URLSearchParams, Headers } from '@angular/http';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { catchError, map, retryWhen } from 'rxjs/operators';
-import { Observable, throwError, of } from 'rxjs';
-import { MatSnackBar } from '@angular/material';
-import { genStrategy } from './genStrategic';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpCallService {
-  constructor(private client: HttpClient, private snackBar: MatSnackBar) {}
+  constructor(private client: HttpClient) {}
 
   deleteRequest(url: string, headersData: {}) {
     const headers = new HttpHeaders();
@@ -24,13 +22,10 @@ export class HttpCallService {
       headers: headers
     };
     return this.client.delete(url, options).pipe(
-      // retryWhen(
-      //   genStrategy({
-      //     scalingDuration: 2000,
-      //     excludedStatusCodes: [500]
-      //   })
-      // ),
-      catchError(error => throwError(error))
+      catchError(err => {
+        console.log('Error DELETE request', err);
+        return throwError(err);
+      })
     );
   }
 
@@ -47,8 +42,8 @@ export class HttpCallService {
     };
     return this.client.put(url, data, options).pipe(
       catchError(err => {
-        // this.open(`${err.message}`, 'Ok');
-        return of(null);
+        console.log('Error PUT request', err);
+        return throwError(err);
       })
     );
   }
@@ -66,7 +61,7 @@ export class HttpCallService {
     };
     return this.client.post(url, data, options).pipe(
       catchError(err => {
-        // this.open(`${err.message}`, 'Ok');
+        console.log('Error POST request', err);
         return throwError(err);
       })
     );
@@ -83,15 +78,9 @@ export class HttpCallService {
     }
     return this.client.get(url, { params }).pipe(
       catchError(err => {
-        // this.open(`${err.message}`, 'Ok');
+        console.log('Error GET request', err);
         return throwError(err);
       })
     );
-  }
-
-  open(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 20000
-    });
   }
 }

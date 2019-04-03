@@ -16,10 +16,19 @@
   [matTooltipPosition]="'above'"
   (click)="clickOnCtrl($event); $event.stopPropagation()"
 >
-  <select [ngStyle]="estilos">
+  <select
+    [ngStyle]="estilos"
+    disabled
+  >
     <option
       value=""
       hidden
     >{{valor}}</option>
   </select>
+  <div
+    class="handle"
+    cdkDragHandle
+    [style.width.px]="width"
+    [style.height.px]="height"
+  ></div>
 </span>

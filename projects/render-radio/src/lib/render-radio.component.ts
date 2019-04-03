@@ -36,8 +36,7 @@ export class RenderRadioComponent implements OnInit {
       // El string debe convertirse a objeto para el [ngStyle]
       const stylesObj: any = style ? this.service.stringToObj(style) : {};
 
-      this.stylesObj = this.service.styleReOrder(stylesObj);
-
+      this.stylesObj = this.service.styleReOrder(stylesObj, this.ctrl.attributes.href);
 
       this.value = value ? value : this.ctrl.type;
     }

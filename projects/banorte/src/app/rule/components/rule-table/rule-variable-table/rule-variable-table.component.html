@@ -18,7 +18,7 @@
       <!-- ID Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        <td mat-cell *matCellDef="let row; let i = index;"> {{row.id}} </td>
       </ng-container>
 
       <!-- Name Column -->
@@ -26,7 +26,11 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
         <td mat-cell *matCellDef ="let row">
           <a class="uf-button font-weight-bold d-block h-color-red" (click)="fn_openDialogForEdit(row);">
-            <span matTooltip="Editar" [matTooltipPosition]="'above'">{{row.variable.name}}</span>
+            <span matTooltip="Editar" [matTooltipPosition]="'above'">
+              {{row.variable.name}}
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleVariableDialogService.fn_isNewEntity(row)"> Nuevo </span>
+              <span class="badge badge-danger ml-1 py-1 px-2" *ngIf="ruleVariableDialogService.fn_isEntityModified(row)"> Modificado </span>
+            </span>
           </a>
         </td>
       </ng-container>
@@ -81,6 +85,6 @@
       <tr mat-footer-row *matFooterRowDef="['notFound']" class="h-auto"></tr>
     </table>
 
-    <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    <mat-paginator [pageSize]="100" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
   </div>
 </div>

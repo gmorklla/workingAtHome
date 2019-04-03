@@ -87,14 +87,14 @@ export class FormImageComponentComponent implements OnInit {
 
   setFormValues(event?: any) {
     let source;
-    let sourceF = source ? source : '/assets/images/banorteLogo.jpg';
+    let sourceF = source ? source : 'http://lnxsapl1d.dev.unix.banorte.com:9080/uf-ui-managment/assets/images/banorteLogo.jpg';
 
     if (event !== undefined) {
       sourceF = event.target.value;
       this.stylesContainerForm.get('source').setValue(sourceF);
     } else {
       source = this.control.attributes['src'];
-      sourceF = source ? source : '/assets/images/banorteLogo.jpg';
+      sourceF = source ? source : 'http://lnxsapl1d.dev.unix.banorte.com:9080/uf-ui-managment/assets/images/banorteLogo.jpg';
     }
 
     const styleObj = this.control.attributes['style']

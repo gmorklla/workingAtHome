@@ -3,6 +3,7 @@ import { HttpCallService } from 'projects/http-call/src/public_api';
 import { target } from '../../shared/data/port';
 import { WindowModel } from '../../shared/models/window/window.model';
 import { FormatStylesService } from '../../shared/services/format-styles/format-styles.service';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-render',
@@ -10,19 +11,26 @@ import { FormatStylesService } from '../../shared/services/format-styles/format-
   styleUrls: ['./render.component.css']
 })
 export class RenderComponent implements OnInit {
-  public window: WindowModel;
+  windowId: string;
+  window: WindowModel;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private http: HttpCallService,
     private formatStylesService: FormatStylesService
   ) {}
 
-  public ngOnInit() {
+  ngOnInit() {
+    this.getWindowId();
     this.getWindow();
   }
 
-  public getWindow() {
-    const url = `${target}/window/5`;
+  getWindowId(): void {
+    this.windowId = this.activatedRoute.snapshot.paramMap.get('windowId');
+  }
+
+  getWindow() {
+    const url = `${target}/window/${this.windowId}`;
     this.http.getRequest(url, {}).subscribe((val: WindowModel) => {
       this.window = val;
       console.log('[this.window]: ', this.window);
@@ -30,7 +38,7 @@ export class RenderComponent implements OnInit {
   }
 
   // De un 'string de estilos css' generará un objeto del tipo ngStyle
-  public setStylesOfWindow(window: WindowModel): { [key: string]: any } {
+  setStylesOfWindow(window: WindowModel): { [key: string]: any } {
     const tamanio = `width:${window.width}px;height:${
       window.height
     }px;position:relative;`;

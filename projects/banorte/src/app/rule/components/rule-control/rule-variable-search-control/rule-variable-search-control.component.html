@@ -2,9 +2,15 @@
       autocomplete="off"
       [formGroup]="parentForm">
   <mat-form-field class="d-block">
-    <input matInput maxlength="64" placeholder="Nombre" formControlName="variableName">
-    <mat-error *ngIf="variableName.hasError('required')">
-      Campo <strong>requerido</strong>
+    <input matInput maxlength="64" placeholder="Nombre" [matAutocomplete]="auto" formControlName="variable">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="fn_display" (optionSelected)="fn_optionSelected($event);">
+      <mat-option *ngFor="let _var of filteredVariable | async" [value]="_var" class="uf-autocomplete">
+        <span class="d-block color-red">{{_var.name}}</span>
+        <small>{{_var.description}}</small>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="variable.hasError('required')">
+      * Campo <strong>requerido</strong>
     </mat-error>
   </mat-form-field>
 </form>
