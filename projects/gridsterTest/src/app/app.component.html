@@ -4,15 +4,7 @@
       [item]="item"
       *ngFor="let item of dashboard"
     >
-      <ng-container *ngIf="item.type === 'input'; else otro">
-        <input
-          type="text"
-          placeholder="Input text"
-        >
-      </ng-container>
-      <ng-template #otro>
-        <p style="font-size: smaller; color: black;">Elemento de muestra</p>
-      </ng-template>
+      <app-dynamic></app-dynamic>
     </gridster-item>
   </gridster>
 </div>
